@@ -1,0 +1,325 @@
+#panel{
+    //float: left;
+    @w: 1em;
+    @h: @w;
+    //width: 16em;
+    width: 100%;
+    .block{
+        margin: .2em 0;
+        padding: .3em;
+        background: rgba(0,0,0,.5);
+    }
+     .s_block{
+          .block;
+       // float: left;
+        min-width: 13em;
+        max-width: 16em;
+       // width: 98%;
+        //margin: .2em;
+        text-align: right;
+        min-height: 22px;
+        color: @white - #111;
+    }
+    .flt{
+       // background: rgba(0,0,0,0.2);
+    }
+    .s_sp{
+        margin: 0;
+        padding: .1em;
+        width: 9em;
+    }
+    
+    h2{
+        font-size: 110%;
+        padding: 0;
+        margin: .2em 0;
+        color: @white;
+    }
+    .bt{         
+        min-width: @w;
+        min-height: @h;
+    }
+    #p_name{
+        .fr-concave;
+        display: inline-block;
+        min-height: @h;
+        padding: .2em;
+      
+    }
+    input[type='checkbox']{
+        display: none;
+    }
+    
+    input[type='checkbox'] + label{
+            .fr-convex;    
+            @w: 2.2em;
+            @h: 1em;
+            min-width: @w;
+            min-height: @h;
+            text-align: center;
+            background: @m-gray + #111;
+           // width: 100%;
+            display: inline-block;
+            padding: .3em;
+            &:hover{
+                background: @m-gray + #222;    
+            }
+            &:active{
+                background:  @m-gray;    
+            }
+            input{
+                display: none;
+            }
+        }
+    input[type='checkbox']:checked + label{
+        .fr-concave;
+        background:  @m-gray - #222;  
+        padding: .3em;  
+    }
+    
+    .hidden_m{
+        display: none;
+        padding: .25em 0;
+        color: @m-gray;
+        &:hover{
+            color: @white;
+        }
+    }
+    .panl{
+        .bt{
+            display: block;
+        }
+    }
+}
+
+
+/// loader
+@b_w_min: 4px;
+@b_w_max: 6px;
+@b_w_time: 3s;
+.loader{	
+	display: inline-block;
+	width: 40px;
+	height: 40px;
+	position: relative;
+	animation: a_rotate  3s infinite steps(60);
+	-webkit-animation: a_rotate  3s infinite steps(60); /* Chrome, Safari, Opera */
+}
+.loader:before{
+	content:"";
+	position: absolute;
+	top:0;
+	left: 0;
+	border-width:5px;
+	border-right-width:0;
+	border-color: rgba(255,255,255,0.5);
+	border-style: solid;
+	display: inline-block;
+	width: 9px;
+	height: 20px;
+	
+	margin: 5px;
+	margin-right: 0;
+	border-radius: 20px 0 0 20px;
+	outline: solid 5px rgba(0,0,0,0);	
+	
+	animation: a_border_left  2s infinite;
+	-webkit-animation: a_border_left  2s infinite; /* Chrome, Safari, Opera */
+}
+
+.loader:after{
+	content:"";
+	position: absolute;
+	top:0;
+	right: 0;
+	border-width:5px;
+	border-left-width:0;
+	border-color: rgba(255,255,255,0.5);
+	border-style: solid;
+	display: inline-block;
+	width: 9px;
+	height: 20px;
+	margin: 5px;
+	margin-left: 0;
+	border-radius:0 20px 20px 0;
+	outline: solid 5px rgba(0,0,0,0);
+	
+	animation: a_border_right  12s infinite;
+	-webkit-animation: a_border_right  2s infinite; /* Chrome, Safari, Opera */
+}
+
+
+@keyframes a_rotate  {
+ from {
+  transform: rotate(0deg);  
+  -moz-transform: rotate(0deg); /* Для Firefox */
+  -ms-transform: rotate(0deg); /* Для IE */
+  -webkit-transform: rotate(0deg); /* Для Safari, Chrome, iOS */
+  -o-transform: rotate(0deg); /* Для Opera */
+  }
+ to {
+  transform: rotate(360deg);
+  -moz-transform: rotate(360deg); /* Для Firefox */
+  -ms-transform: rotate(360deg); /* Для IE */
+  -webkit-transform: rotate(360deg); /* Для Safari, Chrome, iOS */
+  -o-transform: rotate(360deg); /* Для Opera */
+  }
+}
+/* Chrome, Safari, Opera */
+@-webkit-keyframes a_rotate  {
+ from {
+  transform: rotate(0deg);  
+  -moz-transform: rotate(0deg); /* Для Firefox */
+  -ms-transform: rotate(0deg); /* Для IE */
+  -webkit-transform: rotate(0deg); /* Для Safari, Chrome, iOS */
+  -o-transform: rotate(0deg); /* Для Opera */
+  }
+    to {
+  transform: rotate(360deg);
+  -moz-transform: rotate(360deg); /* Для Firefox */
+  -ms-transform: rotate(360deg); /* Для IE */
+  -webkit-transform: rotate(360deg); /* Для Safari, Chrome, iOS */
+  -o-transform: rotate(360deg); /* Для Opera */
+  }
+}
+
+@keyframes a_border_left {
+ 0%{
+	border-width:@b_w_min;
+	border-right-width:0;
+	margin: @b_w_max;
+	margin-right: 0;
+ } 
+ 25%{
+	border-width:@b_w_max;
+	border-right-width:0;
+	margin: @b_w_min;
+	margin-right: 0;
+ } 
+ 50%{
+	border-width:@b_w_max;
+	border-right-width:0;
+	margin: @b_w_min;
+	margin-right: 0;
+ } 
+ 75%{
+	border-width:@b_w_min;
+	border-right-width:0;
+	margin: @b_w_max;
+	margin-right: 0;
+ }
+ 100%{
+	border-width:@b_w_min;
+	border-right-width:0;
+	margin: @b_w_max;
+	margin-right: 0;
+ }
+}
+/* Chrome, Safari, Opera */
+@-webkit-keyframes a_border_left {
+ 0%{
+	border-width:@b_w_min;
+	border-right-width:0;
+	margin: @b_w_max;
+	margin-right: 0;
+ }
+ 50%{
+	border-width:@b_w_max;
+	border-right-width:0;
+	margin: @b_w_min;
+	margin-right: 0;
+ } 
+ 25%{
+	border-width:@b_w_max;
+	border-right-width:0;
+	margin: @b_w_min;
+	margin-right: 0;
+ } 
+ 75%{
+	border-width:@b_w_min;
+	border-right-width:0;
+	margin: @b_w_max;
+	margin-right: 0;
+ }
+ 100%{
+	border-width:@b_w_min;
+	border-right-width:0;
+	margin: @b_w_max;
+	margin-right: 0;
+ }
+}
+
+@keyframes a_border_right {
+ 0%{
+	border-width:@b_w_min;
+	border-left-width:0;
+	margin: @b_w_max;
+	margin-left: 0;
+ }
+ 25%{
+	border-width:@b_w_max;
+	border-left-width:0;
+	margin: @b_w_min;
+	margin-left: 0;
+ }
+ 50%{
+	border-width:@b_w_max;
+	border-left-width:0;
+	margin: @b_w_min;
+	margin-left: 0;
+ }
+ 75%{
+	border-width:@b_w_min;
+	border-left-width:0;
+	margin: @b_w_max;
+	margin-left: 0;
+ }
+ 100%{
+	border-width:@b_w_min;
+	border-left-width:0;
+	margin: @b_w_max;
+	margin-left: 0;
+ }
+}
+/* Chrome, Safari, Opera */
+@-webkit-keyframes a_border_right {
+ 0%{
+	border-width:@b_w_min;
+	border-left-width:0;
+	margin: @b_w_max;
+	margin-left: 0;
+ }
+ 25%{
+	border-width:@b_w_max;
+	border-left-width:0;
+	margin: @b_w_min;
+	margin-left: 0;
+ }
+ 50%{
+	border-width:@b_w_max;
+	border-left-width:0;
+	margin: @b_w_min;
+	margin-left: 0;
+ }
+ 75%{
+	border-width:@b_w_min;
+	border-left-width:0;
+	margin: @b_w_max;
+	margin-left: 0;
+ }
+ 100%{
+	border-width:@b_w_min;
+	border-left-width:0;
+	margin: @b_w_max;
+	margin-left: 0;
+ }
+}
+
+@media screen and (min-width: @m_w_1) {
+    #panel{
+        float: left;
+        @w: 1em;
+        @h: @w;
+        width: 16em;
+    }    
+}

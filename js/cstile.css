@@ -1,0 +1,581 @@
+html {
+    height:100%;
+}
+ body {
+    margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	background:#000000;
+    color: #290101;	
+	width: 100%;
+	height: 100%;
+	font-family: arial, verdana, sans-serif;
+   } 
+/* кнопка */
+button, .button{
+    /*display: block;*/
+	cursor: pointer;
+	padding: 5px;
+	margin: 3px;
+    border: #eca solid 2px;
+	border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;	
+	font-size: 14px;
+	background: #d98c1d; /* Для старых браузров */
+    background: -moz-linear-gradient(top, #f8c67d, #d98c1d); /* Firefox 3.6+ */
+    /* Chrome 1-9, Safari 4-5 */
+    background: -webkit-gradient(linear, left top, left bottom, 
+                color-stop(0%,#f8c67d), color-stop(100%,#d98c1d));
+    /* Chrome 10+, Safari 5.1+ */
+    background: -webkit-linear-gradient(top, #f8c67d, #d98c1d);
+    background: -o-linear-gradient(top, #f8c67d, #d98c1d); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #f8c67d, #d98c1d); /* IE10 */
+    background: linear-gradient(top, #f8c67d, #d98c1d); /* CSS3 */ 
+	 -webkit-box-shadow: 0px 0px 5px rgba(251,229,152,0.6); /* Для Safari 3.0 */
+    -moz-box-shadow: 0px 0px 5px rgba(251,229,152,0.6); /* Для Firefox 3.5 */
+    box-shadow: 0px 0px 5px rgba(251,229,152,0.6); /* Для современных браузеров */
+	text-shadow: #efe 0px 1px 2px;	
+	min-width: 100px;
+}
+button:hover, .button:hover{
+	background: #ca721d; /* Для старых браузров */
+    background: -moz-linear-gradient(top, #fbb270, #ca721d); /* Firefox 3.6+ */
+    /* Chrome 1-9, Safari 4-5 */
+    background: -webkit-gradient(linear, left top, left bottom, 
+                color-stop(0%,#fbb270), color-stop(100%,#ca721d));
+    /* Chrome 10+, Safari 5.1+ */
+    background: -webkit-linear-gradient(top, #fbb270, #ca721d);
+    background: -o-linear-gradient(top, #fbb270, #ca721d); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #fbb270, #ca721d); /* IE10 */
+    background: linear-gradient(top, #fbb270, #ca721d); /* CSS3 */ 
+}
+button:active, .button:active{
+	background: #ba620d; /* Для старых браузров */
+    background: -moz-linear-gradient(top, #eba170, #ba620d); /* Firefox 3.6+ */
+    /* Chrome 1-9, Safari 4-5 */
+    background: -webkit-gradient(linear, left top, left bottom, 
+                color-stop(0%,#fbb270), color-stop(100%,#ba620d));
+    /* Chrome 10+, Safari 5.1+ */
+    background: -webkit-linear-gradient(top, #eba170, #ba620d);
+    background: -o-linear-gradient(top, #eba170, #ba620d); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #eba170, #ba620d); /* IE10 */
+    background: linear-gradient(top, #eba170, #ba620d); /* CSS3 */ 
+} 
+p{
+    text-indent: 20px;
+	text-align: justify
+}  
+h1{
+     margin: 0;
+	 padding: 0;
+}
+/* предупреждения */   
+#notification{
+    left: 0px;
+    top: 0px;
+    /*width: 100%;*/
+    text-align: center;	
+	background: #f77;
+	border-bottom: 2px solid #d55;
+	padding: 3px;
+	/*display: none;*/
+}
+.n_show{
+    display: block;
+}
+.n_hide{
+    display: none;
+}
+.textedit{
+	border: 1px solid #bbb; 
+	background: #fff; 
+	padding: 5px;
+	margin:2px;
+}
+/* основа шаблона */
+#frame_bottom{
+    background:url(/tmp/teatr/imgs/BG2.jpg) bottom center no-repeat; 
+	width: 100%;
+	min-width: 1000px;
+	height: auto;
+	min-height: 700px !important;
+	text-align: center;	
+}
+#frame_top{
+    min-width: 1000px;
+    background:url(/tmp/teatr/imgs/BG1.jpg) top center no-repeat, 
+	url(/tmp/teatr/imgs/BgMin.jpg) repeat-x;; 	
+	height: auto;
+	min-height: 500px !important;
+	text-align: center;	
+}
+#container{
+    width: 1000px;
+	margin: 0 auto;
+}
+/* голова */
+header{
+   width:1000px;
+   height: 200px;
+	background:url(/tmp/teatr/imgs/Emblem_m.png) 10px 20px no-repeat; 
+   /*background: #888;   */
+}
+#emblem{
+    width: 100%;
+	height: 85px;
+	display: block;
+	text-decoration: none;
+	font-family: "Courier New", Courier, monospace;
+	font-size: 64px;
+	color: #ddcc99;
+	font-weight: bold; 
+}
+/* главное меню */
+#m_menu{
+    width: auto;
+	margin: 0 auto;
+	z-index: 2;
+}
+#m_m_l{
+    background:url(/tmp/teatr/imgs/MMenu0.png) no-repeat;
+	width:13px;
+	height: 60px;
+}
+#m_m_r{
+    background:url(/tmp/teatr/imgs/MMenu2.png) no-repeat;
+	width:13px;
+	height: 60px;
+}
+.m_m_m{
+    background:url(/tmp/teatr/imgs/MMenu1.png) repeat-x;
+	padding: 4px;
+}
+/*--------------[Links]--------------*/
+a:link {
+	color: #661100;
+	transition: color 0.5s ease;
+	-webkit-transition: color 0.5s ease;
+	-moz-transition: color 0.5s ease;
+	-o-transition: color 0.5s ease;
+	/*text-shadow: #333322 0 0 1px;*/
+}
+a:visited {
+	color: #553322;	
+}
+a:hover {
+	color: #bb0000;
+}
+a:active {
+	color: #443322;
+}
+/*----------[ more ]---------------*/
+.podr{
+    border-bottom: 1px dotted;
+	cursor:pointer;	
+	margin: 5px;
+	text-decoration: none;
+}
+.podr:before{
+	content: url(/tmp/teatr/imgs/Plus.png);
+	margin-right: 3px;
+}
+.more {
+    /*width: 320px;*/
+	cursor:pointer;	
+	padding: 5px;
+	margin-top: 5px;
+	height: auto;
+	overflow: hidden;
+	background: #fcf0ce;
+	border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+/*----------[ Fons ]-------------*/   
+.giffon1{
+     background:url(/tmp/teatr/imgs/fon1.png);
+}
+.giffon2{
+     background:url(/tmp/teatr/imgs/fon2.png);
+}
+.giffon3{
+     background:url(/tmp/teatr/imgs/fon3.png);
+}
+/*----------[ details ]------------------*/
+hr {
+    background:url(imgs/razd.png) no-repeat top center;
+    height:42px;
+    border:none !important;
+}
+img{
+    border: none;
+}
+.input_text{
+    min-width:300px;
+	max-width:400px;
+	border: #aaa solid 1px;	
+    /*min-height: 200px;*/
+    overflow: auto;	 
+	padding: 5px;
+	margin: 2px;
+	background: #fff;
+}
+.nice_bord{ /* DELETE */
+    border: solid 2px #ddd; 
+	margin: 5px 0;
+	-moz-box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Для Firefox */
+    -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Для Safari и Chrome */
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
+}
+.flat_bord{
+	border-radius: 3px;
+    border: 2px #F0BF81 solid;
+    padding: 10px;
+	margin: 5px auto;
+}
+/*------------------[ News ]------------------*/
+.new_0{
+    padding: 0 0 0 85px;
+	background:url(/tmp/teatr/imgs/N_0_New.PNG) 0px 5px no-repeat;
+}
+.new_1{
+    padding: 0 0 0 85px;
+	background:url(/tmp/teatr/imgs/N_1_Vaz.PNG) 0px 5px no-repeat;
+}
+.new_2{
+    padding: 0 0 0 85px;
+	background:url(/tmp/teatr/imgs/N_2_Af.PNG) 0px 5px no-repeat;
+}
+.new_3{
+    padding: 0 0 0 85px;
+	background:url(/tmp/teatr/imgs/N_3_Site.PNG) 0px 5px no-repeat;
+}
+.new_4{
+    padding: 0 0 0 85px;
+	background:url(/tmp/teatr/imgs/N_4_Act.PNG) 0px 5px no-repeat;
+}
+/*--------------[ Photo ]--------------------*/
+.Bord{
+    float: left;
+    width: 105px;
+	height: 105px;
+    background:url(imgs/border.jpg) no-repeat top left;
+	padding: 15px; 
+}
+.Bord .photo{
+    width: 100px;
+	height: 100px;
+}
+.PhotoBord{
+    height: 227px;
+	width: 198px;
+	background: url(imgs/PhotoBord.jpg) no-repeat;
+	padding: 21px;
+} 
+.play_big_img{ /* DELETE */
+    width: 600px; 
+	height: 150px; 
+	border: solid 2px #ddd; 
+	margin: 5px 0;
+	overflow: hidden; 
+	-moz-box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Для Firefox */
+    -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Для Safari и Chrome */
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
+}
+.img_border{
+    /*border: 14px solid #c28b7b; /* IE */
+	-moz-box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Для Firefox */
+    -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Для Safari и Chrome */
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
+	border: solid 14px #ddd; 
+    padding: 0;
+	margin: 3px;
+    -moz-border-image: url(imgs/border.jpg) 14 14 14 14 repeat; /* Firefox 4 */
+    -webkit-border-image: url(imgs/border.jpg) 14 14 14 14 repeat; /* Safari 5 и Chrome */
+    -o-border-image: url(imgs/border.jpg) 14 14 14 14 repeat; /* Opera 10.5 */
+    border-image: url(imgs/border.jpg) 14 14 14 14 repeat; /* CSS3 */
+}
+/*--------------[MainMenu]--------------*/
+a.buttonq0 {
+	font: normal 22px arial, sans-serif;
+	font-weight:bold;
+    text-decoration: none;
+	color:#ddaa66;
+	text-shadow: #444422 0 0 6px;
+	margin: auto 5px auto 5px;
+	/*border-bottom: 2px dotted;*/
+}
+a.buttonq0:hover{
+    outline: none; /* hide dotted outline in Firefox */	
+	/*background: transparent url('imgs/MMenu34.png') repeat-X scroll top right;*/
+    color: #ffcc88;
+    text-shadow: #444422 0 0 6px;	
+	/*text-decoration: underline;*/
+}
+a.buttonq1 {
+    display: block;
+	font: normal 22px arial, sans-serif;
+	font-weight:bold;
+    text-decoration: none;
+	color:#bb7766;
+	text-shadow: #444422 0 0 6px;
+	margin: 0 5px 0 5px;
+}
+a.buttonq1:hover{
+    outline: none; /* hide dotted outline in Firefox */	
+	/*background: transparent url('imgs/MMenu34.png') repeat-X scroll top right;*/
+    color: #ddaa66;
+    text-shadow: #444422 0 0 6px;	
+	/*text-decoration: underline;*/
+}
+
+a.buttonq2 {
+    display: block;
+    float: left;
+	font: normal 22px arial, sans-serif;
+	font-weight:bold;
+	height: 20px;
+    margin-right: 6px;
+    text-decoration: none;
+	color:#59240f;
+	text-shadow: #666644 0 0 1px;
+    padding: 11px 7px 22px 7px;
+}
+a.buttonq2:hover{
+    outline: none;
+    color: #ddaa66;
+    text-shadow: #444422 0 0 1px;
+}   
+
+/* Центр */
+#center{
+    background: #f4e7c6 url(imgs/MainFon.jpg);
+	border: #974709 solid 2px;
+	padding: 10px;
+	min-height: 500px;
+	border-radius:9px;
+    -moz-border-radius:9px;
+    -webkit-border-radius:9px;
+	-webkit-box-shadow:inset 0 0 5px 2px #976709; /* Для Safari 3.0 */
+    -moz-box-shadow:inset 0 0 5px 2px #976709; /* Для Firefox 3.5 */
+    box-shadow:inset 0 0 5px 2px #976709; /* Для современных браузеров */
+}
+/* бок */
+aside{
+    width: 250px;
+	/*border:solid #222 1px;*/
+	padding: 5px;
+	float: left;
+	
+}
+/* content */
+#content{
+	width: 700px;
+	padding: 5px;
+	/*border:solid #222 1px;*/
+	margin-left: 260px;
+}
+/* Заголовок / Поиск */
+#PageTop{
+    height: 40px;
+	width: 720px;
+}
+#SearchPlase{
+    float: left;
+	height: 40px;
+	width: 260px;
+}
+.searchstr{
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+	outline: none;
+    border: #d9c99e solid 2px;
+	height: 25px;
+	width: 140px;
+	transition: width 0.3s ease;
+	font-size: 16px;
+	padding: 0 35px 0 3px;
+}
+.searchstr:focus{
+    width: 180px;
+	transition: width 0.3s ease;
+}
+.search_res{
+    margin: 4px 4px 4px 30px;
+	border-left: 3px #988 solid;
+	padding-left:3px;
+	color: #654;
+}
+#PageName{
+    /*font-family: "Courier New", Courier, monospace;*/
+	font-size:22px;
+	font-weight:bold;
+	color:#442200;
+	border-bottom: 1px dotted;
+	margin: 0;
+	padding: 0;
+}
+/* текст в красивых кавычках */
+.quoteText{
+    /*background: #f7f7f7;
+    border-left: 1px solid #bbb;*/
+    font-style: italic;
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
+}
+.quoteText:before {
+	color: #bbb;
+	content: "\201C"; /* Непечатаемый символ слева */
+	font-size: 3em;
+	line-height: 0.1em;
+	margin-right: 0.2em;
+	vertical-align: -.4em;}
+.quoteText:after {
+	color: #bbb;
+	content: "\201D"; /* Непечатаемый символ справа */
+	font-size: 3em;
+	line-height: 0.1em;
+	vertical-align: -.45em; }
+.quoteText > p:first-child { display: inline; }
+/* Footer */
+footer{
+    color: #dc9; /* Цвет текста */
+    padding: 5px; /* Отступы вокруг текста */
+    clear: left; /* Отменяем действие float */
+	min-height: 300px;
+}
+#f_text{
+    width: 900px;
+	margin: 0 auto;
+}
+/*---[ Calendar ]---*/
+/*
+a:hover {
+	color: #bb0000;
+}
+a:active {
+	color: #443322;
+}
+*/
+table.calendar{
+    margin: 10px 0;
+}
+table.calendar td{    
+    color: #472828;	
+    border: 1px #ba5 solid;
+	border-top: 1px #d8ce9e solid;
+	border-left: 1px #d8ce9e solid;
+    padding:3px;
+	font-weight: bold;
+	text-shadow: 0 -1px #fcde76;
+	transition: background 0.5s ease;
+	-webkit-transition: background 0.5s ease;
+	-moz-transition: background 0.5s ease;
+	-o-transition: background 0.5s ease;
+}
+.day_0{
+	background: #fec;
+	
+}
+.day_u{    
+	background: #f6e6ae;	
+}
+.day_w{
+    border: 1px #f95 solid;
+	background: #f6d5ae;	
+}
+table.calendar td#day_n{
+    border: 1px #c61 solid;	
+    -moz-box-shadow: inset 0 0 10px rgba(204,34,17,0.5); /* Для Firefox */
+    -webkit-box-shadow: inset 0 0 10px rgba(204,34,17,0.5); /* Для Safari и Chrome */
+    box-shadow: inset 0 0 10px rgba(204,34,17,0.5); /* Параметры тени */	
+}
+.day_p{
+    /*border: 1px #f95 solid;*/
+	background: #fdce5c;
+	position:relative;
+}
+.day_p span{
+    display:none;
+	text-decoration: none;
+}
+.day_p:hover span{
+    display: block;
+	position: absolute;
+	left: -50%;
+	top: -50%;
+	background: #fdce5c;
+	border: 1px #f95 solid;
+	padding: 4px;
+	z-index: 999999999;
+	text-decoration: none;
+}
+.day_0:hover, .day_u:hover, .day_w:hover{    
+    color: #290101;	
+    background: #f9efcb;
+	cursor: pointer;
+}
+/*----------------------------------------[ Pagination ]-------------------------------*/
+a.p_nom{
+	text-decoration: none;
+}
+a.p_nom span{
+    padding: 5px 7px 5px 7px;
+    border-radius:3px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;	
+	border: #eca solid 2px;
+	font-weight: bolder;
+	background: url(imgs/fon2.png);
+}
+span.p_need{
+     border-radius:3px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;	
+	border: #eca solid 2px;
+	font-weight: bolder;
+    padding: 7px;
+    background: url(imgs/fon1.png);
+}
+/*------------------------[ Reguser ]---------------------------------*/
+.reg_ok{
+    position: absolute;
+	border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;	
+	border: #380 solid 2px;
+	font-weight: bolder;
+    padding: 4px;
+	background: #9c7;
+	max-width: 370px;
+}
+.reg_no{
+    position: absolute;
+    border-radius:3px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;	
+	border: #800 solid 2px;
+	font-weight: bolder;
+    padding: 4px;
+	background: #c77;
+	max-width: 370px;
+}
+/*--------------------[ Projects ]---------------------------*/
+.prj_name{
+    border-top: 1px solid #bb9;
+	border-bottom: 1px solid #bb9;
+	cursor: pointer;
+	background:url(/tmp/teatr/imgs/fon2.png);
+	padding: 2px 6px;
+}
+.prj_name:after{
+    content: url(/tmp/teatr/imgs/Plus.png);
+	float: right;
+}
+.prj_body{
+    background:url(/tmp/teatr/imgs/fon3.png);
+	padding: 2px 6px;
+}

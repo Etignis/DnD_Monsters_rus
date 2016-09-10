@@ -1,0 +1,88 @@
+#helper, #result, .description{
+	background: rgba(0, 0, 0, 0.5);
+	    color: #dddddd;
+		font-size: 120%;
+		padding: 10px;
+		
+	a{
+		color: grey;
+	}
+}
+#panel button, #panel a{
+	padding: 3px;
+	font-size: 110%;
+}
+a.info_toggle{
+	padding: 5px 10px;
+	color: grey;
+	font-size: 115%;
+	display: block;
+	background: rgba(0, 0, 0, 0.5);
+}
+@wh: 40px;
+@pd: 100px;
+.milestone{
+	padding-left: @pd;
+	position: relative;
+	min-height: 100px;
+	//margin-top: 10px;
+	//padding-top: 40px;
+	.regen, .next{
+		
+		color: @l-gray;
+		font-size: 90%;
+		text-decoration: none;
+		border-bottom: dashed 1px @l-gray;
+		
+		&:hover{
+			color: @l-gray + #222;
+		}
+	}
+}
+.more{
+	background: url(../img/line.png) 40px 0 repeat-y;
+	&:nth-child(odd){
+		background: url(../img/line.png) 40px 50px repeat-y;	
+	}
+}
+#result{
+	padding-top: 20px;
+}
+
+.milestone:before{
+	content: "";
+	background: url(../img/sprite.jpg);
+	background-color: #000;
+	background-position: 0 0;
+	overflow: hidden;
+	position: absolute;
+	left: (@pd - @wh)/2;
+	top: -10px;
+	width: @wh;
+	height: @wh;
+	border-radius: 100% 100%;
+	border: 3px solid white;
+}
+
+.i1:before{
+	background-position: 0 0;
+}
+.i2:before{
+	background-position: -@wh 0;
+}
+.i3:before{
+	background-position: -@wh*2 0;
+}
+.i4:before{
+	background-position: -@wh*3 0;
+}
+
+@media only screen and (max-width: 460px){
+	#panel a, #panel button{
+		width: 100%;
+		text-align: center;		
+		margin: 4px 0;
+		padding: 5px 0;
+	}
+	
+}
