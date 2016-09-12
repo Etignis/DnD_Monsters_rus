@@ -113,6 +113,7 @@ var str_ch="", str_ml="";
 		$(".challenge input[type=checkbox]:checked").each(function(){
 			str_ch+=$(this).next("label").text()+",";
 		});
+		console.log("ch string: " + str_ch)
 		if(str_ch=='' && str_ml=='')
 			{
 			$(".monster, .monster_card").show();	
@@ -205,13 +206,7 @@ var str_ch="", str_ml="";
 				{
 				arr[arr.length]=cr;	
 				}
-				/*
-			if(cr>max_ch)
-				{
-				max_ch=cr;
-				arr[arr.length] = max_ch;
-				}
-				*/
+				
 		});
 		console.log(arr);
 		
@@ -295,10 +290,10 @@ var str_ch="", str_ml="";
 		var lists = "<div class='lists block' style='display: none'><h2>Выборка:</h2>"+
 			"<input type='checkbox' id='ch_ml_1'><label for='ch_ml_1' class='ml_1'>Простые монстры</label>"+
 		"</div>"
-		var view = "<div class='view block'><h2>Вид:</h2>\
+		var view = "<!--div class='view block'><h2>Вид:</h2>\
 			<input type='checkbox' id='ch_vw_1' class='ch_vw' checked><label for='ch_vw_1' class='vw_1'><i class='fa fa-align-justify'></i> Текст</label>\
 			<input type='checkbox' id='ch_vw_2' class='ch_vw'><label for='ch_vw_2' class='vw_2'><i class='fa fa-th-large'></i> Карточки</label>\
-			</div>";
+			</div-->";
 		var hidden_m = "<div class='hidden block' style='display: none'><h2>Скрытые:</h2></div>";
 		var f_name="<div class='s_name s_block flt'>"+
 						"<span class='n_zero'>Название: </span>"+
@@ -319,6 +314,7 @@ var str_ch="", str_ml="";
         success: xmlParser
     });
 function monster_filter(nm){
+	console.log("monster_filter")
 		tmp1=0, tmp2=0;
 		$(".monster, .monster_card").show();
 		var atr="";
@@ -338,10 +334,10 @@ function monster_filter(nm){
 				str_ch+=$(this).next("label").text()+",";
 				});	
 			}
-		console.log("str_ch: "+str_ch);
+		//console.log("str_ch: "+str_ch);
 		//console.log("class: "+cl+" name: "+nm+" level: "+lv+" school: "+sc);
-		console.log("atr: "+atr);
-		console.log("atr2: "+atr2);
+		//console.log("atr: "+atr);
+		//console.log("atr2: "+atr2);
 		if(atr!='')
 			{	
 			$(".monster, .monster_card").hide();
@@ -354,10 +350,25 @@ function monster_filter(nm){
 				var arr_ch = str_ch.split(",");		
 				$(".monster, .monster_card").each(function(){
 					//$(this).hide();
-					var cr = parseInt($(this).find(".cr_num").text());
+					//console.log($(this).find(".name").text());
+					//console.log(eval(arr_ch[2]));
+					var cr = String($(this).find(".cr_num").text());
 					for(var i=0; i< arr_ch.length; i++)
 						{
-						if(parseInt(arr_ch[i])==parseInt(cr))
+							//console.log(String(arr_ch[i])+"=="+String(cr));
+							/*
+							var str_a_ch = String(arr_ch[i]);
+							var str_cr = String(cr);
+							var s_a_ch = arr_ch[i];
+							var s_cr = cr;
+							var usl =  (cr == arr_ch[i]);
+							*/
+							var tmp_str=cr;
+							while(tmp_str.length>1 && cr[0]==0)
+							{
+								tmp_str=tmp_str.slice(1);
+							}
+						if(String(arr_ch[i])==String(tmp_str) || tmp_str == arr_ch[i])
 							$(this).hide();	
 						}	
 					});
@@ -384,7 +395,7 @@ function monster_filter(nm){
 	}	
 function get_filter(){
 		var nm=$(".f_name").val().toLowerCase();
-		console.log("name: "+nm)
+		//console.log("name: "+nm)
 		//if(nm!='')
 			monster_filter(nm);
 		/*else
