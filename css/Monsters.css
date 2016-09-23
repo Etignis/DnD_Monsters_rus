@@ -415,234 +415,6 @@ th {
 #panel .panl .bt {
   display: block;
 }
-.loader {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  position: relative;
-  animation: a_rotate 3s infinite steps(60);
-  -webkit-animation: a_rotate 3s infinite steps(60);
-  /* Chrome, Safari, Opera */
-}
-.loader:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-width: 5px;
-  border-right-width: 0;
-  border-color: rgba(255, 255, 255, 0.5);
-  border-style: solid;
-  display: inline-block;
-  width: 9px;
-  height: 20px;
-  margin: 5px;
-  margin-right: 0;
-  border-radius: 20px 0 0 20px;
-  outline: solid 5px rgba(0, 0, 0, 0);
-  animation: a_border_left  2s infinite;
-  -webkit-animation: a_border_left  2s infinite;
-  /* Chrome, Safari, Opera */
-}
-.loader:after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  border-width: 5px;
-  border-left-width: 0;
-  border-color: rgba(255, 255, 255, 0.5);
-  border-style: solid;
-  display: inline-block;
-  width: 9px;
-  height: 20px;
-  margin: 5px;
-  margin-left: 0;
-  border-radius: 0 20px 20px 0;
-  outline: solid 5px rgba(0, 0, 0, 0);
-  animation: a_border_right  12s infinite;
-  -webkit-animation: a_border_right  2s infinite;
-  /* Chrome, Safari, Opera */
-}
-@keyframes a_rotate {
-  from {
-    transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    /* Для Firefox */
-    -ms-transform: rotate(0deg);
-    /* Для IE */
-    -webkit-transform: rotate(0deg);
-    /* Для Safari, Chrome, iOS */
-    -o-transform: rotate(0deg);
-    /* Для Opera */
-  }
-  to {
-    transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    /* Для Firefox */
-    -ms-transform: rotate(360deg);
-    /* Для IE */
-    -webkit-transform: rotate(360deg);
-    /* Для Safari, Chrome, iOS */
-    -o-transform: rotate(360deg);
-    /* Для Opera */
-  }
-}
-/* Chrome, Safari, Opera */
-@-webkit-keyframes a_rotate {
-  from {
-    transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    /* Для Firefox */
-    -ms-transform: rotate(0deg);
-    /* Для IE */
-    -webkit-transform: rotate(0deg);
-    /* Для Safari, Chrome, iOS */
-    -o-transform: rotate(0deg);
-    /* Для Opera */
-  }
-  to {
-    transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    /* Для Firefox */
-    -ms-transform: rotate(360deg);
-    /* Для IE */
-    -webkit-transform: rotate(360deg);
-    /* Для Safari, Chrome, iOS */
-    -o-transform: rotate(360deg);
-    /* Для Opera */
-  }
-}
-@keyframes a_border_left {
-  0% {
-    border-width: 4px;
-    border-right-width: 0;
-    margin: 6px;
-    margin-right: 0;
-  }
-  25% {
-    border-width: 6px;
-    border-right-width: 0;
-    margin: 4px;
-    margin-right: 0;
-  }
-  50% {
-    border-width: 6px;
-    border-right-width: 0;
-    margin: 4px;
-    margin-right: 0;
-  }
-  75% {
-    border-width: 4px;
-    border-right-width: 0;
-    margin: 6px;
-    margin-right: 0;
-  }
-  100% {
-    border-width: 4px;
-    border-right-width: 0;
-    margin: 6px;
-    margin-right: 0;
-  }
-}
-/* Chrome, Safari, Opera */
-@-webkit-keyframes a_border_left {
-  0% {
-    border-width: 4px;
-    border-right-width: 0;
-    margin: 6px;
-    margin-right: 0;
-  }
-  50% {
-    border-width: 6px;
-    border-right-width: 0;
-    margin: 4px;
-    margin-right: 0;
-  }
-  25% {
-    border-width: 6px;
-    border-right-width: 0;
-    margin: 4px;
-    margin-right: 0;
-  }
-  75% {
-    border-width: 4px;
-    border-right-width: 0;
-    margin: 6px;
-    margin-right: 0;
-  }
-  100% {
-    border-width: 4px;
-    border-right-width: 0;
-    margin: 6px;
-    margin-right: 0;
-  }
-}
-@keyframes a_border_right {
-  0% {
-    border-width: 4px;
-    border-left-width: 0;
-    margin: 6px;
-    margin-left: 0;
-  }
-  25% {
-    border-width: 6px;
-    border-left-width: 0;
-    margin: 4px;
-    margin-left: 0;
-  }
-  50% {
-    border-width: 6px;
-    border-left-width: 0;
-    margin: 4px;
-    margin-left: 0;
-  }
-  75% {
-    border-width: 4px;
-    border-left-width: 0;
-    margin: 6px;
-    margin-left: 0;
-  }
-  100% {
-    border-width: 4px;
-    border-left-width: 0;
-    margin: 6px;
-    margin-left: 0;
-  }
-}
-/* Chrome, Safari, Opera */
-@-webkit-keyframes a_border_right {
-  0% {
-    border-width: 4px;
-    border-left-width: 0;
-    margin: 6px;
-    margin-left: 0;
-  }
-  25% {
-    border-width: 6px;
-    border-left-width: 0;
-    margin: 4px;
-    margin-left: 0;
-  }
-  50% {
-    border-width: 6px;
-    border-left-width: 0;
-    margin: 4px;
-    margin-left: 0;
-  }
-  75% {
-    border-width: 4px;
-    border-left-width: 0;
-    margin: 6px;
-    margin-left: 0;
-  }
-  100% {
-    border-width: 4px;
-    border-left-width: 0;
-    margin: 6px;
-    margin-left: 0;
-  }
-}
 @media screen and (min-width: 50em) {
   #panel {
     float: left;
@@ -917,6 +689,61 @@ th {
 }
 @page {
   margin: 0.5cm;
+}
+#before_monsters {
+  color: #fff;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+  font-weight: bold;
+  padding-bottom: 1rem;
+}
+.loader {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  background: #fff;
+  margin: 5px;
+  position: relative;
+  top: 16px;
+  -webkit-border-radius: 20px 20px 20px 20px;
+  -moz-border-radius: 20px 20px 20px 20px;
+  border-radius: 20px 20px 20px 20px;
+  -webkit-box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.1);
+  -khtml-box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.1);
+  /*/
+    @w2: @w/2;
+    @b: 4px;
+    /**/
+  /**/
+  /**/
+  /**/
+}
+.loader:after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  width: 0px;
+  height: 0px;
+  border: 10px solid #8DB6F3;
+  border-left-color: rgba(255, 255, 255, 0);
+  border-right-color: rgba(255, 255, 255, 0);
+  -webkit-border-radius: 40px 40px 40px 40px;
+  -moz-border-radius: 40px 40px 40px 40px;
+  border-radius: 40px 40px 40px 40px;
+  animation-name: spin;
+  animation-duration: 1200ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /*# sourceMappingURL=Monsters.css.map */

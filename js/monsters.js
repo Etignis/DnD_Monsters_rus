@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(window).load(function(){
 	var f_type=1;
 	// перемешивание
 	function shuffle(o){
@@ -290,10 +290,10 @@ var str_ch="", str_ml="";
 		var lists = "<div class='lists block' style='display: none'><h2>Выборка:</h2>"+
 			"<input type='checkbox' id='ch_ml_1'><label for='ch_ml_1' class='ml_1'>Простые монстры</label>"+
 		"</div>"
-		var view = "<!--div class='view block'><h2>Вид:</h2>\
+		var view = "<div class='view block'><h2>Вид:</h2>\
 			<input type='checkbox' id='ch_vw_1' class='ch_vw' checked><label for='ch_vw_1' class='vw_1'><i class='fa fa-align-justify'></i> Текст</label>\
 			<input type='checkbox' id='ch_vw_2' class='ch_vw'><label for='ch_vw_2' class='vw_2'><i class='fa fa-th-large'></i> Карточки</label>\
-			</div-->";
+			</div>";
 		var hidden_m = "<div class='hidden block' style='display: none'><h2>Скрытые:</h2></div>";
 		var f_name="<div class='s_name s_block flt'>"+
 						"<span class='n_zero'>Название: </span>"+
@@ -305,7 +305,6 @@ var str_ch="", str_ml="";
 		<a href="#" class="bt" id="info"><i class="fa fa-question-circle"></i></a></div>';
 		var generator=panel + challenge + f_name +view + hidden_m+  lists + monsters ;
 		$("#panel").html(generator);
-		$("#result").append("<div class='load'><div class='loader'></div> Загрузка...</div>");
 	}
 	$.ajax({
         type: "GET",
@@ -535,11 +534,13 @@ function xmlParser(xml) {
 		data_id++;
     });
 	console.log("end xml-parsing");
+	//$("#result").html("");
 	make_generator();
 	$("#panel .hidden").append(to_hidden);
 	$(".load").hide();
 	//$("#result").wrapInner("<div class='page_list'></div>");
 	find_type();
+	$("#before_monsters").hide();
    };
 	function make_side(){
 	}
@@ -618,7 +619,7 @@ function xmlParser(xml) {
 		filter_mn();	
 		return false;		
 	});
-	$(".ch_vw").on('click', function(){
+	$("body").on('click',".ch_vw", function(){
 		//alert(1);
 	$('#load').show();
 		$(".ch_vw").prop('checked', false);

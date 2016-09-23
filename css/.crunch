@@ -40,12 +40,14 @@
 						"strictMath": false,
 						"strictUnits": false,
 						"javascriptEnabled": false,
+						"sourceMap": true,
 						"sourcemap": true
 					}
 				}
 			],
 			"sources": [
 				"frame.less",
+				"loader.less",
 				"page.less",
 				"panel.less",
 				"sceleton.less",
