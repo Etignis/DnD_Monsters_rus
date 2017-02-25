@@ -300,8 +300,8 @@ var str_ch="", str_ml="";
 						"<input type='text' class='f_name s_sp'>"+
 					"</div>";
 		var panel='<div class="panl block">\
-		<a href="http://youknowwho.ru/dnd" class="bt"><i class="fa fa-home"></i></a>\
-		<a href="http://www.youknowwho.ru/message/?theme=dndmonsters" class="bt" target="_blanc">Написать отзыв или предложение</a>\
+		<a href="/" class="bt"><i class="fa fa-home"></i></a>\
+		<a href="/message/?theme=dndmonsters" class="bt" target="_blanc">Написать отзыв или предложение</a>\
 		<a href="#" class="bt" id="info"><i class="fa fa-question-circle"></i></a></div>';
 		var generator=panel + challenge + f_name +view + hidden_m+  lists + monsters ;
 		$("#panel").html(generator);
