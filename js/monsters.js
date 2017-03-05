@@ -205,6 +205,8 @@ var str_ch="", str_ml="";
 		$(".monster, .monster_card").each(function(){
 			var cr = $(this).find(".cr_num").text().trim(); // уровень вызова
 			var size = $(this).find(".size").text().trim(); // размер
+			var type = $(this).find(".type").text().trim(); // тип
+				type = /^[А-Яа-яЁёA-Za-z]+/.exec(type)[0].trim();
 			
 			var f_challenge_is=0; // флаг вызова
 			var f_size_is=0; // флаг вызова
@@ -243,7 +245,7 @@ var str_ch="", str_ml="";
 			// тип
 			for(i=0; i<arr_type.length; i++)
 				{
-				if(arr_type[i]==size)
+				if(arr_type[i]==type)
 					{
 					f_type_is=1;
 					break;					
@@ -251,7 +253,7 @@ var str_ch="", str_ml="";
 				}
 			if(f_type_is==0)
 				{
-				arr_type[arr_type.length]=size;	
+				arr_type[arr_type.length]=type;	
 				}			
 		});		
 		
@@ -314,9 +316,20 @@ var str_ch="", str_ml="";
 		  filter_size_out+="<input type='checkbox' id='ch_sz_"+i+"'><label for='ch_sz_"+i+"' class='ch_lb' " + font_size + ">"+item+"</label>";	
 		});
 		
+		filter_type_out='';
+		arr_type.forEach(function(item, i) {	
+			var font_size = "";
+			if(item.length > 9) {
+				font_size = 100 - (item.length - 9) * 5;
+				font_size = " style='font-size: " + font_size + "%' ";
+			}
+		  filter_type_out+="<input type='checkbox' id='ch_tp_"+i+"'><label for='ch_tp_"+i+"' class='ch_lb' " + font_size + ">"+item+"</label>";	
+		});
+		
 			
 			challenge="<div class='challenge block'><h2>Класс Сложности:</h2>"+filter_challenge_out+"</div>";
 			size="<div class='size block'><h2>Размер:</h2>"+filter_size_out+"</div>";
+			type="<div class='type block'><h2>Тип:</h2>"+filter_type_out+"</div>";
 		var monsters = "<div class='monsters block' style='display: none'>"+
 			"<input type='checkbox' id='ch_mn_1'><label for='ch_mn_1' class='ch_mn' data-mn='Гигантский паук (Giant Spider)'>Гигантский паук (Giant Spider)</label>"+
 			"<input type='checkbox' id='ch_mn_2'><label for='ch_mn_2' class='ch_mn' data-mn='Паук (Spider)'>Паук (Spider)</label>"+
@@ -358,7 +371,7 @@ var str_ch="", str_ml="";
 		<a href="/" class="bt"><i class="fa fa-home"></i></a>\
 		<a href="/message/?theme=dndmonsters" class="bt" target="_blanc">Написать отзыв или предложение</a>\
 		<a href="#" class="bt" id="info"><i class="fa fa-question-circle"></i></a></div>';
-		var generator=panel + challenge + size + f_name +view + hidden_m+  lists + monsters ;
+		var generator=panel + challenge + size + type + f_name +view + hidden_m+  lists + monsters ;
 		$("#panel").html(generator);
 	}
 	$.ajax({
@@ -423,6 +436,26 @@ function monster_filter(name){
 				for(var i=0; i< arr_ch.length; i++) {	
 					var size = arr_ch[i].trim();
 					if(monster_size == size)
+						$(this).hide();	
+				}	
+			});
+		}
+		
+		// тип
+		str_ch="";
+		if($(".type input[type=checkbox]:checked").length>0) {
+			$(".type input[type=checkbox]:not(:checked)").each(function(){
+				str_ch+=$(this).next("label").text()+",";
+				});	
+		}
+		if(str_ch!='') {	
+			var arr_ch = str_ch.split(",");		
+			$(".monster, .monster_card").each(function(){ 
+				var monster_type = String($(this).find(".type").text()).trim();
+					monster_type = /^[А-Яа-яЁёA-Za-z]+/.exec(monster_type)[0].trim();
+				for(var i=0; i< arr_ch.length; i++) {	
+					var type = arr_ch[i].trim();
+					if(monster_type == type)
 						$(this).hide();	
 				}	
 			});
