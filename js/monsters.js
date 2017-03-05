@@ -565,8 +565,55 @@ function xmlParser(xml) {
 		var senses = c_string("senses", "i2-tipe", "Чувства", $(this).find("senses").text());
 		var passive = c_string("passive", "i2-tipe", "Пассивное восприятие", $(this).find("passive").text());
 		var languages = c_string("languages", "i2-tipe", "Язык", $(this).find("languages").text());
-		var cr = c_string("cr", "i2-tipe", "Сложность", "<span class='cr_num'>"+$(this).find("cr").text()+"</span>");
 		var name= $(this).find("name").eq(0).text();
+		
+		// experience
+		var expa = {
+			"0": "0 - 10",
+			"1/8": "25",
+			"1/4": "50",
+			"1/2": "100",
+			"1": "200",
+			"2": "450",
+			"3": "700",
+			"4": "1100",
+			"5": "1800",
+			"6": "2300",
+			"7": "2900",
+			"8": "3900",
+			"9": "5000",
+			"10": "5900",
+			"11": "7200",
+			"12": "8400",
+			"13": "10000",
+			"14": "11500",
+			"15": "13000",
+			"16": "15000",
+			"17": "18000",
+			"18": "20000",
+			"19": "22000",
+			"20": "25000",
+			"21": "33000",
+			"22": "41000",
+			"23": "50000",
+			"24": "62000",
+			"25": "75000",
+			"26": "90000",
+			"27": "105000",
+			"28": "120000",
+			"29": "135000",
+			"30": "155000"
+		};
+		
+		var experience = "?";
+		try{
+			experience = expa[$(this).find("cr").text()].replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+		} catch (err) {
+			
+		}
+		experience = "<span style='color: #999;'> ("+experience+" XP)</span>";
+		var cr = c_string("cr", "i2-tipe", "Сложность", "<span class='cr_num'>"+$(this).find("cr").text()+"</span>" + experience);
+		
 		$("#result").append('<div class="monster" data-id="'+data_id+'" data-name="'+name.toLowerCase()+'"><button class="hide_monster">Скрыть Х</button>'+
 			"<div class='left'><div class='inner'>"+
 			'<div class="name">' + name + '</div>'+
@@ -589,7 +636,7 @@ function xmlParser(xml) {
 			senses+
 			passive+
 			languages+
-			cr+
+			cr+  
 			'<hr>'+
 			trait+
 			"</div></div><div class='right'><div class='inner'>"+
