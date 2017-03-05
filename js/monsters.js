@@ -189,44 +189,85 @@ var str_ch="", str_ml="";
 			"<input type='checkbox' id='ch_ch_26'><label for='ch_ch_26' class='ch_lb'>23</label>"+
 			"<input type='checkbox' id='ch_ch_27'><label for='ch_ch_27' class='ch_lb'>24</label>"+
 		"</div>";
-		//var max_ch=0;
-		var arr=[0];
+		
+		var arr_challenge = [0]; // уровень вызова
+		var arr_size = []; // размер
+		var arr_size_etalon = [
+			"Крошечный",
+			"Маленький",
+			"Средний",
+			"Большой",
+			"Огромный",
+			"Колоссальный"
+		];
+		var arr_type = []; // тип
+
 		$(".monster, .monster_card").each(function(){
-			var cr = $(this).find(".cr_num").text();
-			var f_is=0;
-			for(i=0; i<arr.length; i++)
+			var cr = $(this).find(".cr_num").text().trim(); // уровень вызова
+			var size = $(this).find(".size").text().trim(); // размер
+			
+			var f_challenge_is=0; // флаг вызова
+			var f_size_is=0; // флаг вызова
+			var f_type_is=0; // флаг типа
+			
+			// вызов
+			for(i=0; i<arr_challenge.length; i++)
 				{
-				if(arr[i]==cr)
+				if(arr_challenge[i]==cr)
 					{
-					f_is=1;
+					f_challenge_is=1;
 					break;					
 					}					
 				}
-			if(f_is==0)
+			if(f_challenge_is==0)
 				{
-				arr[arr.length]=cr;	
+				arr_challenge[arr_challenge.length]=cr;	
 				}
 				
-		});
-		console.log(arr);
+				/*/
+			// размер
+			for(i=0; i<arr_size.length; i++)
+				{
+				if(arr_size[i]==size)
+					{
+					f_size_is=1;
+					break;					
+					}					
+				}
+			if(f_size_is==0)
+				{
+				arr_size[arr_size.length]=size;	
+				}
+			/**/
+
+			// тип
+			for(i=0; i<arr_type.length; i++)
+				{
+				if(arr_type[i]==size)
+					{
+					f_type_is=1;
+					break;					
+					}					
+				}
+			if(f_type_is==0)
+				{
+				arr_type[arr_type.length]=size;	
+				}			
+		});		
 		
-		for (var j = 0, len = arr.length - 1; j < len; j++) 
+		// уровень вызова
+		for (var j = 0, len = arr_challenge.length - 1; j < len; j++) 
 			{
 			swapped = 0;
 			var i = 0;
 			while (i < len) 
 				{
-					//console.log(arr[i]+" "+parseFloat(eval(arr[i]))+" - "+arr[i+1]+" "+parseFloat(eval(arr[i+1])));
-					//var val=eval(arr[i]);
-					//val = parseFloat(val);
-					//console.log(arr[i+1]+" "+parseFloat(eval(arr[i+1])));
-				if (parseFloat(eval(arr[i])) > parseFloat(eval(arr[i + 1]))) 
+				if (parseFloat(eval(arr_challenge[i])) > parseFloat(eval(arr_challenge[i + 1]))) 
 					{
-					var c = arr[i];
-					arr[i] = arr[i + 1];
-					arr[i + 1] = c;
+					var c = arr_challenge[i];
+					arr_challenge[i] = arr_challenge[i + 1];
+					arr_challenge[i + 1] = c;
 					swapped = 1;
-					//console.log(arr);
 					}
 				i++;
 				}
@@ -234,34 +275,48 @@ var str_ch="", str_ml="";
 			if(swapped==0)
 				break;
 			}
-	
-		//q_sort(arr);
-		/*
-		var out='';
-		for(s=0,  t=0; s<arr[arr.length]; s++)
+		
+		/*/
+		// размер
+		for (var j = 0, len = arr_size.length - 1; j < len; j++) 
 			{
-			out+="<input type='checkbox' id='ch_ch_"+s+"'><label for='ch_ch_"+s+"' class='ch_lb'>"+t+"</label>";	
+			swapped = 0;
+			var i = 0;
+			while (i < len) 
+				{
+				if (0) 
+					{
+					var c = arr_size[i];
+					arr_size[i] = arr_size[i + 1];
+					arr_size[i + 1] = c;
+					swapped = 1;
+					}
+				i++;
+				}
 			
-			if(t==0)
-				t="1/8";
-			else if(t=="1/8")
-				t="1/4";
-			else if(t=="1/4")
-				t="1/2";
-			else if(t=="1/2")
-				t=1;
-			else
-				t++;
+			if(swapped==0)
+				break;
 			}
-			*/
-		out='';
-		arr.forEach(function(item, i, arr) {
-		  //alert( i + ": " + item + " (массив:" + arr + ")" );
-		  out+="<input type='checkbox' id='ch_ch_"+i+"'><label for='ch_ch_"+i+"' class='ch_lb'>"+item+"</label>";	
+
+		/**/	
+		filter_challenge_out='';
+		arr_challenge.forEach(function(item, i, arr_challenge) {			
+		  filter_challenge_out+="<input type='checkbox' id='ch_ch_"+i+"'><label for='ch_ch_"+i+"' class='ch_lb'>"+item+"</label>";	
 		});
-			//console.log("out: "+out);
+		
+		filter_size_out='';
+		arr_size_etalon.forEach(function(item, i) {	
+			var font_size = "";
+			if(item.length > 9) {
+				font_size = 100 - (item.length - 9) * 5;
+				font_size = " style='font-size: " + font_size + "%' ";
+			}
+		  filter_size_out+="<input type='checkbox' id='ch_sz_"+i+"'><label for='ch_sz_"+i+"' class='ch_lb' " + font_size + ">"+item+"</label>";	
+		});
+		
 			
-			challenge="<div class='challenge block'><h2>Класс Сложности:</h2>"+out+"</div>";
+			challenge="<div class='challenge block'><h2>Класс Сложности:</h2>"+filter_challenge_out+"</div>";
+			size="<div class='size block'><h2>Размер:</h2>"+filter_size_out+"</div>";
 		var monsters = "<div class='monsters block' style='display: none'>"+
 			"<input type='checkbox' id='ch_mn_1'><label for='ch_mn_1' class='ch_mn' data-mn='Гигантский паук (Giant Spider)'>Гигантский паук (Giant Spider)</label>"+
 			"<input type='checkbox' id='ch_mn_2'><label for='ch_mn_2' class='ch_mn' data-mn='Паук (Spider)'>Паук (Spider)</label>"+
@@ -303,7 +358,7 @@ var str_ch="", str_ml="";
 		<a href="/" class="bt"><i class="fa fa-home"></i></a>\
 		<a href="/message/?theme=dndmonsters" class="bt" target="_blanc">Написать отзыв или предложение</a>\
 		<a href="#" class="bt" id="info"><i class="fa fa-question-circle"></i></a></div>';
-		var generator=panel + challenge + f_name +view + hidden_m+  lists + monsters ;
+		var generator=panel + challenge + size + f_name +view + hidden_m+  lists + monsters ;
 		$("#panel").html(generator);
 	}
 	$.ajax({
@@ -312,94 +367,73 @@ var str_ch="", str_ml="";
         dataType: "xml",
         success: xmlParser
     });
-function monster_filter(nm){
+	
+function monster_filter(name){
 	console.log("monster_filter")
 		tmp1=0, tmp2=0;
 		$(".monster, .monster_card").show();
 		var atr="";
 		var atr2='';
 		var f_atr2=0;
+		
 		// имя
-		if(nm!=undefined && nm!='')
+		if(name!=undefined && name!='')
 		{
-			atr+= "[data-name*='"+nm+"']";
-			//atr2+= "[data-name*='"+nm+"']";
+			atr+= "[data-name*='"+name+"']";
 		}
+		
+		if(atr!='') {	// if name
+			$(".monster, .monster_card").hide();
+			$(".monster"+atr+", .monster_card"+atr).show();
+		}
+		
 		// сложность
 		var str_ch="";
-		if($(".challenge input[type=checkbox]:checked").length>0)
-			{
+		if($(".challenge input[type=checkbox]:checked").length>0) {
 			$(".challenge input[type=checkbox]:not(:checked)").each(function(){
 				str_ch+=$(this).next("label").text()+",";
 				});	
-			}
-		//console.log("str_ch: "+str_ch);
-		//console.log("class: "+cl+" name: "+nm+" level: "+lv+" school: "+sc);
-		//console.log("atr: "+atr);
-		//console.log("atr2: "+atr2);
-		if(atr!='')
-			{	
-			$(".monster, .monster_card").hide();
-			$(".monster"+atr+", .monster_card"+atr).show();
-			}
-		//if(f_atr2==1)
-			//$(".monster"+atr2+", .monster_card"+atr2).show();
-			if(str_ch!='')
-				{	
-				var arr_ch = str_ch.split(",");		
-				$(".monster, .monster_card").each(function(){
-					//$(this).hide();
-					//console.log($(this).find(".name").text());
-					//console.log(eval(arr_ch[2]));
-					var cr = String($(this).find(".cr_num").text());
-					for(var i=0; i< arr_ch.length; i++)
-						{
-							//console.log(String(arr_ch[i])+"=="+String(cr));
-							/*
-							var str_a_ch = String(arr_ch[i]);
-							var str_cr = String(cr);
-							var s_a_ch = arr_ch[i];
-							var s_cr = cr;
-							var usl =  (cr == arr_ch[i]);
-							*/
-							var tmp_str=cr;
-							while(tmp_str.length>1 && cr[0]==0)
-							{
-								tmp_str=tmp_str.slice(1);
-							}
-						if(String(arr_ch[i])==String(tmp_str) || tmp_str == arr_ch[i])
-							$(this).hide();	
-						}	
-					});
-				}
-		/*	
-		if(str_ch=='' && str_ml=='')
-			{
-			$(".monster, .monster_card").show();	
-			}
-		else
-		{
-			var arr_ch = str_ch.split(",");
-			$(".monster, .monster_card").each(function(){
-				$(this).hide();
-				var cr = $(this).find(".cr_num").text();
-				for(var i=0; i< arr_ch.length; i++)
-					{
-					if(arr_ch[i]==cr)
-						$(this).show();	
+		}
+		if(str_ch!='') {	
+			var arr_ch = str_ch.split(",");		
+			$(".monster, .monster_card").each(function(){ 
+				var cr = String($(this).find(".cr_num").text());
+				for (var i=0; i < arr_ch.length; i++) {
+					var tmp_str = cr.trim();
+					while (tmp_str.length > 1 && cr[0] == 0) {
+						tmp_str = tmp_str.slice(1);
 					}
-			});			
-		}	
-		*/
+					if (String(arr_ch[i]) == String(tmp_str) || tmp_str == arr_ch[i])
+						$(this).hide();	
+				}	
+			});
+		}
+		
+		// размер
+		str_ch="";
+		if($(".size input[type=checkbox]:checked").length>0) {
+			$(".size input[type=checkbox]:not(:checked)").each(function(){
+				str_ch+=$(this).next("label").text()+",";
+				});	
+		}
+		if(str_ch!='') {	
+			var arr_ch = str_ch.split(",");		
+			$(".monster, .monster_card").each(function(){ 
+				var monster_size = String($(this).find(".size").text()).trim();
+				for(var i=0; i< arr_ch.length; i++) {	
+					var size = arr_ch[i].trim();
+					if(monster_size == size)
+						$(this).hide();	
+				}	
+			});
+		}
+		
 	}	
 function get_filter(){
-		var nm=$(".f_name").val().toLowerCase();
-		//console.log("name: "+nm)
-		//if(nm!='')
-			monster_filter(nm);
-		/*else
-			$(".monster, .monster_card").show();*/
+		var nm=$(".f_name").val().toLowerCase();		
+		monster_filter(nm);
 	}
+	
 function count_mod(num){
 	var mod=Math.floor((num-10)/2);
 	if(mod>0)
@@ -407,6 +441,7 @@ function count_mod(num){
 	num = num+" ("+mod+")";
 	return num;
 }
+
 function c_string(clas, s_clas, title, cont){
 	//'<div class="vulnerable"><span class="i2-tipe">Уязвимость </span>' + $(this).find("vulnerable").text() + '</div>'+
 	var string ='';
@@ -414,6 +449,7 @@ function c_string(clas, s_clas, title, cont){
 		string = '<div class="'+clas+' i4-tipe"><span class="'+s_clas+'">'+title+' </span>'+cont+'</div>';
 	return string;
 }
+
 function xmlParser(xml) {
     //$('#load').fadeOut();
 	console.log("start xml-parsing");
@@ -433,7 +469,7 @@ function xmlParser(xml) {
 			case "M": size="Средний"; break;
 			case "L": size="Большой"; break;
 			case "H": size="Огромный"; break;
-			case "g": size="Колосальный"; break;
+			case "G": size="Колоссальный"; break;
 		}
 		size='<span class="size">' + size + ' </span>'
 		var trait = '';
@@ -580,6 +616,8 @@ function xmlParser(xml) {
 			}
 		});
 	});
+	
+	// фильтр по разнм параметрам (одна функция для всех)
 	$("body").on('click',".ch_lb", function(){
 		var fr=$(this).attr("for");
 		if($("#"+fr).prop("checked"))
@@ -593,6 +631,8 @@ function xmlParser(xml) {
 		get_filter();	
 		return false;		
 	});
+	
+	
 	$(".ch_mn").on('click', function(){
 		var fr=$(this).attr("for");
 		if($("#"+fr).prop("checked"))

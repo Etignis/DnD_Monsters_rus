@@ -5,15 +5,15 @@
     //width: 16em;
     width: 100%;
     .block{
-        margin: .2em 0;
-        padding: .3em;
+        margin: .2rem 0;
+        padding: .3rem;
         background: rgba(0,0,0,.5);
     }
      .s_block{
           .block;
        // float: left;
-        min-width: 13em;
-        max-width: 16em;
+        min-width: 13rem;
+        max-width: 16rem;
        // width: 98%;
         //margin: .2em;
         text-align: right;
@@ -25,14 +25,14 @@
     }
     .s_sp{
         margin: 0;
-        padding: .1em;
-        width: 9em;
+        padding: .1rem;
+        width: 9rem;
     }
     
     h2{
         font-size: 110%;
         padding: 0;
-        margin: .2em 0;
+        margin: .2rem 0;
         color: @white;
     }
     .bt{         
@@ -43,7 +43,7 @@
         .fr-concave;
         display: inline-block;
         min-height: @h;
-        padding: .2em;
+        padding: .2rem;
       
     }
     input[type='checkbox']{
@@ -52,15 +52,15 @@
     
     input[type='checkbox'] + label{
             .fr-convex;    
-            @w: 2.2em;
-            @h: 1em;
+            @w: 2.2rem;
+            @h: 1rem;
             min-width: @w;
             min-height: @h;
             text-align: center;
             background: @m-gray + #111;
            // width: 100%;
             display: inline-block;
-            padding: .3em;
+            padding: .3rem;
             &:hover{
                 background: @m-gray + #222;    
             }
@@ -74,12 +74,12 @@
     input[type='checkbox']:checked + label{
         .fr-concave;
         background:  @m-gray - #222;  
-        padding: .3em;  
+        padding: .3rem;  
     }
     
     .hidden_m{
         display: none;
-        padding: .25em 0;
+        padding: .25rem 0;
         color: @m-gray;
         &:hover{
             color: @white;
@@ -94,8 +94,14 @@
 @media screen and (min-width: @m_w_1) {
     #panel{
         float: left;
-        @w: 1em;
+        @w: 1rem;
         @h: @w;
-        width: 16em;
-    }    
+        width: 16rem;
+        .size{
+            .ch_lb{
+
+                width: 45%;
+            }
+        } 
+    }   
 }
