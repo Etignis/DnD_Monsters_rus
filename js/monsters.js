@@ -207,10 +207,13 @@ var str_ch="", str_ml="";
 			var size = $(this).find(".size").text().trim(); // размер
 			var type = $(this).find(".type").text().trim(); // тип
 				type = /^[А-Яа-яЁёA-Za-z]+/.exec(type)[0].trim();
+			var subtype = $(this).find(".type").text().trim(); // подтип
+				subtype = /([А-Яа-яЁёA-Za-z]+)/.exec(type)[0].trim();
 			
 			var f_challenge_is=0; // флаг вызова
 			var f_size_is=0; // флаг вызова
 			var f_type_is=0; // флаг типа
+			var f_subtype_is=0; // флаг подтипа
 			
 			// вызов
 			for(i=0; i<arr_challenge.length; i++)
@@ -254,7 +257,23 @@ var str_ch="", str_ml="";
 			if(f_type_is==0)
 				{
 				arr_type[arr_type.length]=type;	
-				}			
+				}
+			
+			// подтип
+			if(subtype) {
+			for(i=0; i<arr_subtype.length; i++)
+				{
+				if(arr_subtype[i]==subtype)
+					{
+					f_subtype_is=1;
+					break;					
+					}					
+				}
+			if(f_subtype_is==0)
+				{
+				arr_subtype[arr_subtype.length]=subtype;	
+				}
+			}
 		});		
 		
 		// уровень вызова
@@ -326,10 +345,20 @@ var str_ch="", str_ml="";
 		  filter_type_out+="<input type='checkbox' id='ch_tp_"+i+"'><label for='ch_tp_"+i+"' class='ch_lb' " + font_size + ">"+item+"</label>";	
 		});
 		
+		filter_subtype_out='';
+		arr_subtype.forEach(function(item, i) {	
+			var font_size = "";
+			if(item.length > 9) {
+				font_size = 100 - (item.length - 9) * 5;
+				font_size = " style='font-size: " + font_size + "%' ";
+			}
+		  filter_subtype_out+="<input type='checkbox' id='ch_sbt_"+i+"'><label for='ch_sbt_"+i+"' class='ch_lb' " + font_size + ">"+item+"</label>";	
+		});
+		
 			
 			challenge="<div class='challenge block'><h2>Класс Сложности:</h2>"+filter_challenge_out+"</div>";
 			size="<div class='size block'><h2>Размер:</h2>"+filter_size_out+"</div>";
-			type="<div class='type block'><h2>Тип:</h2>"+filter_type_out+"</div>";
+			type="<div class='type block'><h2>Тип и подтип:</h2>"+filter_type_out+filter_subtype_out+"</div>";	
 		var monsters = "<div class='monsters block' style='display: none'>"+
 			"<input type='checkbox' id='ch_mn_1'><label for='ch_mn_1' class='ch_mn' data-mn='Гигантский паук (Giant Spider)'>Гигантский паук (Giant Spider)</label>"+
 			"<input type='checkbox' id='ch_mn_2'><label for='ch_mn_2' class='ch_mn' data-mn='Паук (Spider)'>Паук (Spider)</label>"+
