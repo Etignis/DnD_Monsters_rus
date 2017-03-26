@@ -209,7 +209,8 @@ var str_ch="", str_ml="";
 			var type = $(this).find(".type").text().trim(); // тип
 				type = /^[А-Яа-яЁёA-Za-z]+/.exec(type)[0].trim();
 			var subtype = $(this).find(".type").text().trim(); // подтип
-				subtype = /([А-Яа-яЁёA-Za-z]+)/.exec(type)[0].trim();
+				subtype = /\(([^\(\)]+)\)/.exec(subtype);
+				subtype = subtype? subtype[1].trim(): false;
 			
 			var f_challenge_is=0; // флаг вызова
 			var f_size_is=0; // флаг вызова
@@ -230,21 +231,6 @@ var str_ch="", str_ml="";
 				arr_challenge[arr_challenge.length]=cr;	
 				}
 				
-				/*/
-			// размер
-			for(i=0; i<arr_size.length; i++)
-				{
-				if(arr_size[i]==size)
-					{
-					f_size_is=1;
-					break;					
-					}					
-				}
-			if(f_size_is==0)
-				{
-				arr_size[arr_size.length]=size;	
-				}
-			/**/
 
 			// тип
 			for(i=0; i<arr_type.length; i++)
@@ -262,17 +248,21 @@ var str_ch="", str_ml="";
 			
 			// подтип
 			if(subtype) {
-			for(i=0; i<arr_subtype.length; i++)
-				{
-				if(arr_subtype[i]==subtype)
-					{
-					f_subtype_is=1;
-					break;					
-					}					
-				}
-			if(f_subtype_is==0)
-				{
-				arr_subtype[arr_subtype.length]=subtype;	
+				a_st = subtype.split(",");
+				for (var t=0; t<a_st.length; t++) {
+					var t_st = a_st[t];
+					for(i=0; i<arr_subtype.length; i++)
+						{
+						if(arr_subtype[i]==t_st)
+							{
+							f_subtype_is=1;
+							break;					
+							}					
+						}
+					if(f_subtype_is==0)
+						{
+						arr_subtype[arr_subtype.length]=t_st;	
+						}					
 				}
 			}
 		});		
@@ -296,31 +286,8 @@ var str_ch="", str_ml="";
 			
 			if(swapped==0)
 				break;
-			}
-		
-		/*/
-		// размер
-		for (var j = 0, len = arr_size.length - 1; j < len; j++) 
-			{
-			swapped = 0;
-			var i = 0;
-			while (i < len) 
-				{
-				if (0) 
-					{
-					var c = arr_size[i];
-					arr_size[i] = arr_size[i + 1];
-					arr_size[i + 1] = c;
-					swapped = 1;
-					}
-				i++;
-				}
-			
-			if(swapped==0)
-				break;
-			}
-
-		/**/	
+			}		
+	
 		filter_challenge_out='';
 		arr_challenge.forEach(function(item, i, arr_challenge) {			
 		  filter_challenge_out+="<input type='checkbox' id='ch_ch_"+i+"'><label for='ch_ch_"+i+"' class='ch_lb'>"+item+"</label>";	
@@ -351,6 +318,7 @@ var str_ch="", str_ml="";
 			var font_size = "";
 			if(item.length > 9) {
 				font_size = 100 - (item.length - 9) * 5;
+				font_size = font_size<70? 70: font_size;
 				font_size = " style='font-size: " + font_size + "%' ";
 			}
 		  filter_subtype_out+="<input type='checkbox' id='ch_sbt_"+i+"'><label for='ch_sbt_"+i+"' class='ch_lb' " + font_size + ">"+item+"</label>";	
@@ -359,7 +327,8 @@ var str_ch="", str_ml="";
 			
 			challenge="<div class='challenge block'><h2>Класс Сложности:</h2>"+filter_challenge_out+"</div>";
 			size="<div class='size block'><h2>Размер:</h2>"+filter_size_out+"</div>";
-			type="<div class='type block'><h2>Тип и подтип:</h2>"+filter_type_out+filter_subtype_out+"</div>";	
+			type="<div class='type block'><h2>Тип:</h2>"+filter_type_out+"</div>";	
+			subtype="<div class='subtype block'><h2>Подтип:</h2>"+filter_subtype_out+"</div>";	
 		var monsters = "<div class='monsters block' style='display: none'>"+
 			"<input type='checkbox' id='ch_mn_1'><label for='ch_mn_1' class='ch_mn' data-mn='Гигантский паук (Giant Spider)'>Гигантский паук (Giant Spider)</label>"+
 			"<input type='checkbox' id='ch_mn_2'><label for='ch_mn_2' class='ch_mn' data-mn='Паук (Spider)'>Паук (Spider)</label>"+
@@ -401,7 +370,7 @@ var str_ch="", str_ml="";
 		<a href="/" class="bt"><i class="fa fa-home"></i></a>\
 		<a href="/message/?theme=dndmonsters" class="bt" target="_blanc">Написать отзыв или предложение</a>\
 		<a href="#" class="bt" id="info"><i class="fa fa-question-circle"></i></a></div>';
-		var generator=panel + challenge + size + type + f_name +view + hidden_m+  lists + monsters ;
+		var generator=panel + challenge + size + type +subtype + f_name +view + hidden_m+  lists + monsters ;
 		$("#panel").html(generator);
 	}
 	$.ajax({
@@ -488,6 +457,34 @@ function monster_filter(name){
 					if(monster_type == type)
 						$(this).hide();	
 				}	
+			});
+		}		
+		
+			
+		// подтип
+		str_ch="";
+		var arr_ch = [];
+		if($(".subtype input[type=checkbox]:checked").length>0) {
+			$(".subtype input[type=checkbox]:not(:checked)").each(function(){
+				arr_ch.push($(this).next("label").text()); //str_ch+=$(this).next("label").text()+",";
+				});	
+		}
+		if(arr_ch.length>0) {	
+			//var arr_ch = str_ch.split(",");		
+			$(".monster, .monster_card").each(function(){ 
+				var monster_type = String($(this).find(".type").text()).trim();
+				var monster_subtype = monster_type; // подтип
+					monster_subtype = /\(([^\(\)]+)\)/.exec(monster_subtype);
+					monster_subtype = monster_subtype? monster_subtype[1].trim(): false;
+					if(monster_subtype) {						
+						for(var i=0; i< arr_ch.length; i++) {	
+							var subtype = arr_ch[i].trim();
+							if(monster_subtype.match(subtype))
+								$(this).hide();	
+						}	
+					} else{
+						$(this).hide();	
+					}
 			});
 		}
 		

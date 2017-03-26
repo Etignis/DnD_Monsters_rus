@@ -5778,7 +5778,7 @@
 <monster>
 <name>Дуегар (Duergar)</name>
 <size>M</size>
-<type>гуманоид (dwarf), monster manual</type>
+<type>гуманоид (дворф), monster manual</type>
 <alignment>законно-злое</alignment>
 <ac>16 (пластинчатый нагрудник, щит)</ac>
 <hp>26 (4d8 + 4)</hp>
@@ -8801,9 +8801,9 @@
 </monster>
 
 <monster>
-<name>Гнолл (Gnoll)</name>
+<name>Гнолл (гнолл)</name>
 <size>M</size>
-<type>гуманоид (gnoll), monster manual</type>
+<type>гуманоид (гнолл), monster manual</type>
 <alignment>хаотично-злое</alignment>
 <ac>15 (кожаный доспех, щит)</ac>
 <hp>22 (5d8)</hp>
@@ -8842,7 +8842,7 @@
 </monster>
 
 <monster>
-<name>Гнолл Клык Иеноху (Gnoll Fang of Yeenoghu)</name>
+<name>Гнолл Клык Иеноху (гнолл Fang of Yeenoghu)</name>
 <size>M</size>
 <type>гуманоид (гнолл), monster manual</type>
 <alignment>хаотично-злое</alignment>
@@ -8881,7 +8881,7 @@
 </monster>
 
 <monster>
-<name>Гнолл хозяин стаи (Gnoll Pack Lord)</name>
+<name>Гнолл хозяин стаи (гнолл Pack Lord)</name>
 <size>M</size>
 <type>гуманоид (гнолл), monster manual</type>
 <alignment>хаотично-злое</alignment>
@@ -11217,9 +11217,9 @@
 </monster>
 
 <monster>
-<name>Куо-тоа (Kuo-Toa)</name>
+<name>Куо-тоа (куо-тоа)</name>
 <size>M</size>
-<type>гуманоид (kuo-toa), monster manual</type>
+<type>гуманоид (куо-тоа), monster manual</type>
 <alignment>нейтрально-злое</alignment>
 <ac>13 (естественная броня, щит)</ac>
 <hp>18 (4d8)</hp>
@@ -11274,9 +11274,9 @@
 </monster>
 
 <monster>
-<name>Куо-тоа архисвященник (Kuo-Toa Archpriest)</name>
+<name>Куо-тоа архисвященник (куо-тоа Archpriest)</name>
 <size>M</size>
-<type>гуманоид (kuo-toa), monster manual</type>
+<type>гуманоид (куо-тоа), monster manual</type>
 <alignment>нейтрально-злое</alignment>
 <ac>13 (естественная броня)</ac>
 <hp>97 (13d8 + 39)</hp>
@@ -11337,9 +11337,9 @@
 </monster>
 
 <monster>
-<name>Куо-тоа староста (Kuo-Toa Monitor)</name>
+<name>Куо-тоа староста (куо-тоа Monitor)</name>
 <size>M</size>
-<type>гуманоид (kuo-toa), monster manual</type>
+<type>гуманоид (куо-тоа), monster manual</type>
 <alignment>нейтрально-злое</alignment>
 <ac>13 (естественная броня, unarmored defense)</ac>
 <hp>65 (10d8 + 20)</hp>
@@ -11392,9 +11392,9 @@
 </monster>
 
 <monster>
-<name>Куо-тоа Кнут (Kuo-Toa Whip)</name>
+<name>Куо-тоа Кнут (куо-тоа Whip)</name>
 <size>M</size>
-<type>гуманоид (kuo-toa), monster manual</type>
+<type>гуманоид (куо-тоа), monster manual</type>
 <alignment>нейтрально-злое</alignment>
 <ac>11 (естественная броня)</ac>
 <hp>65 (10d8 + 20)</hp>
