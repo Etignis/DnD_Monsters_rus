@@ -201,6 +201,7 @@ var str_ch="", str_ml="";
 			"Колоссальный"
 		];
 		var arr_type = []; // тип
+		var arr_subtype = []; // тип
 
 		$(".monster, .monster_card").each(function(){
 			var cr = $(this).find(".cr_num").text().trim(); // уровень вызова
