@@ -1,39 +1,10 @@
 {
 	"files": {
-		"background.less": {
+		"style.less": {
 			"engines": [
 				{
 					"compiler": "less",
-					"output": "background.css",
-					"options": {
-						"compress": false,
-						"ieCompat": false,
-						"strictMath": false,
-						"strictUnits": false,
-						"javascriptEnabled": false,
-						"sourcemap": true
-					}
-				}
-			],
-			"sources": [
-				"bg.less",
-				"bg.less",
-				"frame.less",
-				"frame.less",
-				"page.less",
-				"page.less",
-				"sceleton.less",
-				"sceleton.less",
-				"usefull.less",
-				"usefull.less",
-				"vars.less"
-			]
-		},
-		"Monsters.less": {
-			"engines": [
-				{
-					"compiler": "less",
-					"output": "Monsters.css",
+					"output": "style.css",
 					"options": {
 						"compress": false,
 						"ieCompat": false,
@@ -46,13 +17,17 @@
 				}
 			],
 			"sources": [
+				"card.less",
+				"combobox.less",
 				"frame.less",
 				"loader.less",
 				"page.less",
-				"panel.less",
-				"sceleton.less",
+				"print.less",
+				"select.less",
+				"side.less",
+				"start.less",
 				"usefull.less",
-				"vars.less"
+				"var.less"
 			]
 		}
 	}

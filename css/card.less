@@ -1,0 +1,385 @@
+@mainColor: #e01a10;
+@radius: 5px;
+.row{
+    float: none;
+    clear: both;
+    &:before, &:after{
+        content:"";
+        .clear();
+    }
+    
+    .cell{
+        float: left;
+        width: 50%;  
+    }
+}
+#lockedSpellsArea{
+    margin-bottom: .3em;
+    position: relative;
+    
+    .topHeader, .bottomHeader, .bUnlockAll{
+        font-weight: 600;
+       // display: block;
+        padding: .2em;
+        text-shadow: 0 0 4px rgba(255,255,255,.9);
+        background: rgba(255,255,255,.5);
+        color: @d-gray;
+        border-radius: .1em;
+    }
+    .bUnlockAll{
+        position: absolute;
+        top: 0;
+        right: 0;
+        cursor: pointer;
+        
+        &:hover{
+            background: rgba(255,255,255,.7);
+        }
+    }
+    .topHeader{
+        cursor: pointer;        
+        &:hover{
+            background: rgba(255,255,255,.7);
+        }
+        &:before{
+            content: "Закрепленные заклинания "
+        }
+        
+    }
+    .bottomHeader{
+        &:before{
+            content: "Каталог заклинаний "
+        }
+        
+    }
+    .content{
+        margin-bottom: .3em;
+    }
+    .bHideSpell{
+        display: none;
+    }
+}
+.cardContainer{
+    page-break-inside: avoid;
+    width: 2.5in;
+    margin-right: 1px;
+    margin-top: 1px;
+    float: left;
+    
+    .row{
+        border-bottom: 2px solid @mainColor; 
+        display: flex;
+        flex-direction: row;
+        align-content: stretch;
+        .cell{  
+            float: none;
+            text-align: center;
+            font-size: 65%;      
+            
+            &:first-of-type{
+                border-right: 1px solid @mainColor;      
+            }
+            &:last-of-type{
+                border-left: 1px solid @mainColor;      
+            }
+            span, b{
+                display: block;
+            }
+            b{
+                text-transform: uppercase;
+                font-size: 90%;
+                padding: 2px 0 0;
+            }
+        }
+    }
+}
+
+.spellCard{
+    height: 3.5in;
+    background: @mainColor;
+    border: 9px solid @mainColor;
+    border-bottom-width: 25px;
+    //overflow: hidden;
+    position: relative;
+    color: @m-gray - #111;
+    .bHideSpell, .bLockSpell, .bUnlockSpell{
+        position: absolute;
+        top: -.1em;
+        color: @l-gray;
+        cursor: pointer;
+        transition: color .3s;
+        
+        &:hover{
+            color: @color + #222;    
+        }
+        &:active{
+            color: @color;    
+        }
+    }
+    .bHideSpell{
+       right: .1em; 
+    }
+    .bLockSpell, .bUnlockSpell{
+       left: .1em; 
+    }
+    .content{
+        border-radius: @radius;
+        background: @white;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: stretch;
+    }
+    .cell{
+        span{
+            font-size: 109%;
+        }
+    }
+    h1{
+        font-size: 95%;
+        margin: 0;
+        padding: 0;
+        padding-left: .9em;
+        padding-right: .9em;
+        text-align: center;
+        text-transform: uppercase;
+        border-bottom: 2px solid @mainColor;
+    }
+    .materials{
+        color: @white;
+        background: @mainColor !important;
+        font-size: 75%;
+        padding: 0 2px;
+        font-style: oblique;
+    }
+    .text{
+        font-size: 75%;
+        padding: 2px;
+        overflow-y: auto;
+        flex-shrink: 99;
+        .scrollbars(5px, @m-gray, @l-gray);
+    }
+    .class{
+        position: absolute;
+        left: 1px;
+        bottom: -20px;
+        font-size: 70%;
+        color: @white;
+        cursor: default;
+    }
+    .school{
+        position: absolute;
+        right: 1px;
+        bottom: -20px;
+        font-size: 70%;
+        color: @white;
+        cursor: default;
+    }
+
+}
+
+.lockedSpell{
+    .bLockSpell{
+        color: @black;
+        text-shadow: 0 0 2px @color;
+    }
+}
+
+.Bard{
+    .spellCard{
+        @mainColor: #e91e63;
+        background-color: @mainColor;
+        border-color: @mainColor;
+        h1{
+            border-bottom-color: @mainColor;
+        }
+        .materials{
+            background: @mainColor !important;
+        }
+        .row{
+            border-bottom-color: @mainColor; 
+            .cell{ 
+                &:first-of-type{
+                    border-right-color: @mainColor;      
+                }
+                &:last-of-type{
+                    border-left-color: @mainColor;      
+                }                
+            }
+        }
+    }
+}
+.Cleric{
+    .spellCard{
+        @mainColor: #FDD835;
+        background-color: @mainColor;
+        border-color: @mainColor;
+        h1{
+            border-bottom-color: @mainColor;
+        }
+        .materials{
+            background: @mainColor !important;
+        }
+        .row{
+            border-bottom-color: @mainColor; 
+            .cell{ 
+                &:first-of-type{
+                    border-right-color: @mainColor;      
+                }
+                &:last-of-type{
+                    border-left-color: @mainColor;      
+                }                
+            }
+        }
+    }
+}
+.Druid{
+    .spellCard{
+        @mainColor: #795548;
+        background-color: @mainColor;
+        border-color: @mainColor;
+        h1{
+            border-bottom-color: @mainColor;
+        }
+        .materials{
+            background: @mainColor !important;
+        }
+        .row{
+            border-bottom-color: @mainColor; 
+            .cell{ 
+                &:first-of-type{
+                    border-right-color: @mainColor;      
+                }
+                &:last-of-type{
+                    border-left-color: @mainColor;      
+                }                
+            }
+        }
+    }
+}
+.Paladin{
+    .spellCard{
+        @mainColor: #2196f3;
+        background-color: @mainColor;
+        border-color: @mainColor;
+        h1{
+            border-bottom-color: @mainColor;
+        }
+        .materials{
+            background: @mainColor !important;
+        }
+        .row{
+            border-bottom-color: @mainColor; 
+            .cell{ 
+                &:first-of-type{
+                    border-right-color: @mainColor;      
+                }
+                &:last-of-type{
+                    border-left-color: @mainColor;      
+                }                
+            }
+        }
+    }
+}
+.Ranger{
+    .spellCard{
+        @mainColor: #4caf50;
+        background-color: @mainColor;
+        border-color: @mainColor;
+        h1{
+            border-bottom-color: @mainColor;
+        }
+        .materials{
+            background: @mainColor !important;
+        }
+        .row{
+            border-bottom-color: @mainColor; 
+            .cell{ 
+                &:first-of-type{
+                    border-right-color: @mainColor;      
+                }
+                &:last-of-type{
+                    border-left-color: @mainColor;      
+                }                
+            }
+        }
+    }
+}
+.Sorcerer{
+    .spellCard{
+        @mainColor: #ff9800;
+        background-color: @mainColor;
+        border-color: @mainColor;
+        h1{
+            border-bottom-color: @mainColor;
+        }
+        .materials{
+            background: @mainColor !important;
+        }
+        .row{
+            border-bottom-color: @mainColor; 
+            .cell{ 
+                &:first-of-type{
+                    border-right-color: @mainColor;      
+                }
+                &:last-of-type{
+                    border-left-color: @mainColor;      
+                }                
+            }
+        }
+    }
+}
+.Warlock{
+    .spellCard{
+        @mainColor: #673ab7;
+        background-color: @mainColor;
+        border-color: @mainColor;
+        h1{
+            border-bottom-color: @mainColor;
+        }
+        .materials{
+            background: @mainColor !important;
+        }
+        .row{
+            border-bottom-color: @mainColor; 
+            .cell{ 
+                &:first-of-type{
+                    border-right-color: @mainColor;      
+                }
+                &:last-of-type{
+                    border-left-color: @mainColor;      
+                }                
+            }
+        }
+    }
+}
+.Wizard{
+    .spellCard{
+        @mainColor: #f44336;
+        background-color: @mainColor;
+        border-color: @mainColor;
+        h1{
+            border-bottom-color: @mainColor;
+        }
+        .materials{
+            background: @mainColor !important;
+        }
+        .row{
+            border-bottom-color: @mainColor; 
+            .cell{ 
+                &:first-of-type{
+                    border-right-color: @mainColor;      
+                }
+                &:last-of-type{
+                    border-left-color: @mainColor;      
+                }                
+            }
+        }
+    }
+}

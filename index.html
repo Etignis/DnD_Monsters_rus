@@ -6,11 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> <!-- for monile -->
   <meta name="description" content="Каталог монстров D&D5 на русском языке"> 
   <meta name="Keywords" content="днд, монстры, dnd, monsters, monster manual, d&d"> 
-  <link rel="stylesheet" type="text/css" href="css/Monsters.css"><!-- include css styles  -->
+  <link rel="stylesheet" type="text/css" href="css/style.css"><!-- include css styles  -->
   <link href="../_fonts/FortAwesome/css/font-awesome.min.css" rel="stylesheet">
   <link rel="shortcut icon" href="favicon.ico" /><!-- include icon for browser -->
-  <script type='text/javascript' src='js/jquery-1.11.3.min.js'></script><!-- jQuery -->
-  <script type='text/javascript' src='js/monsters.js'></script><!-- your script -->
+  <script type='text/javascript' src='../_js/jquery-1.11.3.min.js'></script><!-- jQuery -->
+  <script type='text/javascript' src='data/monsters.js' defer></script><!-- your script -->
+  <script type='text/javascript' src='js/monsters.js' defer></script><!-- your script -->
   
   <meta property="og:image" content="img/t1.jpg" />
   <meta property="og:image" content="img/og.jpg" />
@@ -30,15 +31,77 @@
 </head>
 
 <body>
-	<div id='helper'>	
+<div class='wrap'>
+	<div class='p_side'>		
 	</div>
-	<div id='wrap'>
-		<div id='panel'>
-		</div>	
-			<span id='before_monsters'><div class='loader'></div>Созываем монстров...</span>
-		<div id='result'>
+	<div class='p_cont'>
+		<!--span id='before_spells'><div class='loader'></div>Читаем заклинания...</span-->
+		<div id='info_text'>
+			<h1>Монстры D&D5</h2>
+			<h2>
+				Что есть
+			</h2>
+			<p>
+				Список заклинаний из Players Handbook D&D5 на русском и английском языках.			
+			</p>
+			<p>
+				Заклинания можно фильтровать по:
+				<ul>
+				  <li>названию</li>
+				  <li>классам</li>
+				  <li>уровням</li>
+				  <li>школам</li>
+				  <li>языкам</li>
+				</ul>				
+			</p>
+			<h2>
+				Скрытие заклинаний
+			</h2>
+			<p>
+				Карточку заклинаний можно скрыть из общего списка, если нажать на <i class="fa fa-eye-slash" aria-hidden="true"></i> в правом верхнем углу карточки. В таком случае заклинание исчезнет из общего списка и его название будет отображаться в самом низу панели фильтров. Если нажать на название, заклинание вернется в общий список.	
+			</p>
+			<h2>
+				Закрепление заклинаний
+			</h2>
+			<p>
+				Карточки заклинаний можно закреплять - в таком случае они будут отображаться в самом верху списка заклинаний. Для закрепления нужно нажать на <i class="fa fa-lock" aria-hidden="true"></i> в левом верхнем углу карточки заклинаний. Можно закреплять карточки заклинаний разных классов. При закреплении заклинания, оно не исчезает из общего списка. Если нажать на заголовок "Закрепленные заклинания", закрепленные карточки скроются (чтобы не мешать). На закрепленные заклинания не действуют никакие фильтры.
+			</p>
+			<h2>
+				Отображение заклинаний
+			</h2>
+			<p>
+				Чтобы увидеть заклинания выберите класс, или другой фильтр. Либо нажмите:
+			</p>
+			<p style="padding: .3em 0; text-align: center">
+				<a class="button" id="showAllMonsters" href="#" style="display: none">Показать всех монстров</a>
+			</p>
+			
+			<h2>Печать заклинаний</h2>
+			<p>
+				Если есть закрепленные заклиннаия, то печататься будут только они.<br>
+				Если вы хотите распечатать заклинания, лучше всего делать это через Chrome (удобные настройки печати). Доя этого надо:
+					<ul>
+						<li>нажать сочетание клавиш [Ctrl]+[P]</li>
+					</ul>
+					И, если все устраивает, нажать кнопку "Печать", либо:
+					<ul>
+						<li>в появившемся окне нажать "Дополнительные настройки"</li>
+						<li>выбрать поля "Персонализированные"</li>
+						<li>перетянуть мышкой поля так, чтобы карточки нормально распределились по листу <small>(помните, что обычно принтер печатает с полями, если сделать поля слишком маленькие, при печати часть карточек может обрезаться)</small></li>
+	
+					</ul>
+			</p>
+			<p>				
+				Если есть вопросы или предложения - <a style="color: #0288D1" href="https://tentaculus.ru/message?theme=dndspells">пишите</a>.
+			</p>
+			<p>
+				<a style="color: #0288D1"  href="https://github.com/Etignis/DnD_SpellList_eng_rus" target="_blanc">Страница проекта на GitHub.</a>
+			</p>
 		</div>
-	</div>	
+		<div class='spellContainer row'>
+		</div>
+	</div>
+</div>
  <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
     (function (d, w, c) {
