@@ -26,6 +26,7 @@
 				"select.less",
 				"side.less",
 				"start.less",
+				"toggle.less",
 				"usefull.less",
 				"var.less"
 			]

@@ -16,6 +16,9 @@ function getConfig(prop) {
 }
 
 window.onload = function(){
+	var monsterLevels = [];
+	var monsterTypes = [];
+
 	var oTimer; // for TimeOut (filtering)
 	var nTimerSeconds = 100;
 	
@@ -83,13 +86,21 @@ window.onload = function(){
 	function createToggle(src, params) {
 		var ret = '';
 		var id =  params.id? "id='"+params.id+"'": "";
+		var mode = params.mode || "fix";
+		
+		var modeClass = " class='mode_"+mode+"' ";
 			
 		for (var i =0; i < src.length; i++) {
 			var type = src[i];
-			var sOptionValue = type.key;
-			var sOptionLabel = type.text;
+			var sOptionValue, sOptionLabel;
+			if(typeof type == "number" || typeof type == "string") {
+				sOptionValue = sOptionLabel = type;
+			} else {
+				sOptionValue = type.key;
+				sOptionLabel = type.title;
+			}
 			
-			ret+="<input type='checkbox' value='"+sOptionValue+"' id='tg_"+sOptionValue+"'><label for='tg_"+sOptionValue+"' data-hierarchy='root'>"+sOptionLabel+"</label>";
+			ret+="<input type='checkbox' value='"+sOptionValue+"' id='tg_"+sOptionValue+"'><label for='tg_"+sOptionValue+"' "+modeClass+" data-hierarchy='root'>"+sOptionLabel+"</label>";
 			
 		}
 		ret = "<div "+id+" class='toggle_box'><div class='toggle_box_content'>"+ret+"</div></div>";
@@ -155,14 +166,20 @@ window.onload = function(){
 		}			
 		for (var i =0; i < src.length; i++) {
 			var type = src[i];
-			var max = Math.max(type.en.length, type.ru.length)/2;
+			var max = type.title.length/2;
 			if (max > min_width) {
 				min_width = max;
 			}
 			
-			var sOptionValue = type.key? type.key : type.en;
+			var sOptionValue = type.key || "";
+			var sOptionTitle = type.title || "";
 			
-			ret+="<input "+checked+" type='checkbox' value='"+sOptionValue+"' id='ch_"+sOptionValue+"'><label for='ch_"+sOptionValue+"' data-hierarchy='root'>"+type.en+"<br>"+type.ru+"</label>";
+			var oSubtype = type.subtype;
+			if(oSubtype) {
+				
+			}
+			
+			ret+="<input "+checked+" type='checkbox' value='"+sOptionValue+"' id='ch_"+sOptionValue+"'><label for='ch_"+sOptionValue+"' data-hierarchy='root'>"+sOptionTitle+"</label>";
 			
 		}
 		min_width = min_width>20? 20: min_width;
@@ -479,6 +496,66 @@ window.onload = function(){
 		
 	}
 	
+	function colectMonstersParams() {
+		//monsterLevels[]
+		//monsterTypes[]
+		var tmpMonsterTypes = {};
+		
+		allMonsters.forEach(function(el) {
+			// level
+			if(monsterLevels.indexOf(el.cr)<0) {
+				monsterLevels.push(el.cr);
+			}
+			
+			// types
+			var sTypeString = el.type;
+			var sTypeTest = sTypeString.match(/^([^(]+)(\([^)]+\))?/);
+			var sType = (sTypeTest[1] || "").trim().toLowerCase();
+			var aSubtype = (sTypeTest[2]|| "").replace(/[)(]+/g, "").split(",").map(function(el){return el.trim().toLowerCase()});
+			
+			if(sType) {
+				if(!tmpMonsterTypes[sType]){
+					tmpMonsterTypes[sType] = {};
+				}
+				if(aSubtype.length>0) {
+					aSubtype.forEach(function(el){
+						if(el.length>0)
+							tmpMonsterTypes[sType][el] = "";
+					});					
+				}	
+			}
+			
+		});
+		
+		// transform monster object to array
+		for (var type in tmpMonsterTypes) {
+			var aSubtype = [];
+			for (var subtype in tmpMonsterTypes[type]) {
+				aSubtype.push({
+					"title": subtype,
+					"key": subtype
+				});
+			}
+			var oType = {
+				"title": type,
+				"key": type
+			}
+			if(aSubtype.length > 0){
+				oType.subtype = aSubtype;
+			}
+			monsterTypes.push(oType);
+		}
+		
+		// sorting monsters levels
+		monsterLevels.sort(function(a, b) {
+			if(eval(a) < eval(b))
+				return -1
+			if(eval(a) > eval(b))
+				return 1
+			return 0
+		});
+	}
+	
 	function createButtons() {
 		var bHome = "<a href='/' class='bt flexChild' title='На главную страницу'><i class='fa fa-home'></i></a>";
 		var bInfo = "<a href='#' class='bt flexChild' id='bInfo' title='Справка'><i class='fa fa-question-circle'></i></a>";
@@ -489,153 +566,72 @@ window.onload = function(){
 	function createLabel(text) {
 		return "<div class='filterLabel'>"+text+"</div>";
 	}
-	function createClassSelect() {
-		var src = [{
-			name: "[ALL]",
-			title: "[ВСЕ]"
-		}];
-		for (var i in classSpells){
-			src.push(
+	function createSizeCombobox(isOpen){
+		
+		var aSizes = [
 			{
-				name: classSpells[i].title.en,
-				title: classSpells[i].title.en+"<br>"+classSpells[i].title.ru
-			}
-			);
-		}
-		var classSelect = createSelect(src, {id: "ClassSelect", selected_key: "[ALL]", width: "100%"});
-		var label = createLabel("Класс");
-		
-		$(".p_side").append("<div class='mediaWidth'>" + label + classSelect + "</div>");		
-	}
-	function createSubClassSelect(sClass) {
-		$("#SubSubClassSelect").remove();
-		var src = [{
-			name: "[NONE]",
-		    title: "[ПОДКЛАСС]"
-		}];
-		if(classSpells[sClass] && classSpells[sClass].subclasses)
-		for (var i in classSpells[sClass].subclasses){
-			src.push(
+				"title": "Крошечный",
+				"key": "T"
+			},
 			{
-				name: i,
-				title: classSpells[sClass].subclasses[i].title.en+"<br>"+classSpells[sClass].subclasses[i].title.ru
-			}
-			);
-		}
-		var classSelect = createSelect(src, {id: "SubClassSelect", selected_key: "[NONE]", width: "100%"});
-		var label = createLabel("Класс");
-		
-		var index = 1;
-		if($("#SubClassSelect").length>0) {
-			index = $("button").index($("#SubClassSelect"));
-			$("#SubClassSelect").remove();
-		}
-		
-		if(src.length>1) {
-			$("#ClassSelect").parent().find("button").eq(index-1).after(classSelect);
-			//$("#ClassSelect").parent().append(classSelect);
-		} else {
-			$("#SubClassSelect").remove();
-		}
-		
-		//$(".p_side").append("<div class='mediaWidth'>" + classSelect + "</div>");		
-	}
-	function createSubSubClassSelect(sClass, sSubClass) {
-		var src = [{
-			name: "[NONE]",
-		    title: "[ПОДПОДКЛАСС]"
-		}];
-		if(classSpells[sClass] && 
-			classSpells[sClass].subclasses && 
-			classSpells[sClass].subclasses[sSubClass] && 
-			classSpells[sClass].subclasses[sSubClass].subclasses)
-		for (var i in classSpells[sClass].subclasses[sSubClass].subclasses){
-			src.push(
+				"title": "Маленький",
+				"key": "S"
+			},
 			{
-				name: i,
-				title: classSpells[sClass].subclasses[sSubClass].subclasses[i].title.en+"<br>"+classSpells[sClass].subclasses[sSubClass].subclasses[i].title.ru
+				"title": "Средний",
+				"key": "M"
+			},
+			{
+				"title": "Большой",
+				"key": "L"
+			},
+			{
+				"title": "Огромный",
+				"key": "H"
+			},
+			{
+				"title": "Колоссальный",
+				"key": "G"
 			}
-			);
-		}
-		var classSelect = createSelect(src, {id: "SubSubClassSelect", selected_key: "[NONE]", width: "100%"});
-		var label = createLabel("Класс");
-		//src[0].title= "[Полкласс]";
+		]
 		
-		var index = 1;
-		if($("#SubSubClassSelect").length>0) {
-			index = $("button").index($("#SubSubClassSelect"));
-			$("#SubSubClassSelect").remove();
-		} else {
-			index = $("button").index($("#SubClassSelect"));
-		}
-		
-		if(src.length>1) {
-			$("#SubClassSelect").after(classSelect);
-			//$("#ClassSelect").parent().append(classSelect);
-		} else {
-			$("#SubSubClassSelect").remove();
-		}
-		//$(".p_side").append("<div class='mediaWidth'>" + classSelect + "</div>");		
-	}
-	function createLevelSelect() {
-		var src = [];
-		for (var i=0; i<10; i++) {
-			src.push(
-				{
-					name: i,
-					title: i
-				}
-			);
-		}
-		var s1 = createSelect(src, {id: "LevelStart", selected_key: 0, width: "100%"});
-		var s2 = createSelect(src, {id: "LevelEnd", selected_key: 9, width: "100%"});
-		var str = "<div class='row'><div class='cell'>"+s1+"</div><div class='cell'>"+s2+"</div></div>";
-		var label = createLabel("Уровень с/по");
-		$(".p_side").append("<div class='mediaWidth'>" + label + str + "</div>");	
-	}
-	function createSchoolCombobox(isOpen) {	
 		if(isOpen == undefined)
 			isOpen = false;
-		var s1=createComboBox(schoolList.sort(function(a, b){
-			if(a.en < b.en)
-				return -1;
-			if(a.en > b.en)
-				return 1;
-			return 0;
-		}), {id: "SchoolCombobox", title: "Школы", checkAll: true, isOpen: isOpen});
+		var s1=createComboBox(aSizes, {
+			id: "SizeCombobox", 
+			title: "Размер", 
+			checkAll: true, 
+			isOpen: isOpen
+			});
 		$(".p_side").append("<div class='mediaWidth'>" + s1 + "</div>");
-	}	
+	}
+		
 	function createSourceCombobox(isOpen) {	
 		if(isOpen == undefined)
 			isOpen = false;
-		var s1=createComboBox(sourceList, {id: "SourceCombobox", title: "Источники", checkAll: true, isOpen: isOpen});
+		var s1=createComboBox(monsterSources, {id: "SourceCombobox", title: "Источники", checkAll: true, isOpen: isOpen});
 		$(".p_side").append("<div class='mediaWidth'>" + s1 + "</div>");
-		
+		/*/
 		sourceList.forEach(function(el) {			
 			oSource[el.key] = el.en;
 		});
+		/**/
+	}
+	
+	function createTypeToggle() {	
+
+		var s1=createToggle(monsterTypes, {id: "SourceCombobox", title: "Типы", checkAll: true});
+		$(".p_side").append("<div class='mediaWidth'>" + s1 + "</div>");
+		/*/
+		sourceList.forEach(function(el) {			
+			oSource[el.key] = el.en;
+		});
+		/**/
 	}
 	function createNameFilter() {
 		var ret=createInput({id: "NameInput"});
 		var label = createLabel("Название");
 		$(".p_side").append("<div class='mediaWidth'>" + label + ret + "</div>");		
-	}
-	function createLangSelect(lang) {
-		var src = [
-			{
-				name: "en",
-				title: "English"
-			},
-			{
-				name: "ru",
-				title: "Русский"
-			}
-		];
-		if(!lang)
-			lang = "ru";
-		var classSelect = createSelect(src, {id: "LangSelect", selected_key: lang, width: "100%"});
-		var label = createLabel("Язык");
-		$(".p_side").append("<div class='mediaWidth'>" + label + classSelect + "</div>");	
 	}
 	
 	function createLevelToggle(){
@@ -709,17 +705,20 @@ window.onload = function(){
 		// name
 		createNameFilter();		
 		
+		// collect data for level & type
+		colectMonstersParams();
+		
 		// level
 		createLevelToggle();	
 		
 		//size
-		//createSizeSelect();
+		createSizeCombobox();
 		
 		// type
-		//createTypeCombobox();
+		createTypeToggle();
 		
 		//source
-		//createSourceCombobox();	
+		createSourceCombobox();	
 		
 		// view
 		//createViewSelect();
