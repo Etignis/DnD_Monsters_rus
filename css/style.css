@@ -34,6 +34,12 @@
 .flexChild {
   flex-grow: 1;
 }
+.sticky {
+  position: -webkit-sticky;
+  position: -moz-sticky;
+  position: -ms-sticky;
+  position: -o-sticky;
+}
 .frame {
   -webkit-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
   -moz-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
@@ -191,7 +197,7 @@ p {
 .p_top {
   width: 100%;
 }
-#before_spells {
+#before_monsters {
   font-weight: bold;
   padding: .2em;
   display: inline-block;
@@ -221,7 +227,7 @@ p {
   position: absolute;
   width: 0.6em;
   height: 0.6em;
-  top: 1em;
+  top: .4em;
   left: -1.1em;
   background: #ddd;
   border: 0.2em solid #cccccc;
@@ -239,7 +245,7 @@ p {
 .combo_box input[type=checkbox]:checked + label::after {
   content: "\2714";
   position: absolute;
-  top: .2em;
+  top: -0.1em;
   left: -0.75em;
   color: #487EC5;
   font-size: 150%;
@@ -519,40 +525,51 @@ p {
 .toggle_box input[type=checkbox] {
   display: none;
   position: relative;
-  /* 
-        &+label::before{
-            @w: 0.6em;
-            @b: 0.2em;
-            content: "";
-            position: absolute;
-            width: @w;
-            height: @w;
-            top: 1em;
-            left: -1.1em;
-            background: @l-gray;
-            border: @b solid @m-gray+#555;
-            border-radius: 3px;
-            transition: border-color .2s ease-out;
-            box-shadow: inset 0 0 0px 2px @l-gray;
-        }
-        
-        &:hover+label::before,
-        &:checked:hover+label::before{
-            border-color: @m-gray+#333;
-        }
-        &:checked+label::before{
-            border-color: @m-gray+#444;
-        }
-        
-        &:checked+label::after{
-            content: "\2714";
-            position: absolute;
-            top: .2em;
-            left: -0.75em;
-            color: @color;
-            font-size: 150%;
-        }
-        /**/
+}
+.toggle_box input[type=checkbox]:checked + label {
+  -webkit-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
+  -moz-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
+  border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
+  overflow: visible;
+  background: #fff;
+  border: 0px solid #d8d8d8;
+  border-top-width: 0px;
+  /*display: inline-block;*/
+  font-weight: bold;
+  padding: 0.7em;
+  margin: 0.3em;
+  border-width: 1px;
+  border-style: solid;
+  border-bottom-width: 2px;
+  text-decoration: none;
+  border-color: #777;
+  color: #fff;
+  background: #666666;
+  box-shadow: 0 1px 0px 0px rgba(0, 0, 0, 0.2) inset;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background: #222;
+  padding: .1em .4em;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  font-size: 90%;
+  margin: .3em;
+}
+.toggle_box input[type=checkbox][disabled] + label {
+  background: #bbbbbb;
+}
+.toggle_box input[type=checkbox][disabled]:hover + label {
+  background: #bbbbbb;
 }
 .toggle_box label {
   -webkit-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
@@ -586,34 +603,12 @@ p {
   -ms-user-select: none;
   user-select: none;
   background: #777;
-  padding: .2em;
+  padding: .1em .4em;
   display: inline-block;
   cursor: pointer;
   text-align: center;
-  font-size: 100%;
-  margin: .1em;
-  /*
-       @ml: 1.4em;       
-       display: block;
-       padding: .2em;
-       .noselect();
-       //margin-left: @ml;
-       z-index: 9;
-       position: relative;
-       color: @d-gray;
-       transition: background .2s ease-out;
-       */
-  /*
-       &[data-hierarchy="child"]{
-            margin-left: @ml*1.8;
-        }
-        */
-  /*
-       &:hover{
-            background: @l-gray - #111;
-            cursor: pointer;
-        }
-        */
+  font-size: 90%;
+  margin: .3em;
 }
 .toggle_box label:hover {
   background: #888888;
@@ -622,7 +617,73 @@ p {
   background: #666666;
 }
 .toggle_box .mode_fix {
-  min-width: 2.2em;
+  min-width: 2.5em;
+}
+.segmented_button {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.segmented_button input[type=radio] {
+  display: none;
+  position: relative;
+}
+.segmented_button input[type=radio]:checked + label {
+  background: #222;
+}
+.segmented_button input[type=radio][disabled] + label {
+  background: #bbbbbb;
+}
+.segmented_button input[type=radio][disabled]:hover + label {
+  background: #bbbbbb;
+}
+.segmented_button label {
+  -webkit-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
+  -moz-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
+  border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
+  overflow: visible;
+  background: #fff;
+  border: 0px solid #d8d8d8;
+  border-top-width: 0px;
+  /*display: inline-block;*/
+  font-weight: bold;
+  padding: 0.7em;
+  margin: 0.3em;
+  border-width: 1px;
+  border-style: solid;
+  border-bottom-width: 2px;
+  text-decoration: none;
+  border-color: #555555;
+  color: #fff;
+  background: #666666;
+  box-shadow: 0 1px 0px 0px rgba(255, 255, 255, 0.2) inset;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background: #777;
+  padding: .4em .1em;
+  margin: 0;
+  flex-grow: 1;
+  flex-shrink: 0;
+  cursor: pointer;
+  text-align: center;
+  font-size: 90%;
+}
+.segmented_button label:hover {
+  background: #888888;
+}
+.segmented_button label:active {
+  background: #666666;
 }
 .page {
   -webkit-perspective: 800px;
@@ -926,7 +987,7 @@ p {
 }
 @media screen and (min-width: 65em) {
   body {
-    background: url('../img/bg2.jpg') center center no-repeat;
+    background: url('../img/t1.jpg') center center no-repeat;
     background-attachment: fixed;
     background-size: cover;
   }
@@ -939,12 +1000,138 @@ p {
     padding-top: 0;
   }
 }
-.row {
+.monster,
+.monster_card {
+  position: relative;
+}
+.monster .lock_monster,
+.monster_card .lock_monster,
+.monster .unlock_monster,
+.monster_card .unlock_monster,
+.monster .hide_monster,
+.monster_card .hide_monster {
+  display: block;
+  opacity: .9;
+  padding: .8em .7em .6em;
+  color: #bbbbbb;
+  position: absolute;
+  transition: color .3s, opacity .3s .3s;
+}
+.monster .lock_monster:hover,
+.monster_card .lock_monster:hover,
+.monster .unlock_monster:hover,
+.monster_card .unlock_monster:hover,
+.monster .hide_monster:hover,
+.monster_card .hide_monster:hover {
+  color: #487EC5;
+}
+.monster .hide_monster,
+.monster_card .hide_monster {
+  top: 0;
+  right: 0;
+}
+.monster .lock_monster,
+.monster_card .lock_monster,
+.monster .unlock_monster,
+.monster_card .unlock_monster {
+  top: 0;
+  left: 0em;
+}
+.monster:hover .hide_monster,
+.monster_card:hover .hide_monster,
+.monster:hover .lock_monster,
+.monster_card:hover .lock_monster,
+.monster:hover .unlock_monster,
+.monster_card:hover .unlock_monster {
+  opacity: 1;
+}
+.monster {
+  -webkit-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
+  -moz-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
+  border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
+  overflow: visible;
+  background: #fff;
+  border: 0px solid #d8d8d8;
+  border-bottom-width: 2px;
+  border-top-width: 0px;
+  /*float: left;
+	width: 30%;*/
+  margin: 10px 15px;
+  padding: 10px;
+  position: relative;
+}
+.monster .i-tipe {
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #5A0000;
+}
+.monster .i2-tipe {
+  font-weight: bold;
+  padding: 0 0.4em 0 0;
+  font-style: italic;
+}
+.monster .i3-tipe {
+  font-weight: bold;
+  color: #5A0000;
+  margin: .5em 0 0 .2em;
+  font-size: 120%;
+  border-bottom: 1px solid #5A0000;
+}
+.monster .i4-tipe {
+  margin: .5em 0;
+}
+.monster hr {
+  border: none;
+  height: 1px;
+  background: #5A0000;
+}
+.monster .name {
+  font-size: 120%;
+  font-weight: bold;
+  color: #5A0000;
+  margin-left: .7em;
+}
+.monster .size,
+.monster .type,
+.monster .alignment {
+  font-style: italic;
+  padding: 0 0.4em 0 0;
+}
+.monster .size:after,
+.monster .type:after {
+  content: ",";
+}
+.monster .stats > span {
+  padding: 0 0.6em 0 0;
+}
+.monster_card {
+  -webkit-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
+  -moz-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
+  border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
+  overflow: visible;
+  background: #fff;
+  border: 0px solid #d8d8d8;
+  border-bottom-width: 2px;
+  border-top-width: 0px;
+  /*float: left;
+	width: 30%;*/
+  font-size: 90%;
+  width: 100%;
+  min-width: 45em;
+  max-width: 188mm;
+  height: 136mm;
+  background: #5A0000;
+  border-color: #5A0000;
+  margin: 10px auto;
+  padding: 0;
+  overflow: hidden;
   float: none;
   clear: both;
+  position: relative;
+  page-break-inside: avoid;
 }
-.row:before,
-.row:after {
+.monster_card:after,
+.monster_card:before {
   content: "";
   float: none!important;
   clear: both!important;
@@ -954,17 +1141,83 @@ p {
   margin: 0!important;
   padding: 0!important;
 }
-.row .cell {
-  float: left;
+.monster_card .left,
+.monster_card .right {
+  display: block;
   width: 50%;
+  height: 136mm;
+  float: left;
+  padding: .2mm;
 }
-#lockedSpellsArea {
+.monster_card .left .inner,
+.monster_card .right .inner {
+  -webkit-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
+  -moz-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
+  border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
+  border-bottom-width: 2px;
+  background: #fff;
+  padding: .4em;
+  height: 133mm;
+  margin: 1mm;
+}
+.monster_card .i-tipe {
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #5A0000;
+}
+.monster_card .i2-tipe {
+  font-weight: bold;
+  padding: 0 0.4em 0 0;
+  font-style: italic;
+}
+.monster_card .i3-tipe {
+  font-weight: bold;
+  color: #5A0000;
+  margin: 0 0 0 .2em;
+  font-size: 120%;
+  border-bottom: 1px solid #5A0000;
+}
+.monster_card .i4-tipe {
+  margin: .5em 0;
+  font-size: 90%;
+}
+.monster_card hr {
+  border: none;
+  height: 1px;
+  background: #5A0000;
+}
+.monster_card .name {
+  font-size: 120%;
+  font-weight: bold;
+  color: #5A0000;
+  margin-left: 1em;
+}
+.monster_card .size,
+.monster_card .type,
+.monster_card .alignment {
+  font-style: italic;
+  padding: 0 0.4em 0 0;
+  font-size: 90%;
+}
+.monster_card .stats > span {
+  padding: 0 0.6em 0 0;
+}
+.monster_card .stats .str,
+.monster_card .stats .dex,
+.monster_card .stats .con,
+.monster_card .stats .int,
+.monster_card .stats .wis,
+.monster_card .stats .cha {
+  display: inline-block;
+  width: 4em;
+}
+#lockedMonstersArea {
   margin-bottom: .3em;
   position: relative;
 }
-#lockedSpellsArea .topHeader,
-#lockedSpellsArea .bottomHeader,
-#lockedSpellsArea .bUnlockAll {
+#lockedMonstersArea .topHeader,
+#lockedMonstersArea .bottomHeader,
+#lockedMonstersArea .bUnlockAll {
   font-weight: 600;
   padding: .2em;
   text-shadow: 0 0 4px rgba(255, 255, 255, 0.9);
@@ -972,324 +1225,36 @@ p {
   color: #222;
   border-radius: .1em;
 }
-#lockedSpellsArea .bUnlockAll {
+#lockedMonstersArea .topHeader,
+#lockedMonstersArea .bottomHeader {
+  margin-left: 1em;
+}
+#lockedMonstersArea .bUnlockAll {
   position: absolute;
   top: 0;
-  right: 0;
+  right: 1em;
   cursor: pointer;
 }
-#lockedSpellsArea .bUnlockAll:hover {
+#lockedMonstersArea .bUnlockAll:hover {
   background: rgba(255, 255, 255, 0.7);
 }
-#lockedSpellsArea .topHeader {
+#lockedMonstersArea .topHeader {
   cursor: pointer;
 }
-#lockedSpellsArea .topHeader:hover {
+#lockedMonstersArea .topHeader:hover {
   background: rgba(255, 255, 255, 0.7);
 }
-#lockedSpellsArea .topHeader:before {
-  content: "Закрепленные заклинания ";
+#lockedMonstersArea .topHeader:before {
+  content: "Закрепленные монстры ";
 }
-#lockedSpellsArea .bottomHeader:before {
-  content: "Каталог заклинаний ";
+#lockedMonstersArea .bottomHeader:before {
+  content: "Каталог монстров ";
 }
-#lockedSpellsArea .content {
+#lockedMonstersArea .content {
   margin-bottom: .3em;
 }
-#lockedSpellsArea .bHideSpell {
+#lockedMonstersArea .bHideSpell {
   display: none;
-}
-.cardContainer {
-  page-break-inside: avoid;
-  width: 2.5in;
-  margin-right: 1px;
-  margin-top: 1px;
-  float: left;
-}
-.cardContainer .row {
-  border-bottom: 2px solid #e01a10;
-  display: flex;
-  flex-direction: row;
-  align-content: stretch;
-}
-.cardContainer .row .cell {
-  float: none;
-  text-align: center;
-  font-size: 65%;
-}
-.cardContainer .row .cell:first-of-type {
-  border-right: 1px solid #e01a10;
-}
-.cardContainer .row .cell:last-of-type {
-  border-left: 1px solid #e01a10;
-}
-.cardContainer .row .cell span,
-.cardContainer .row .cell b {
-  display: block;
-}
-.cardContainer .row .cell b {
-  text-transform: uppercase;
-  font-size: 90%;
-  padding: 2px 0 0;
-}
-.spellCard {
-  height: 3.5in;
-  background: #e01a10;
-  border: 9px solid #e01a10;
-  border-bottom-width: 25px;
-  position: relative;
-  color: #666666;
-}
-.spellCard .bHideSpell,
-.spellCard .bLockSpell,
-.spellCard .bUnlockSpell {
-  position: absolute;
-  top: -0.1em;
-  color: #ddd;
-  cursor: pointer;
-  transition: color .3s;
-}
-.spellCard .bHideSpell:hover,
-.spellCard .bLockSpell:hover,
-.spellCard .bUnlockSpell:hover {
-  color: #6aa0e7;
-}
-.spellCard .bHideSpell:active,
-.spellCard .bLockSpell:active,
-.spellCard .bUnlockSpell:active {
-  color: #487EC5;
-}
-.spellCard .bHideSpell {
-  right: .1em;
-}
-.spellCard .bLockSpell,
-.spellCard .bUnlockSpell {
-  left: .1em;
-}
-.spellCard .content {
-  border-radius: 5px;
-  background: #fff;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-items: stretch;
-}
-.spellCard .cell span {
-  font-size: 109%;
-}
-.spellCard h1 {
-  font-size: 95%;
-  margin: 0;
-  padding: 0;
-  padding-left: .9em;
-  padding-right: .9em;
-  text-align: center;
-  text-transform: uppercase;
-  border-bottom: 2px solid #e01a10;
-}
-.spellCard .materials {
-  color: #fff;
-  background: #e01a10 !important;
-  font-size: 75%;
-  padding: 0 2px;
-  font-style: oblique;
-}
-.spellCard .text {
-  font-size: 75%;
-  padding: 2px;
-  overflow-y: auto;
-  flex-shrink: 99;
-}
-.spellCard .text::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-.spellCard .text::-webkit-scrollbar-thumb {
-  background: #777;
-}
-.spellCard .text::-webkit-scrollbar-track {
-  background: #ddd;
-}
-.spellCard .text body {
-  scrollbar-face-color: #777;
-  scrollbar-track-color: #ddd;
-}
-.spellCard .class {
-  position: absolute;
-  left: 1px;
-  bottom: -20px;
-  font-size: 70%;
-  color: #fff;
-  cursor: default;
-}
-.spellCard .school {
-  position: absolute;
-  right: 1px;
-  bottom: -20px;
-  font-size: 70%;
-  color: #fff;
-  cursor: default;
-}
-.lockedSpell .bLockSpell {
-  color: #000;
-  text-shadow: 0 0 2px #487EC5;
-}
-.Bard .spellCard {
-  background-color: #e91e63;
-  border-color: #e91e63;
-}
-.Bard .spellCard h1 {
-  border-bottom-color: #e91e63;
-}
-.Bard .spellCard .materials {
-  background: #e91e63 !important;
-}
-.Bard .spellCard .row {
-  border-bottom-color: #e91e63;
-}
-.Bard .spellCard .row .cell:first-of-type {
-  border-right-color: #e91e63;
-}
-.Bard .spellCard .row .cell:last-of-type {
-  border-left-color: #e91e63;
-}
-.Cleric .spellCard {
-  background-color: #FDD835;
-  border-color: #FDD835;
-}
-.Cleric .spellCard h1 {
-  border-bottom-color: #FDD835;
-}
-.Cleric .spellCard .materials {
-  background: #FDD835 !important;
-}
-.Cleric .spellCard .row {
-  border-bottom-color: #FDD835;
-}
-.Cleric .spellCard .row .cell:first-of-type {
-  border-right-color: #FDD835;
-}
-.Cleric .spellCard .row .cell:last-of-type {
-  border-left-color: #FDD835;
-}
-.Druid .spellCard {
-  background-color: #795548;
-  border-color: #795548;
-}
-.Druid .spellCard h1 {
-  border-bottom-color: #795548;
-}
-.Druid .spellCard .materials {
-  background: #795548 !important;
-}
-.Druid .spellCard .row {
-  border-bottom-color: #795548;
-}
-.Druid .spellCard .row .cell:first-of-type {
-  border-right-color: #795548;
-}
-.Druid .spellCard .row .cell:last-of-type {
-  border-left-color: #795548;
-}
-.Paladin .spellCard {
-  background-color: #2196f3;
-  border-color: #2196f3;
-}
-.Paladin .spellCard h1 {
-  border-bottom-color: #2196f3;
-}
-.Paladin .spellCard .materials {
-  background: #2196f3 !important;
-}
-.Paladin .spellCard .row {
-  border-bottom-color: #2196f3;
-}
-.Paladin .spellCard .row .cell:first-of-type {
-  border-right-color: #2196f3;
-}
-.Paladin .spellCard .row .cell:last-of-type {
-  border-left-color: #2196f3;
-}
-.Ranger .spellCard {
-  background-color: #4caf50;
-  border-color: #4caf50;
-}
-.Ranger .spellCard h1 {
-  border-bottom-color: #4caf50;
-}
-.Ranger .spellCard .materials {
-  background: #4caf50 !important;
-}
-.Ranger .spellCard .row {
-  border-bottom-color: #4caf50;
-}
-.Ranger .spellCard .row .cell:first-of-type {
-  border-right-color: #4caf50;
-}
-.Ranger .spellCard .row .cell:last-of-type {
-  border-left-color: #4caf50;
-}
-.Sorcerer .spellCard {
-  background-color: #ff9800;
-  border-color: #ff9800;
-}
-.Sorcerer .spellCard h1 {
-  border-bottom-color: #ff9800;
-}
-.Sorcerer .spellCard .materials {
-  background: #ff9800 !important;
-}
-.Sorcerer .spellCard .row {
-  border-bottom-color: #ff9800;
-}
-.Sorcerer .spellCard .row .cell:first-of-type {
-  border-right-color: #ff9800;
-}
-.Sorcerer .spellCard .row .cell:last-of-type {
-  border-left-color: #ff9800;
-}
-.Warlock .spellCard {
-  background-color: #673ab7;
-  border-color: #673ab7;
-}
-.Warlock .spellCard h1 {
-  border-bottom-color: #673ab7;
-}
-.Warlock .spellCard .materials {
-  background: #673ab7 !important;
-}
-.Warlock .spellCard .row {
-  border-bottom-color: #673ab7;
-}
-.Warlock .spellCard .row .cell:first-of-type {
-  border-right-color: #673ab7;
-}
-.Warlock .spellCard .row .cell:last-of-type {
-  border-left-color: #673ab7;
-}
-.Wizard .spellCard {
-  background-color: #f44336;
-  border-color: #f44336;
-}
-.Wizard .spellCard h1 {
-  border-bottom-color: #f44336;
-}
-.Wizard .spellCard .materials {
-  background: #f44336 !important;
-}
-.Wizard .spellCard .row {
-  border-bottom-color: #f44336;
-}
-.Wizard .spellCard .row .cell:first-of-type {
-  border-right-color: #f44336;
-}
-.Wizard .spellCard .row .cell:last-of-type {
-  border-left-color: #f44336;
 }
 .p_side {
   background: rgba(0, 0, 0, 0.4);
@@ -1304,6 +1269,38 @@ p {
   z-index: 9;
   color: #fff;
   border-radius: 0 0 3px 0;
+  /*/
+    input[type='radio']{
+        display: none;
+    }
+    
+    input[type='radio'] + label{
+            .fr-convex;    
+            @w: 2.2em;
+            @h: 1em;
+            min-width: @w;
+            min-height: @h;
+            text-align: center;
+            background: @m-gray + #111;
+           // width: 100%;
+            display: inline-block;
+            padding: .3em;
+            &:hover{
+                background: @m-gray + #222;    
+            }
+            &:active{
+                background:  @m-gray;    
+            }
+            input{
+                display: none;
+            }
+        }
+    input[type='radio']:checked + label{
+        .fr-concave;
+        background:  @m-gray - #222;  
+        padding: .3em;  
+    }
+    /**/
 }
 .p_side .s_block {
   float: left;
@@ -1321,92 +1318,6 @@ p {
   margin: 0;
   padding: .1em;
   width: 9em;
-}
-.p_side input[type='radio'] {
-  display: none;
-}
-.p_side input[type='radio'] + label {
-  -webkit-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
-  -moz-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
-  border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
-  overflow: visible;
-  background: #fff;
-  border: 0px solid #d8d8d8;
-  border-top-width: 0px;
-  /*display: inline-block;*/
-  font-weight: bold;
-  padding: 0.7em;
-  margin: 0.3em;
-  border-width: 1px;
-  border-style: solid;
-  border-bottom-width: 2px;
-  text-decoration: none;
-  border-color: #555555;
-  color: #fff;
-  background: #666666;
-  box-shadow: 0 1px 0px 0px rgba(255, 255, 255, 0.2) inset;
-  cursor: pointer;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  -ms-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  min-width: 2.2em;
-  min-height: 1em;
-  text-align: center;
-  background: #888888;
-  display: inline-block;
-  padding: .3em;
-}
-.p_side input[type='radio'] + label:hover {
-  background: #999999;
-}
-.p_side input[type='radio'] + label:active {
-  background: #777;
-}
-.p_side input[type='radio'] + label input {
-  display: none;
-}
-.p_side input[type='radio']:checked + label {
-  -webkit-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
-  -moz-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
-  border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
-  overflow: visible;
-  background: #fff;
-  border: 0px solid #d8d8d8;
-  border-top-width: 0px;
-  /*display: inline-block;*/
-  font-weight: bold;
-  padding: 0.7em;
-  margin: 0.3em;
-  border-width: 1px;
-  border-style: solid;
-  border-bottom-width: 2px;
-  text-decoration: none;
-  border-color: #777;
-  color: #fff;
-  background: #666666;
-  box-shadow: 0 1px 0px 0px rgba(0, 0, 0, 0.2) inset;
-  cursor: pointer;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  -ms-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  background: #555555;
-  padding: .3em;
 }
 .p_side .hidden_spells {
   max-width: 99.4%;
@@ -1433,29 +1344,35 @@ p {
   max-width: 100%;
   width: auto;
 }
-#HiddenSpells a {
+#HiddenMonsters a {
   text-decoration: none;
   color: #ddd;
   transition: color .3s;
 }
-#HiddenSpells a:hover {
+#HiddenMonsters a:hover {
   color: #6aa0e7;
 }
-#HiddenSpells a:active {
+#HiddenMonsters a:active {
   color: #487EC5;
 }
-#HiddenSpells .bReturnUnvisible {
-  display: inline-block;
+#HiddenMonsters .bReturnUnvisible {
+  display: block;
   padding: .1em .2em;
+  margin-right: 2em;
   margin: .4em 0;
   background: rgba(200, 200, 200, 0.2);
   border-bottom: 1px dashed rgba(100, 100, 100, 0.6);
 }
+#HiddenMonsters .bUnhideMonster {
+  padding: .4em;
+}
 .mediaWidth {
   margin: .2em;
   flex-grow: 1;
-  flex-shrink: 0;
-  flex-basis: 200px;
+  flex-shrink: 1;
+}
+.max_width_2 {
+  flex-grow: 2;
 }
 @media screen and (min-width: 65em) {
   .p_side {

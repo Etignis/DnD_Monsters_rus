@@ -14,25 +14,48 @@ function getConfig(prop) {
 	}
 	return oConfig;
 }
+function count_mod(num){
+	var mod=Math.floor((num-10)/2);
+	if(mod>0)
+		mod="+"+mod;
+	num = num+" ("+mod+")";
+	return num;
+}
+function c_string(clas, s_clas, title, cont){
+	//'<div class="vulnerable"><span class="i2-tipe">Уязвимость </span>' + $(this).find("vulnerable").text() + '</div>'+
+	var string ='';
+	if(cont != '' && cont != undefined)
+		string = '<div class="'+clas+' i4-tipe"><span class="'+s_clas+'">'+title+' </span>'+cont+'</div>';
+	return string;
+}
 
 window.onload = function(){
 	var monsterLevels = [];
 	var monsterTypes = [];
+	var aHiddenMonsters = [];
 
 	var oTimer; // for TimeOut (filtering)
 	var nTimerSeconds = 100;
 	
-	var aHiddenSpells = [];
-	var aLockedSpells = {};
-	var filteredSpells = [];
+	var aHiddenMonsters = [];
+	var aLockedMonsters = {};
+	var filteredMonsters = [];
 	
 	var oSource = {};
 	
+	function translateCR(str){
+		str = String(eval(str)*1000);
+		while (str.length<7) {
+			str = "0" + str;
+		}
+		return str;
+	}
+	
 	function arrDiff(arr1, arr2) {
-		var arr3 = arr2.map(function(item){return item.en});
+		var arr3 = arr2;//.map(function(item){return item.en});
 		return arr1.filter(
 			function(item){ 
-				return (arr3.indexOf(item.en.name)>=0)? false: true;
+				return (arr3.indexOf(item.name.toLowerCase())>=0)? false: true;
 			}
 		);
 	}
@@ -83,25 +106,96 @@ window.onload = function(){
 		return viewportwidth + "~" + viewportheight;
 	}
 	
+	function createSegmentedButton(src, params) {
+		var ret = '';
+		var id =  params.id? "id='"+params.id+"'": "";
+		var mode = params.mode || "fix";
+		var subtypes = params.subtypes || false;
+		
+		var name = new Date().getTime();
+		if(params.id) {
+			var name = params.id;
+		}		
+		
+		var modeClass = " class='mode_"+mode+"' ";
+		
+		function getOption(el) {
+			var sOptionValue, sOptionLabel;
+			if(typeof el == "number" || typeof el == "string") {
+				sOptionValue = sOptionLabel = el;
+			} else {
+				sOptionValue = el.key;
+				sOptionLabel = el.title;
+			}
+			
+			var selected = el.selected? " checked " : "";
+			
+			return "<input "+selected+" name='"+name+"' type='radio' value='"+sOptionValue+"' id='tg_"+sOptionValue+"'><label for='tg_"+sOptionValue+"' "+modeClass+" data-hierarchy='root'>"+sOptionLabel+"</label>";
+		}
+
+		var oItems = [];
+		for (var i =0; i < src.length; i++) {
+			var type = src[i];	
+	
+			var key = (typeof type == "number" || typeof type == "string")? type: type.key;
+			oItems[key] = type;
+			
+		}
+
+		for(var i in oItems) {
+			ret+= getOption(oItems[i]);
+		}
+		ret = "<div "+id+" class='segmented_button'>"+ret+"</div>";
+		return ret;	
+	}
+	
+	
 	function createToggle(src, params) {
 		var ret = '';
 		var id =  params.id? "id='"+params.id+"'": "";
 		var mode = params.mode || "fix";
+		var subtypes = params.subtypes || false;
 		
 		var modeClass = " class='mode_"+mode+"' ";
-			
-		for (var i =0; i < src.length; i++) {
-			var type = src[i];
+		
+		function getOption(el) {
 			var sOptionValue, sOptionLabel;
-			if(typeof type == "number" || typeof type == "string") {
-				sOptionValue = sOptionLabel = type;
+			if(typeof el == "number" || typeof el == "string") {
+				sOptionValue = sOptionLabel = el;
 			} else {
-				sOptionValue = type.key;
-				sOptionLabel = type.title;
+				sOptionValue = el.key;
+				sOptionLabel = el.title;
 			}
 			
-			ret+="<input type='checkbox' value='"+sOptionValue+"' id='tg_"+sOptionValue+"'><label for='tg_"+sOptionValue+"' "+modeClass+" data-hierarchy='root'>"+sOptionLabel+"</label>";
+			return "<input type='checkbox' value='"+sOptionValue+"' id='tg_"+sOptionValue+"'><label for='tg_"+sOptionValue+"' "+modeClass+" data-hierarchy='root'>"+sOptionLabel+"</label>";
+		}
+		var aItems = [];
+		var oItems = [];
+		for (var i =0; i < src.length; i++) {
+			var type = src[i];
 			
+			
+			if (subtypes == "only") {
+				for (var sbt in type.subtype) {
+					aItems.push(type.subtype[sbt]);
+					oItems[type.subtype[sbt].key]=type.subtype[sbt];
+					//ret+= getOption(type.subtype[sbt]);
+				}
+			} else {	
+				aItems.push(type);
+				var key = (typeof type == "number" || typeof type == "string")? type: type.key;
+				oItems[key] = type;
+				//ret+= getOption(type);
+			}
+			
+		}
+		/*/
+		aItems.forEach(function(el) {
+			ret+= getOption(el);
+		});
+		/**/
+		for(var i in oItems) {
+			ret+= getOption(oItems[i]);
 		}
 		ret = "<div "+id+" class='toggle_box'><div class='toggle_box_content'>"+ret+"</div></div>";
 		return ret;	
@@ -223,273 +317,373 @@ window.onload = function(){
 		return s.substr(0,1).toUpperCase() + s.substr(1);
 	}
 		
-	function createCard(spell, lang, sClass, sLockedSpell) {
-		if (spell[lang] || (lang="en", spell[lang])) {
-			var o = spell[lang];
-			var s_name = o.name;
-			var s_ritual = o.ritual? " ("+o.ritual+")" : "";
-			var s_castingTime = o.castingTime;
-			var s_range = pretifyString(o.range);
-			var s_components = o.components;
-			var s_duration = pretifyString(o.duration.replace(/концентрация/ig, "конц-я"));
-			var s_materials = o.materials;
-			var s_text = o.text;
-			var s_level = o.level;
-			var s_source = o.source? o.source : spell.en.source? spell.en.source: "";
-			var st_castingTime, st_range, st_components, st_duration;
-			switch (lang){		
-				case "ru": 
-					s_level = s_level>0? s_level + " круг" : "Трюк"; 
-					st_castingTime = "Время накладывания";
-					st_range = "Дистанция";
-					st_components = "Компоненты";
-					st_duration = "Длительность";
-					break;	
-				default: 
-					s_level = s_level>0? s_level + " lvl" : "Cantrip";
-					st_castingTime = "CASTING TIME";
-					st_range = "RANGE";
-					st_components = "COMPONENTS";
-					st_duration = "DURATION";	
-			}
-			var s_school = o.school;
-			var sNeedHelp = (spell.ru && spell.ru.needHelp)? "Как лучше перевести?" : "";
-			
-			var sClassName = classSpells[sClass]? classSpells[sClass].title[lang] : false;
-			var bHideSpell = '<span class="bHideSpell" title="Скрыть заклинание (будет внизу панели фильтров)"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>';			
-			var bLockSpell = sLockedSpell? '<span class="bUnlockSpell" title="Открепить обратно"><i class="fa fa-unlock-alt" aria-hidden="true"></i></span>' : '<span class="bLockSpell" title="Закорепить заклинане (не будут действовать фильтры)"><i class="fa fa-lock" aria-hidden="true"></i></span>';			
-			
-			sLockedSpell = sLockedSpell? " lockedSpell " : "";
-			
-			var sNameRu;
-			try{
-				spell.ru.name.length;
-				sNameRu  = spell.ru.name;
-			} catch (err) {
-				console.log("!: "+spell.en.name);
-				sNameRu = spell.en.name;
-			}
-			
-			var title = spell.en.name;
-			if (lang=='en') {
-				title = (spell.ru && spell.ru.name)?spell.ru.name: spell.en.name;
-			}
-			
-			ret = '<div class="cardContainer '+sClass+ sLockedSpell +'" data-level="' + spell.en.level + '" data-school="' + spell.en.school + '" data-name="' + spell.en.name + '" data-name-ru="' + sNameRu + '" data-lang="' + lang + '" data-class="' + sClass + '">'+
-				'<div class="spellCard">'+
-					'<div class="content">'+
-						bLockSpell +
-						bHideSpell +
-						'<h1 title="'+title+(sNeedHelp?" ("+sNeedHelp+")":"")+'">' + s_name + s_ritual + '</h1>'+
-						'<div class="row">'+
-							'<div class="cell castingTime">'+
-								'<b>'+st_castingTime+'</b>'+
-								'<span>' + s_castingTime + '</span>'+
-							'</div>'+
-							'<div class="cell range">'+
-								'<b>'+st_range+'</b>'+
-								'<span>' + s_range + '</span>'+
-							'</div>'+
-						'</div>'+
-						'<div class="row">'+
-							'<div class="cell components">'+
-								'<b>'+st_components+'</b>'+
-								'<span>' + s_components + '</span>'+
-							'</div>'+
-							'<div class="cell duration">'+
-								'<b>'+st_duration+'</b>'+
-								'<span>' + s_duration + '</span>'+
-							'</div>'+
-						'</div>'+
-						'<div class="materials">' + s_materials + '</div>'+
-						'<div class="text">' + s_text + '</div>	'+	
-						(sClassName? '<b class="class">' + sClassName + '</b>' : "")+
-						'<b class="school">' + s_level + ", " + s_school + (s_source?" <span title=\"Источник: "+ oSource[o.source]+"\">("+s_source+")</span>":"")+'</b>'+
-					'</div>'+
-				'</div>'+
-			'</div>';
-			return ret;
-		} else {
-			console.log("not found: ");
-			console.dir(spell);
+	function createCard(oMonster, sLockedSpell) {
+		var size = '';
+		size = oMonster.size;
+		switch(size)
+		{
+			case "T": size="Крошечный"; break;
+			case "S": size="Маленький"; break;
+			case "M": size="Средний"; break;
+			case "L": size="Большой"; break;
+			case "H": size="Огромный"; break;
+			case "G": size="Колоссальный"; break;
 		}
+		size='<span class="size">' + size + '</span>';
+		
+		var trait = '';
+		if(Array.isArray(oMonster.trait)) {
+			for(var i in oMonster.trait){
+				trait+="<div class='trait i4-tipe'>"+
+					"<span class='i2-tipe'>"+oMonster.trait[i].name+"</span>"+
+					oMonster.trait[i].text+
+				"</div>";
+			}	
+		}		
+		else if(typeof oMonster.trait == "object") {
+			trait+="<div class='trait i4-tipe'>"+
+				"<span class='i2-tipe'>"+oMonster.trait.name+"</span>"+
+				oMonster.trait.text+
+			"</div>";
+		}		
+
+		var action = '';
+		if(Array.isArray(oMonster.action)) {
+			for(var i in oMonster.action){
+				action+="<div class='action i4-tipe'>"+
+					"<span class='i2-tipe'>"+oMonster.action[i].name+"</span>"+
+					oMonster.action[i].text+
+				"</div>";
+			}	
+		}		
+		else if(typeof oMonster.action == "object") {
+			action+="<div class='action i4-tipe'>"+
+				"<span class='i2-tipe'>"+oMonster.action.name+"</span>"+
+				oMonster.action.text+
+			"</div>";
+		}		
+		if(action!='')			
+			action="<div class='actions i3-tipe'>Действия</div>"+action;
+		
+		var legendary = '';
+		if(Array.isArray(oMonster.legendary)) {
+			for(var i in oMonster.legendary){
+				legendary+="<div class='legendary i4-tipe'>"+
+					"<span class='i2-tipe'>"+oMonster.legendary[i].name+"</span>"+
+					oMonster.legendary[i].text+
+				"</div>";
+			}	
+		}		
+		else if(typeof oMonster.legendary == "object") {
+			legendary+="<div class='legendary i4-tipe'>"+
+				"<span class='i2-tipe'>"+oMonster.legendary.name+"</span>"+
+				oMonster.legendary.text+
+			"</div>";
+		}
+		if(legendary!='')			
+			legendary="<div class='legendary i3-tipe'>Легендарные Действия</div>"+legendary;
+		
+		var spells = '';
+		if(Array.isArray(oMonster.spells)) {
+			for(var i in oMonster.spells){
+				spells+="<div class='spells'>"+
+					"<span class='i2-tipe'>"+oMonster.spells[i].name+"</span>"+
+					oMonster.spells[i].text+
+				"</div>";
+			}	
+		}		
+		else if(typeof oMonster.spells == "object") {
+			spells+="<div class='spells'>"+
+				"<span class='i2-tipe'>"+oMonster.spells.name+"</span>"+
+				oMonster.spells.text+
+			"</div>";
+		}
+
+		//console.log("spells: "+spells);
+		if(spells!='')			
+			spells="<div class='spellist i3-tipe'>Заклинания</div>"+spells;	
+		var stats = '';
+		var str = oMonster.str;
+		var dex = oMonster.dex;
+		var con = oMonster.con;
+		var inl = oMonster.int;
+		var wis = oMonster.wis;
+		var cha = oMonster.cha;
+		stats = '<div class="stats">'+
+				'<span class="str"><span class="i-tipe">STR </span>' + count_mod(str) + '</span>'+
+				'<span class="dex"><span class="i-tipe">DEX </span>' + count_mod(dex) + '</span>'+
+				'<span class="con"><span class="i-tipe">CON </span>' + count_mod(con) + '</span>'+
+				'<span class="int"><span class="i-tipe">INT </span>' + count_mod(inl) + '</span>'+
+				'<span class="wis"><span class="i-tipe">WIS </span>' + count_mod(wis) + '</span>'+
+				'<span class="cha"><span class="i-tipe">CHA </span>' + count_mod(cha) + '</span>'+
+			'</div>';
+		var skill = c_string("skill", "i2-tipe", "Способность", oMonster.skill);
+		var vulnerable = c_string("vulnerable", "i2-tipe", "Уязвимость", oMonster.vulnerable);
+		var immune = c_string("immune", "i2-tipe", "Иммунитет", oMonster.immune);
+		var conditionImmune = c_string("conditionImmune", "i2-tipe", "Иммунитет к состояниям", oMonster.conditionImmune);
+		var senses = c_string("senses", "i2-tipe", "Чувства", oMonster.senses);
+		var passive = c_string("passive", "i2-tipe", "Пассивное восприятие", oMonster.passive);
+		var languages = c_string("languages", "i2-tipe", "Язык", oMonster.languages);
+		var name= oMonster.name;
+		
+		// experience
+		var expa = {
+			"0": "0 - 10",
+			"1/8": "25",
+			"1/4": "50",
+			"1/2": "100",
+			"1": "200",
+			"2": "450",
+			"3": "700",
+			"4": "1100",
+			"5": "1800",
+			"6": "2300",
+			"7": "2900",
+			"8": "3900",
+			"9": "5000",
+			"10": "5900",
+			"11": "7200",
+			"12": "8400",
+			"13": "10000",
+			"14": "11500",
+			"15": "13000",
+			"16": "15000",
+			"17": "18000",
+			"18": "20000",
+			"19": "22000",
+			"20": "25000",
+			"21": "33000",
+			"22": "41000",
+			"23": "50000",
+			"24": "62000",
+			"25": "75000",
+			"26": "90000",
+			"27": "105000",
+			"28": "120000",
+			"29": "135000",
+			"30": "155000"
+		};
+		
+		var experience = "?";
+		try{
+			experience = expa[oMonster.cr].replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+		} catch (err) {
+			
+		}
+		experience = "<span style='color: #999;'> ("+experience+" XP)</span>";
+		var cr = c_string("cr", "i2-tipe", "Сложность", "<span class='cr_num'>"+oMonster.cr+"</span>" + experience);
+		
+		var oLock = sLockedSpell? '<a href="#" class="unlock_monster" title="Открепить"><i class="fa fa fa-unlock-alt" aria-hidden="true"></i></a>':
+		'<a href="#" class="lock_monster" title="Закрепить"><i class="fa fa-lock" aria-hidden="true"></i></a>';
+		
+		var ret = '<div class="monster" data-name="'+name.toLowerCase()+'">'+
+		'<a href="#" class="hide_monster" title="Скрыть"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>'+
+		oLock+
+			"<div class='left'><div class='inner'>"+
+			'<div class="name">' + name + '</div>'+
+			'<div>'+
+				size+
+				'<span class="type">' + oMonster.type + '</span>'+
+				'<span class="alignment">' + oMonster.alignment + '</span>'+
+			'</div>'+
+			'<hr>'+	
+			'<div class="ac"><span class="i-tipe">AC </span>' + oMonster.ac + '</div>'+
+			'<div class="hp"><span class="i-tipe">HP </span>' + oMonster.hp + '</div>'+
+			'<div class="speed"><span class="i-tipe">Скорось </span>' + oMonster.speed + '</div>'+
+			'<hr>'+	
+			stats+
+			'<hr>'+
+			skill+
+			vulnerable+
+			immune+
+			conditionImmune+
+			senses+
+			passive+
+			languages+
+			cr+  
+			'<hr>'+
+			trait+
+			"</div></div><div class='right'><div class='inner'>"+
+			action+
+			legendary+
+			spells+
+			"</div></div>"+
+			'</div>';
+		return ret;
 	}
 	
 	
-	function createSpellsIndex() {
-		var spells = "";
-		allSpells.forEach(function(item) {
-			spells += createCard(item);
+	function createMonstersIndex() {
+		var monsters = "";
+		allMonsters.forEach(function(item) {
+			monsters += createCard(item);
 		});
-		$(".spellContainer").html(spells);
-		$("#before_spells").hide();
+		$(".monsterContainer").html(monsters);		
 		$("#info_text").hide();
 	}
 	function showFiltered(oParams) {
-		var sName = oParams.sName;
-		var sClass = oParams.sClass;
-		var sSubClass = oParams.sSubClass;
-		var sSubSubClass = oParams.sSubSubClass;
-		var nLevelStart = oParams.nLevelStart;
-		var nLevelEnd = oParams.nLevelEnd;
-		var aSchools = oParams.aSchools;
-		var aSources = oParams.aSources;
-		var sLang = oParams.sLang;
 		
-		var fHiddenSpells = (aHiddenSpells.length>0)? true: false;
-		var fLockedSpells = (aLockedSpells.length>0)? true: false;
-		
-		$(".spellContainer").empty();
-		var spells = "";
-		
+		var sName = oParams.sName || ""; 
+		var aLevels = oParams.aLevels || [];
+		var aTypes = oParams.aTypes || []; 
+		var aSubTypes = oParams.aSubTypes || []; 
+		var aSources = oParams.aSources || []; 
+		var aSize = oParams.aSize || [];
+		var fHidden = oParams.fHidden;
 
-		filteredSpells = []; //arrDiff(filteredSpells, aHiddenSpells);
-		
-		
-		//class
-		var aSpells = [];
-		if(sClass) {
-			if(classSpells[sClass]) {
-				aSpells = aSpells.concat(classSpells[sClass].spells);
-				if(classSpells[sClass].subclasses && classSpells[sClass].subclasses[sSubClass]) {
-					if(classSpells[sClass].subclasses[sSubClass].spells)
-						aSpells = aSpells.concat(classSpells[sClass].subclasses[sSubClass].spells);
-					if(classSpells[sClass].subclasses[sSubClass].subclasses && classSpells[sClass].subclasses[sSubClass].subclasses[sSubSubClass]) {
-						aSpells = aSpells.concat(classSpells[sClass].subclasses[sSubClass].subclasses[sSubSubClass].spells);
-					}
-				}
-				aSpells.forEach(function(spellName){
-					var fFind = false;
-					for (var i = 0; i<allSpells.length; i++){
+		$(".monsterContainer").empty();
+		var monsters = "";		
 
-						if(allSpells[i].en.name == spellName) {
-							filteredSpells.push(allSpells[i]);
-							fFind = true;
-							break;
-						}
-					}
-					if(!fFind){
-						//console.log(spellName);
-					}
-				})
-			}	else {
-				filteredSpells = allSpells;
-			} 
-		} else {
-			filteredSpells = allSpells;
-		}
+		filteredMonsters = []; //arrDiff(filteredMonsters, aHiddenMonsters);
+		allMonsters.forEach(function(el) {
+			filteredMonsters.push(el);
+		});
 		
-		// level
-		/**/
-		if(nLevelStart && nLevelEnd) {
-			filteredSpells = filteredSpells.filter(function(spell){
-				return !(spell.en.level < nLevelStart || spell.en.level > nLevelEnd);
-			});
-		}
-		/**/
-		
-		
-		//school		
-		if(aSchools && aSchools.length>0 && aSchools.length<99) {
-			filteredSpells = filteredSpells.filter(function(spell){
-				for(var i = 0; i < aSchools.length; i++) {
-					if(aSchools[i].toLowerCase().trim() == spell.en.school.toLowerCase().trim()) {
-						return true;
-					}
-				}
-				return false;
-			});
-		}
-		
-		//source		
-		if(aSources && aSources.length>0 && aSources.length<9) {
-			filteredSpells = filteredSpells.filter(function(spell){
-				for(var i = 0; i < aSources.length; i++) {
-
-					if(aSources[i].toLowerCase().trim() == spell.en.source.toLowerCase().trim()) {
-						return true;
-					}
-				}
-				return false;
-			});
-		}
-			
 		// name
 		if (sName) {
 			sName = sName.toLowerCase().trim();
-			filteredSpells = filteredSpells.filter(function(spell){
-				return (spell.en.name.toLowerCase().trim().indexOf(sName)>=0 || (spell.ru && spell.ru.name.toLowerCase().trim().indexOf(sName)>=0));
+			filteredMonsters = filteredMonsters.filter(function(monster){
+				return (monster.name.toLowerCase().trim().indexOf(sName)>=0);
 			});
 		}
 		
+		// level		
+		if(aLevels && aLevels.length>0 && aLevels.length<99) {
+			filteredMonsters = filteredMonsters.filter(function(monster){
+				for(var i = 0; i < aLevels.length; i++) {
+					if(aLevels[i].toLowerCase().trim() == monster.cr.toLowerCase().trim()) {
+						return true;
+					}
+				}
+				return false;
+			});
+		}
 		
-		filteredSpells = fHiddenSpells? arrDiff(filteredSpells, aHiddenSpells) : filteredSpells;
-		//filteredSpells = fLockedSpells? filteredSpells.concat(aLockedSpells) : filteredSpells;
-		if (fLockedSpells) {
-			for (var i = 0; i<allSpells.length; i++){	
-				for (var j=0; j<aLockedSpells.length; j++){
-					if(allSpells[i].en.name == aLockedSpells[j].en) {
-						filteredSpells.push(allSpells[i]);
+		// types		
+		if(aTypes && aTypes.length>0 && aTypes.length<99) {
+			filteredMonsters = filteredMonsters.filter(function(monster){
+				for(var i = 0; i < aTypes.length; i++) {
+					if(aTypes[i].toLowerCase().trim() == monster.sType.toLowerCase().trim()) {
+						return true;
+					}
+				}
+				return false;
+			});
+		}
+		// subtypes		
+		if(aSubTypes && aSubTypes.length>0 && aSubTypes.length<99) {
+			filteredMonsters = filteredMonsters.filter(function(monster){
+				for(var i = 0; i < aSubTypes.length; i++) {
+					if(monster.aSubtypes.indexOf(aSubTypes[i].toLowerCase().trim()) >= 0) {
+						return true;
+					}
+				}
+				return false;
+			});
+		}
+		
+		// sizes		
+		if(aSize && aSize.length>0 && aSize.length<99) {
+			filteredMonsters = filteredMonsters.filter(function(monster){
+				for(var i = 0; i < aSize.length; i++) {
+					if(aSize[i].toLowerCase().trim() == monster.size.toLowerCase().trim()) {
+						return true;
+					}
+				}
+				return false;
+			});
+		}		
+		
+		//source		
+		if(aSources && aSources.length>0 && aSources.length<9) {
+			filteredMonsters = filteredMonsters.filter(function(spell){
+				for(var i = 0; i < aSources.length; i++) {
+					if(aSources[i].toLowerCase().trim() == spell.source.toLowerCase().trim()) {
+						return true;
+					}
+				}
+				return false;
+			});
+		}
+		
+		filteredMonsters = fHidden? arrDiff(filteredMonsters, aHiddenMonsters) : filteredMonsters;
+		/*/
+		if (fLockedMonsters) {
+			for (var i = 0; i<allMonsters.length; i++){	
+				for (var j=0; j<aLockedMonsters.length; j++){
+					if(allMonsters[i].name == aMonsterSpells[j]) {
+						filteredMonsters.push(allMonsters[i]);
 						break;
 					}
 				}
 			}
 		}
-			
+		/**/
+		
 		// sort
-		filteredSpells.sort(function(a, b) {
-			if(a[sLang] && b[sLang]) {
-				if (a[sLang].level+a[sLang].name.toLowerCase().trim() < b[sLang].level+b[sLang].name.toLowerCase().trim() )
-					return -1;
-				if (a[sLang].level+a[sLang].name.toLowerCase().trim() > b[sLang].level+b[sLang].name.toLowerCase().trim() )
-					return 1;
-			}
+		filteredMonsters.sort(function(a, b) {	
+			
+			if (translateCR(a.cr)+a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") < translateCR(b.cr)+b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
+				return -1;
+			if (translateCR(a.cr)+a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") > translateCR(b.cr)+b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
+				return 1;	
+			
 			return 0
 		});
 					
-		for (var i in filteredSpells) {
-			if(filteredSpells[i]) {
-				var fLocked = filteredSpells[i].locked? true: false;
-				var tmp = createCard(filteredSpells[i], sLang, sClass, fLocked)
+		for (var i in filteredMonsters) {
+			if(filteredMonsters[i]) {
+				var fLocked = filteredMonsters[i].locked? true: false;
+				var tmp = createCard(filteredMonsters[i], fLocked)
 				if (tmp)
-					spells += tmp;
+					monsters += tmp;
 			} 
 		}
 
-		$(".spellContainer").html(spells);
-		$("#before_spells").hide();
+		$(".monsterContainer").html(monsters);
+		//$("#before_spells").hide();
 		$("#info_text").hide();
 	}
 	
-	function filterSpells(oParams){
+	function filterMonsters(oParams){
 		var sName = $("#NameInput input").val();
-		var sClass = $("#ClassSelect .label").attr("data-selected-key");
-		var sSubClass = $("#SubClassSelect .label").attr("data-selected-key");
-		var sSubSubClass = $("#SubSubClassSelect .label").attr("data-selected-key");
-		var nLevelStart = $("#LevelStart .label").attr("data-selected-key");
-		var nLevelEnd = $("#LevelEnd .label").attr("data-selected-key");
-		var aSchools = $("#SchoolCombobox .combo_box_title").attr("data-val");
-			if(aSchools) aSchools = aSchools.split(",").map(function(item){return item.trim()});
-		var aSources = $("#SourceCombobox .combo_box_title").attr("data-val");
-			if(aSources) aSources = aSources.split(",").map(function(item){return item.trim()});
-		var sLang = $("#LangSelect .label").attr("data-selected-key");
+		var aLevels = [];
+		$("#levelToggle .toggle_box_content input:checkbox:checked").each(function(i, el){
+			aLevels.push(el.value);
+		});
+
+		var aTypes = [];
+		$("#TypeToggle .toggle_box_content input:checkbox:checked").each(function(i, el){
+			aTypes.push(el.value);
+		});
 		
-		var fHidden = (aHiddenSpells.length>0)? true: false;
+		var aSubTypes = [];
+		$("#SubTypeToggle .toggle_box_content input:checkbox:checked").each(function(i, el){
+			aSubTypes.push(el.value);
+		});
+
+		var aSources = [];
+		$("#SourceCombobox .combo_box_content input:checkbox:checked").each(function(i, el){
+			aSources.push(el.value);
+		});
+			
+		var aSize = [];
+		$("#SizeCombobox .combo_box_content input:checkbox:checked").each(function(i, el){
+			aSize.push(el.value);
+		});
 		
-		setConfig("language", sLang);
+		var fHidden = (aHiddenMonsters.length>0)? true: false;
+		
 		//setConfig("schoolOpen", $("#SchoolCombobox").attr("data-content-open"));
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
 			showFiltered({
 				sName: sName, 
-				sClass: sClass, 
-				sSubClass: sSubClass, 
-				sSubSubClass: sSubSubClass, 
-				nLevelStart: nLevelStart, 
-				nLevelEnd: nLevelEnd, 
-				aSchools: aSchools, 
-				aSources: aSources,
-				sLang: sLang,
+				aLevels: aLevels, 
+				aTypes: aTypes, 
+				aSubTypes: aSubTypes, 
+				aSources: aSources, 
+				aSize: aSize,
 				fHidden: fHidden
 				});
 		}, nTimerSeconds/4);		
@@ -525,6 +719,9 @@ window.onload = function(){
 				}	
 			}
 			
+			el.sType = sType;
+			if(aSubtype.length>0)
+				el.aSubtypes = aSubtype;
 		});
 		
 		// transform monster object to array
@@ -541,10 +738,25 @@ window.onload = function(){
 				"key": type
 			}
 			if(aSubtype.length > 0){
+				aSubtype.sort(function(a, b) {
+					if(a.title > b.title)
+						return 1;
+					if(a.title < b.title)
+						return -1;
+					return 0;
+				});
+			
 				oType.subtype = aSubtype;
 			}
 			monsterTypes.push(oType);
 		}
+		monsterTypes.sort(function(a, b) {
+			if(a.title > b.title)
+				return 1;
+			if(a.title < b.title)
+				return -1;
+			return 0;
+		});
 		
 		// sorting monsters levels
 		monsterLevels.sort(function(a, b) {
@@ -611,22 +823,37 @@ window.onload = function(){
 			isOpen = false;
 		var s1=createComboBox(monsterSources, {id: "SourceCombobox", title: "Источники", checkAll: true, isOpen: isOpen});
 		$(".p_side").append("<div class='mediaWidth'>" + s1 + "</div>");
-		/*/
-		sourceList.forEach(function(el) {			
-			oSource[el.key] = el.en;
-		});
-		/**/
+	}
+		
+	function createViewSegmented() {
+		var aViews = [
+			{
+				key: "text",
+				title: "<i class='fa fa-align-justify' aria-hidden='true'></i> Текст",
+				selected: true
+			},
+			{
+				key: "card",
+				title: "<i class='fa fa-th-large' aria-hidden='true'></i> Карточки"
+			}
+		];
+		var s1=createSegmentedButton(aViews, {id: "ViewSegmented"});
+		var label = createLabel("Вид");
+		$(".p_side").append("<div class='mediaWidth'>" + label + s1 + "</div>");
 	}
 	
 	function createTypeToggle() {	
+		var label = createLabel("Типы");
+		var s1=createToggle(monsterTypes, {id: "TypeToggle", title: "Типы", checkAll: true});
+		$(".p_side").append("<div class='mediaWidth max_width_2'>" + label + s1 + "</div>");
 
-		var s1=createToggle(monsterTypes, {id: "SourceCombobox", title: "Типы", checkAll: true});
-		$(".p_side").append("<div class='mediaWidth'>" + s1 + "</div>");
-		/*/
-		sourceList.forEach(function(el) {			
-			oSource[el.key] = el.en;
-		});
-		/**/
+	}
+	
+	function createSubTypeToggle() {	
+		var label = createLabel("Подтипы");
+		var s1=createToggle(monsterTypes, {id: "SubTypeToggle", title: "Подтипы", checkAll: true, subtypes: "only"});
+		$(".p_side").append("<div class='mediaWidth max_width_2'>" + label + s1 + "</div>");
+
 	}
 	function createNameFilter() {
 		var ret=createInput({id: "NameInput"});
@@ -637,64 +864,62 @@ window.onload = function(){
 	function createLevelToggle(){
 		var label = createLabel("Класс Сложности");
 		var s1 = createToggle(monsterLevels, {"id": "levelToggle"});
-		$(".p_side").append("<div class='mediaWidth'>"  + label +  s1 + "</div>");
+		$(".p_side").append("<div class='mediaWidth max_width_2'>"  + label +  s1 + "</div>");
 	}
 	
-	function createHiddenSpellsList(){
-		if(aHiddenSpells.length < 1){
-			$("#HiddenSpells").parent().remove();
+	function createHiddenMonstersList(){
+		if(aHiddenMonsters.length < 1){
+			$("#HiddenMonsters").parent().remove();
 			return;
 		}
-		if(!$("#HiddenSpells").length>0){
-			var label = createLabel("Скрытые заклинания");
-			$("#LangSelect").parent().after("<div class='mediaWidth'>" + label + "<div id='HiddenSpells'></div></div>");
+		if(!$("#HiddenMonsters").length>0){
+			var label = createLabel("Скрытые монстры");
+			$("#SourceCombobox").parent().after("<div class='mediaWidth'>" + label + "<div id='HiddenMonsters'></div></div>");
 		}
-		var listHiddenSpells = aHiddenSpells.map(function(item){
-			return "<a href='#' title='Вернуть на место' class='bUnhideSpell' data-name='"+item.en+"'>"+item.ru +" ("+ item.en+") </a>";
-			}).join(" ");
+		var listHiddenMonsters = aHiddenMonsters.map(function(item){
+			return "<a href='#' title='Вернуть на место' class='bUnhideMonster' data-name='"+item+"'>"+item +"</a>";
+		}).join(" ");
 			
 		var bReturnAll = "<a href='#' class='bReturnUnvisible'>Вернуть все обратно</a>";
-		$("#HiddenSpells").html(bReturnAll + listHiddenSpells);			
+		$("#HiddenMonsters").html(bReturnAll + listHiddenMonsters);			
 	}
 	
-	function createLockedSpellsArea(){
+	function createLockedMonstersArea(){
 		var aLocked = [];
-		for (var i in aLockedSpells){
+		for (var i in aLockedMonsters){
 			aLocked.push(i);
 		}
 		var aResult = [];
 		var l = aLocked.length;
 		if(l>0){
-			for (var i=0; i<allSpells.length; i++) {
+			for (var i=0; i<allMonsters.length; i++) {
 				for (var j=0; j< l; j++) {
-					if(allSpells[i].en.name == aLocked[j]) {
-						aResult.push(allSpells[i]);
-						aResult[aResult.length-1].lang = aLockedSpells[aLocked[j]].lang;
-						aResult[aResult.length-1].class = aLockedSpells[aLocked[j]].class;
+					if(allMonsters[i].name.toLowerCase() == aLocked[j].toLowerCase()) {
+						aResult.push(allMonsters[i]);
 					}
 				}
 			}
 			
-			if($("#lockedSpellsArea").length<1){
-				$(".p_cont").prepend("<div id='lockedSpellsArea'><span class='bUnlockAll'>Открепить все</span><span class='topHeader'></span><div class='content row'></div><span class='bottomHeader'></span></div>");
+			if($("#lockedMonstersArea").length<1){
+				$(".p_cont").prepend("<div id='lockedMonstersArea'><span class='bUnlockAll'>Открепить все</span><span class='topHeader'></span><div class='content row'></div><span class='bottomHeader'></span></div>");
 
 			}
-			$("#lockedSpellsArea .content").html(aResult.sort(function(a, b) {
-				if(a.lang && b.lang) {
-					if (a[a.lang].level+a[a.lang].name.toLowerCase().trim() < b[b.lang].level+b[b.lang].name.toLowerCase().trim() )
-						return -1;
-					if (a[a.lang].level+a[a.lang].name.toLowerCase().trim() > b[b.lang].level+b[b.lang].name.toLowerCase().trim() )
-						return 1;
-				}
+			$("#lockedMonstersArea .content").html(aResult.sort(function(a, b) {
+
+				if (translateCR(a.cr)+a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") < translateCR(b.cr)+b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
+				return -1;
+				if (translateCR(a.cr)+a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") > translateCR(b.cr)+b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
+				return 1;	
+
 				return 0
-			}).map(function(el){return createCard(el, el.lang, el.class, true)}));	
+			}).map(function(el){return createCard(el, true)}));	
 			
 			//COUNTER
-			$("#lockedSpellsArea .topHeader").html("("+l+")");
-			$(".spellContainer").addClass("noprint");
+			$("#lockedMonstersArea .topHeader").html("("+l+")");
+			$(".monsterContainer").addClass("noprint");
 		} else {
-			$("#lockedSpellsArea").remove();
-			$(".spellContainer").removeClass("noprint");
+			$("#lockedMonstersArea").remove();
+			$(".monsterContainer").removeClass("noprint");
 		}
 	}
 	
@@ -711,22 +936,59 @@ window.onload = function(){
 		// level
 		createLevelToggle();	
 		
-		//size
-		createSizeCombobox();
 		
 		// type
 		createTypeToggle();
+		
+		createSubTypeToggle();
+		
+		//size
+		createSizeCombobox();
 		
 		//source
 		createSourceCombobox();	
 		
 		// view
-		//createViewSelect();
+		createViewSegmented()
 		
 		$(".p_side").fadeIn();	
 	}
 	
-
+	function setSubtypeToggleEnable() {
+		var aTypes = [];
+		var aSubTypes = [];
+		$("#TypeToggle .toggle_box_content input:checkbox:checked").each(function(i, el){
+			aTypes.push(el.value);
+		});
+		//console.dir(aTypes);
+		//console.dir(monsterTypes);
+		if(aTypes.length>0){
+			$("#SubTypeToggle input[type='checkbox']").each(function () {			
+				$(this).attr("disabled", true);			
+			});
+			for (var t in monsterTypes) {
+				aTypes.forEach(function(el) {
+					if(monsterTypes[t].key == el) {
+						if(monsterTypes[t].subtype){
+							monsterTypes[t].subtype.forEach(function (item) {
+								$("#SubTypeToggle input[type='checkbox']").each(function () {
+									if($(this).attr('value') == item.key){
+										$(this).removeAttr("disabled");	
+									}				
+								})
+							})
+						}
+					}
+				})
+				
+			}
+		} else{
+			$("#SubTypeToggle input[type='checkbox']").each(function () {			
+				$(this).removeAttr("disabled");		
+			});
+		}
+	}
+	
 	/// handlers
 	
 	// close Mod Win
@@ -741,26 +1003,7 @@ window.onload = function(){
 		hideInfoWin();
 	});
 	
-	//custom Select
-	$("body").on("click", ".customSelect .label", function() {
-	  if($(this).next(".list").css('display') == 'none') {
-		$(this).parent().focus();		
-	  }
-	  $(this).next(".list").fadeToggle();
-	});
-	$("body").on("focusout", ".customSelect", function() {	  
-	  $(this).find(".list").fadeOut();
-	});
-	$("body").on("click", ".customSelect .option", function() {
-	  var key = $(this).attr("data-key");
-	  var text = $(this).html().replace("<br>", " | ");
-	  $(this).closest(".customSelect").find(".label").attr("data-selected-key", key).text(text);
-	  $(this).parent("ul").fadeOut();
-	  $(this).closest(".customSelect").focusout();
-	  $(this).closest(".customSelect").blur();
-	  //$("#toFocus").focus();	  
-	});
-	
+
 	// custom Combobox
 	$("body").on('click', ".combo_box_title, .combo_box_arrow", function(){
 		var el = $(this).closest(".combo_box").find(".combo_box_content");
@@ -924,91 +1167,59 @@ window.onload = function(){
 	$("body").on('focusout', "#NameInput", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
-			filterSpells();
+			filterMonsters();
 		}, nTimerSeconds);		
 	});
 	$("body").on('keyup', "#NameInput input", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
-			filterSpells();
+			filterMonsters();
 		}, nTimerSeconds*3);		
 	});
-	// class select
-	$("body").on('focusout', "#ClassSelect", function(){
+	
+	
+	// level select
+	$("body").on('click', "#levelToggle label", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
-			filterSpells();
-			var sClass = $("#ClassSelect .label").attr("data-selected-key");
-			createSubClassSelect(sClass);
-		}, nTimerSeconds);		
-	});
-	// sub class select
-	$("body").on('focusout', "#SubClassSelect", function(){
-		clearTimeout(oTimer);
-		
-		oTimer = setTimeout(function(){
-			filterSpells();
-			var sClass = $("#ClassSelect .label").attr("data-selected-key");
-			var sSubClass = $("#SubClassSelect .label").attr("data-selected-key");
-			createSubSubClassSelect(sClass, sSubClass);
-		}, nTimerSeconds);		
-	});
-	// sub sub class select
-	$("body").on('focusout', "#SubSubClassSelect", function(){
-		clearTimeout(oTimer);
-		
-		oTimer = setTimeout(function(){
-			filterSpells();			
+			filterMonsters();
 		}, nTimerSeconds);		
 	});
 	
-	// level select
-	$("body").on('focusout', "#LevelStart", function(){
+	// type select
+	$("body").on('click', "#TypeToggle label", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
-			filterSpells();
+			setSubtypeToggleEnable();
+			filterMonsters();
 		}, nTimerSeconds);		
 	});
-	$("body").on('focusout', "#LevelEnd", function(){
+	
+	// subtype select
+	$("body").on('click', "#SubTypeToggle label", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
-			filterSpells();
+			filterMonsters();
 		}, nTimerSeconds);		
-	});
-	// school combobox
-	$("body").on('click', "#SchoolCombobox label", function(){
-		clearTimeout(oTimer);
-		oTimer = setTimeout(function(){
-			filterSpells();
-		}, nTimerSeconds);		
-	});
-	$("body").on('click', "#SchoolCombobox .combo_box_title, #SchoolCombobox .combo_box_arrow", function(){
-		setConfig("schoolOpen", $("#SchoolCombobox").attr("data-content-open"));	
 	});
 	
 	// source combobox
 	$("body").on('click', "#SourceCombobox label", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
-			filterSpells();
+			filterMonsters();
 		}, nTimerSeconds);		
 	});
 	$("body").on('click', "#SourceCombobox .combo_box_title, #SourceCombobox .combo_box_arrow", function(){
 		setConfig("sourceOpen", $("#SourceCombobox").attr("data-content-open"));	
 	});
 	
-	// lang select
-	$("body").on('focusout', "#LangSelect", function(){
-		clearTimeout(oTimer);
-		oTimer = setTimeout(function(){
-			filterSpells();
-		}, nTimerSeconds);		
-	});
+	//
 	
 	// show all moncters
 	$("body").on('click', "#showAllMonsters", function(){
 		setConfig("infiIsShown", true);
-		filterSpells();	
+		filterMonsters();	
 		hideInfoWin();
 		hideDBG();
 		return false;
@@ -1024,85 +1235,94 @@ window.onload = function(){
 	
 
 	//hide monsters
-	$("body").on('click', ".bHideSpell", function(){
-		var sName = $(this).closest(".cardContainer").attr("data-name");
-		var sNameRu = $(this).closest(".cardContainer").attr("data-name-ru");
+	$("body").on('click', ".hide_monster", function(){
+		var sName = $(this).closest(".monster").attr("data-name");
 		
 		$(this).hide();
-		// update hidden spells array
-		aHiddenSpells.push({en: sName, ru: sNameRu}); 
+		// update hidden Monsters array
+		aHiddenMonsters.push(sName); 
 		
-		// show list of hidden spells
-		createHiddenSpellsList();
+		// show list of hidden Monsters
+		createHiddenMonstersList();
 		
-		// show spells without hidden
-		filterSpells({fHidden: true});
+		// show Monsters without hidden
+		filterMonsters({fHidden: true});
 	})
 	// unhide spells
-	$("body").on('click', ".bUnhideSpell", function(){
+	$("body").on('click', ".bUnhideMonster", function(){
 		var sName = $(this).attr("data-name")
 		// update hidden spells array
-		aHiddenSpells.splice(aHiddenSpells.map(function(el){return el.en}).indexOf(sName), 1); 
+		aHiddenMonsters.splice(aHiddenMonsters.indexOf(sName), 1); 
 		
 		// show list of hidden spells
-		createHiddenSpellsList();
+		createHiddenMonstersList();
 		
 		// show spells without hidden
-		filterSpells({fHidden: true});
+		filterMonsters({fHidden: true});
 		
 		return false;
 	})
 	$("body").on("click", ".bReturnUnvisible", function() {
-		aHiddenSpells = [];// show list of hidden spells
-		createHiddenSpellsList();
+		aHiddenMonsters = [];// show list of hidden spells
+		createHiddenMonstersList();
 		
 		// show spells without hidden
-		filterSpells({fHidden: true});
+		filterMonsters({fHidden: true});
 		
 		return false;
 	});
 	
 	// lock spells
-	$("body").on('click', ".bLockSpell", function(){
-		var sName = $(this).closest(".cardContainer").attr("data-name");
-		var sNameRu = $(this).closest(".cardContainer").attr("data-name-ru");
-		var sLang = $(this).closest(".cardContainer").attr("data-lang");
-		var sClass= $(this).closest(".cardContainer").attr("data-class");
+	$("body").on('click', ".lock_monster", function(){
+		var sName = $(this).closest(".monster").attr("data-name");		
 		
-		
-		aLockedSpells[sName] = {
-			ru: sNameRu,
-			lang: sLang,
-			class: sClass
-			};
+		aLockedMonsters[sName] = "";
 		
 		// show locked
-		createLockedSpellsArea();
+		createLockedMonstersArea();
 	})
 	
 	// unlock spells
-	$("body").on('click', ".bUnlockSpell", function(){
-		var sName = $(this).closest(".cardContainer").attr("data-name");
+	$("body").on('click', ".unlock_monster", function(){
+		var sName = $(this).closest(".monster").attr("data-name");
 		
-		delete aLockedSpells[sName];
+		delete aLockedMonsters[sName];
 		
 		// show locked
-		createLockedSpellsArea();
+		createLockedMonstersArea();
 	})
-	$("body").on('click', "#lockedSpellsArea .topHeader", function(){
+	$("body").on('click', "#lockedMonstersArea .topHeader", function(){
 		$(this).next(".content").slideToggle();
 		$(this).next(".content").next(".bottomHeader").fadeToggle();
 	});
 	$("body").on('click', ".bUnlockAll", function(){
-		aLockedSpells = [];
+		aLockedMonsters = [];
 		// show locked
-		createLockedSpellsArea();
+		createLockedMonstersArea();
 	});
 	
+	// print
 	$("body").on('click', "#bPrint", function(){
 		window.print();
 		
 		return false;
+	});
+	
+	$("body").on('change', "#ViewSegmented input", function() {
+		var sValue = $(this).val();
+		
+		if(sValue == "text") {
+			$(".monster_card").each(function(){
+				$(this).removeClass("monster_card");
+				$(this).addClass("monster");
+			});	
+		} else {
+			$(".monster").each(function(){
+				$(this).removeClass("monster");
+				$(this).addClass("monster_card");
+			});		
+			
+		}
 	});
 		
 	
@@ -1111,7 +1331,7 @@ window.onload = function(){
 			$("#showAllMonsters").slideDown();
 			if(getViewPortSize("width") > 600){
 				if(getConfig("infiIsShown")==true)
-					filterSpells();
+					filterMonsters();
 
 			}
 		}

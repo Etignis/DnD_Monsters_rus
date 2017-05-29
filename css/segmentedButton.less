@@ -1,17 +1,17 @@
-.toggle_box{
-	input[type=checkbox]{
+.segmented_button{
+	
+	display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+	
+	input[type=radio]{
         display: none;
         position: relative;  
         
         &:checked+label{
-        	.fr-concave;
 		    background: @d-gray;
-		    padding: .1em .4em;
-		    display: inline-block;
-		    cursor: pointer;
-		    text-align: center;
-		    font-size: 90%;
-		    margin: .3em;
         }
     	&[disabled]+label{
     		background: @l-gray - #222;
@@ -22,22 +22,20 @@
     }
     label{
 	    .fr-convex;
+	    //border-radius: 0;
 	    background: @m-gray;
-	    padding: .1em .4em;
-	    display: inline-block;
+	    padding: .4em .1em;
+	    margin: 0;
+		flex-grow: 1;
+		flex-shrink: 0;
 	    cursor: pointer;
 	    text-align: center;
 	    font-size: 90%;
-	    margin: .3em;
 	    &:hover{
 	        background: @m-gray + #111;    
 	    }
 	    &:active{
 	        background:  @m-gray - #111;    
 	    }    
-    }
-    
-    .mode_fix{
-    	min-width: 2.5em;
     }
 }

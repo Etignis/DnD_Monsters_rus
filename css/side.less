@@ -30,7 +30,7 @@
         padding: .1em;
         width: 9em;
     }
-    
+    /*/
     input[type='radio']{
         display: none;
     }
@@ -61,6 +61,7 @@
         background:  @m-gray - #222;  
         padding: .3em;  
     }
+    /**/
     .hidden_spells{
         max-width: 99.4%;
         width: 100%;
@@ -88,7 +89,7 @@
         width: auto;
     }
 }
-#HiddenSpells{
+#HiddenMonsters{
     a{
         text-decoration: none;
         color: @l-gray;
@@ -102,11 +103,15 @@
         }
     }
     .bReturnUnvisible{
-        display: inline-block;
+        display: block;
         padding: .1em .2em;
+        margin-right: 2em;
         margin: .4em 0;
         background: rgba(200,200,200,.2);
         border-bottom: 1px dashed rgba(100,100,100,.6);
+    }
+    .bUnhideMonster{
+    	padding: .4em;
     }
 }
 .mediaWidth{
@@ -114,8 +119,11 @@
     //display: inline-block;
     margin: .2em;
     flex-grow: 1;
-    flex-shrink: 0;
-    flex-basis: 200px;
+    flex-shrink: 1;
+    //flex-basis: 200px;
+}
+.max_width_2{
+	flex-grow: 2;
 }
 @media screen and (min-width: @m_w_1) {
     .p_side{
@@ -126,6 +134,7 @@
         flex-direction: column;
         align-items: stretch;
         position: absolute;
+        
         .s_block{
             width: 98%;
         }

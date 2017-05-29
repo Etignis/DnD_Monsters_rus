@@ -17,12 +17,13 @@
 				}
 			],
 			"sources": [
-				"card.less",
 				"combobox.less",
 				"frame.less",
 				"loader.less",
+				"monsterCard.less",
 				"page.less",
 				"print.less",
+				"segmentedButton.less",
 				"select.less",
 				"side.less",
 				"start.less",
