@@ -29,6 +29,14 @@ function c_string(clas, s_clas, title, cont){
 	return string;
 }
 
+function ToNormalFraction(sFraction) {
+	if(/\d+\/\d+/.test(sFraction))
+		return eval(sFraction);
+	if(/\d+/.test(sFraction))
+		return Number(sFraction);
+	return sFraction;
+}
+
 window.onload = function(){
 	var monsterLevels = [];
 	var monsterTypes = [];
@@ -177,12 +185,12 @@ window.onload = function(){
 			
 			if (subtypes == "only") {
 				for (var sbt in type.subtype) {
-					aItems.push(type.subtype[sbt]);
+					//aItems.push(type.subtype[sbt]);
 					oItems[type.subtype[sbt].key]=type.subtype[sbt];
 					//ret+= getOption(type.subtype[sbt]);
 				}
 			} else {	
-				aItems.push(type);
+				//aItems.push(type);
 				var key = (typeof type == "number" || typeof type == "string")? type: type.key;
 				oItems[key] = type;
 				//ret+= getOption(type);
@@ -193,10 +201,23 @@ window.onload = function(){
 		aItems.forEach(function(el) {
 			ret+= getOption(el);
 		});
+		/*/
 		/**/
 		for(var i in oItems) {
-			ret+= getOption(oItems[i]);
+			//ret+= getOption(oItems[i]);
+			aItems.push(i);
 		}
+		aItems.sort(function (a, b) {
+			if(ToNormalFraction(a) < ToNormalFraction(b))
+				return -1;
+			if(ToNormalFraction(a) > ToNormalFraction(b))
+				return 1;
+			return 0;
+		})
+		aItems.forEach(function(el) {
+			ret+= getOption(el);
+		})
+		/**/
 		ret = "<div "+id+" class='toggle_box'><div class='toggle_box_content'>"+ret+"</div></div>";
 		return ret;	
 	}
