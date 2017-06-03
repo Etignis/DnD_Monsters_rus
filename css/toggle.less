@@ -1,0 +1,54 @@
+.toggle_box{
+	.toggle_box_content{
+		display: flex;
+	    flex-direction: row;
+	    flex-wrap: wrap;
+	    justify-content: space-between;
+	    align-items: flex-end;	
+	}
+    
+	input[type=checkbox]{
+        display: none;
+        position: relative;  
+        
+        &:checked+label{
+        	//.fr-concave;
+		    background: @d-gray;
+        }
+    	&[disabled]+label{
+    		background: @l-gray - #222;
+    	}
+    	&[disabled]:hover+label{
+    		background: @l-gray - #222;
+    	}
+    }
+    label{
+	    .fr-convex;
+	    background: @m-gray;
+	    padding: .4em .4em;
+	    display: inline-block;
+	    cursor: pointer;
+	    text-align: center;
+	    font-size: 90%;
+	    margin: .3em;
+		flex-grow: 1;
+		flex-shrink: 0;
+	    &:hover{
+	        background: @m-gray + #111;    
+	    }
+	    &:active{
+	        background:  @m-gray - #111;    
+	    }    
+    }
+    
+    .mode_fix{
+    	min-width: 2.5em;
+    }
+}
+@media screen and (min-width: @m_w_1) {
+	.toggle_box{
+		label{
+			padding: .1em .4em;
+		}
+	}
+}

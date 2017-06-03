@@ -7,7 +7,7 @@
 .clear{
     float: none!important;
     clear: both!important;  
-    display: block!important;
+    display: table!important;
     width: 0!important;
     height: 0!important;
     margin:0!important;
@@ -22,7 +22,7 @@
     user-select: none;
 }
 
-.transit(@prop: all, @tm: 1s, @fn: ease-out, @tm2: 0){
+.transit(@prop: all, @tm: 1s, @fn: ease-out, @tm2: 0s){
     -webkit-transition: @prop @tm @fn @tm2;
        -moz-transition: @prop @tm @fn @tm2;
         -ms-transition: @prop @tm @fn @tm2;
@@ -61,4 +61,44 @@
     
     
     display: none;
+}
+
+.scrollbars(@size, @foreground-color, @background-color) {
+  // For Google Chrome
+  &::-webkit-scrollbar {
+      width:  @size;
+      height: @size;
+  }
+
+  &::-webkit-scrollbar-thumb {
+      background: @foreground-color;
+  }
+
+  &::-webkit-scrollbar-track {
+      background: @background-color;
+  }
+
+  // For Internet Explorer
+  body {
+    scrollbar-face-color: @foreground-color;
+    scrollbar-track-color: @background-color;
+  }
+}
+
+.flexParent{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+.flexChild{
+    flex-grow: 1;
+}
+
+.sticky{
+    position: -webkit-sticky;
+	position: -moz-sticky;
+	position: -ms-sticky;
+	position: -o-sticky;
 }

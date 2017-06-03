@@ -1,0 +1,41 @@
+.segmented_button{
+	
+	display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+	
+	input[type=radio]{
+        display: none;
+        position: relative;  
+        
+        &:checked+label{
+		    background: @d-gray;
+        }
+    	&[disabled]+label{
+    		background: @l-gray - #222;
+    	}
+    	&[disabled]:hover+label{
+    		background: @l-gray - #222;
+    	}
+    }
+    label{
+	    .fr-convex;
+	    //border-radius: 0;
+	    background: @m-gray;
+	    padding: .4em .1em;
+	    margin: 0;
+		flex-grow: 1;
+		flex-shrink: 0;
+	    cursor: pointer;
+	    text-align: center;
+	    font-size: 90%;
+	    &:hover{
+	        background: @m-gray + #111;    
+	    }
+	    &:active{
+	        background:  @m-gray - #111;    
+	    }    
+    }
+}

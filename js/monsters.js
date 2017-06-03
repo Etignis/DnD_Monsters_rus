@@ -1,527 +1,361 @@
-$(window).load(function(){
-	var f_type=1;
-	// перемешивание
-	function shuffle(o){
-    for(var j, x, k = o.length; k; j = Math.floor(Math.random() * k), x = o[--k], o[k] = o[j], o[j] = x);
-    return o;
-};
-/*
-list = list.split(";");		
-		list = shuffle(list);
-*/
-function randd(min, max) {    
-    //return 3;//
-	var rnd = Math.floor(arguments.length > 1 ? (max - min + 1) * Math.random() + min : (min + 1) * Math.random());
-	console.log("rand num: "+rnd);
-	return rnd;
-}
-function is_array (a) {
-    return (typeof a == "object") && (a instanceof Array);
-}
-Array.prototype.shuffle = function() {
-    for (var i = this.length - 1; i > 0; i--) {
-        var num = Math.floor(Math.random() * (i + 1));
-        var d = this[num];
-        this[num] = this[i];
-        this[i] = d;
-    }
-    return this;
-}
-// parameters from URL
-function getParamsURL(){
-    var vars = [], hash;
-    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    for(var i = 0; i < hashes.length; i++)
-    {
-        hash = hashes[i].split('=');
-        vars.push(hash[0]);
-        vars[hash[0]] = hash[1];
-    }
-    return vars;
-}
-function find_type(){
-	console.log("f find_type");
-	//$("body").css('opacity', '0.6');
-	var pars=getParamsURL()["type"];
-	if (pars === undefined || pars=='') 
-		{
-		if($("#ch_vw_2").prop('checked'))
-			type=1;
-		else
-			type=0;
-		}
-		else
-		type = pars;
-	//console.log(pars);
-	if(type==1)
-	{
-		$(".pagebreak").remove();
-		$("#ch_vw_1").prop('checked', false);
-		$("#ch_vw_2").prop('checked', true);
-		console.log("ch 1 1 1 1");
-		var f_num=1;
-		if($(".monster").length>0)
-			{
-			$(".monster").each(function(){
-				$(this).addClass("monster_card").removeClass("monster");
-				//console.log("f_num: "+f_num);
-				if($(this).is(':visible'))
-					f_num*=-1;
-				if(f_num>0)
-					{
-					//$(this).after("<div class='pagebreak'></div>");
-					}
-			});
-			}
-		else
-			{
-			$(".monster_card").each(function(){
-				//console.log("f_num: "+f_num);
-				if($(this).is(':visible'))
-					f_num*=-1;
-				if(f_num>0)
-					{
-					$(this).after("<div class='pagebreak'></div>");
-					}
-			});
-			}
-	}
-	//if(type==0)
-	else
-	{
-		$("#ch_vw_2").prop('checked', false);
-		$("#ch_vw_1").prop('checked', true);
-		console.log("ch 2 2 2 2 2 ");
-		$(".monster_card").each(function(){
-			$(this).addClass("monster").removeClass("monster_card");
-		});
-	}
-	//$("body").css('opacity', '1');
-	$('#load').fadeOut();
-}
-// Константы //
-//var IMF_RF="<img src='img/i_rf.png' class='i_rf' style='width: 16px'>";
-//var IMF_RF="<span style='width: 16px; height: 16px; background: url(img/i_rf.png) center center no-repeat; background-size: cover; display: inline-block;'></span>";
-//var IMF_QW="<img src='img/i_qw.png' class='i_qw' style='width: 16px'>";
-var IMF_RF="<i class='fa  fa-refresh'></i>";
-var IMF_QW="<i class='fa fa-question-circle'></i>";
-var str_ch="", str_ml="";
-//////////////
-	function filter_ch(){
-		$(".challenge input[type=checkbox]:checked").attr("disabled", true);
-		str_ch="";
-		$(".challenge input[type=checkbox]:checked").each(function(){
-			str_ch+=$(this).next("label").text()+",";
-		});
-		console.log("ch string: " + str_ch)
-		if(str_ch=='' && str_ml=='')
-			{
-			$(".monster, .monster_card").show();	
-			}
-		else
-		{
-			var arr_ch = str_ch.split(",");
-			$(".monster, .monster_card").each(function(){
-				$(this).hide();
-				var cr = parseInt($(this).find(".cr_num").text());
-				for(var i=0; i< arr_ch.length; i++)
-					{
-					if(parseInt(arr_ch[i])==parseInt(cr))
-						$(this).show();	
-					}
-			});			
-		}	
-		$(".challenge input[type=checkbox]:checked").removeAttr("disabled");
-		//find_type();
-	}
-	function filter_mn(){
-		str_ml="";
-		$(".monsters input[type=checkbox]:checked").each(function(){
-			str_ml+=$(this).next("label").text()+",";
-		});
-		if(str_ch=='' && str_ml=='')
-		{
-		$(".monster, .monster_card").show();	
-		}
-		else
-		{
-			var arr_ml = str_ml.split(",");
-			$(".monster, .monster_card").each(function(){
-				$(this).hide();
-				var ml = $(this).find(".name").text();
-				for(var i=0; i< arr_ml.length; i++)
-					{
-					if(arr_ml[i]==ml)
-						$(this).show();	
-					}
-			});			
-		}
-		find_type();
-	}
-	function make_generator(){
-		var challenge = "<div class='challenge block'><h2>Класс Сложности:</h2>"+
-			"<input type='checkbox' id='ch_ch_0'><label for='ch_ch_0' class='ch_lb'>0</label>"+
-			"<input type='checkbox' id='ch_ch_1'><label for='ch_ch_1' class='ch_lb'>1/8</label>"+
-			"<input type='checkbox' id='ch_ch_2'><label for='ch_ch_2' class='ch_lb'>1/4</label>"+
-			"<input type='checkbox' id='ch_ch_3'><label for='ch_ch_3' class='ch_lb'>1/2</label>"+
-			"<input type='checkbox' id='ch_ch_4'><label for='ch_ch_4' class='ch_lb'>1</label>"+
-			"<input type='checkbox' id='ch_ch_5'><label for='ch_ch_5' class='ch_lb'>2</label>"+
-			"<input type='checkbox' id='ch_ch_6'><label for='ch_ch_6' class='ch_lb'>3</label>"+
-			"<input type='checkbox' id='ch_ch_7'><label for='ch_ch_7' class='ch_lb'>4</label>"+
-			"<input type='checkbox' id='ch_ch_8'><label for='ch_ch_8' class='ch_lb'>5</label>"+
-			"<input type='checkbox' id='ch_ch_9'><label for='ch_ch_9' class='ch_lb'>6</label>"+
-			"<input type='checkbox' id='ch_ch_10'><label for='ch_ch_10' class='ch_lb'>7</label>"+
-			"<input type='checkbox' id='ch_ch_11'><label for='ch_ch_11' class='ch_lb'>8</label>"+
-			"<input type='checkbox' id='ch_ch_12'><label for='ch_ch_12' class='ch_lb'>9</label>"+
-			"<input type='checkbox' id='ch_ch_13'><label for='ch_ch_13' class='ch_lb'>10</label>"+
-			"<input type='checkbox' id='ch_ch_14'><label for='ch_ch_14' class='ch_lb'>11</label>"+
-			"<input type='checkbox' id='ch_ch_15'><label for='ch_ch_15' class='ch_lb'>12</label>"+
-			"<input type='checkbox' id='ch_ch_16'><label for='ch_ch_16' class='ch_lb'>13</label>"+
-			"<input type='checkbox' id='ch_ch_17'><label for='ch_ch_17' class='ch_lb'>14</label>"+
-			"<input type='checkbox' id='ch_ch_18'><label for='ch_ch_18' class='ch_lb'>15</label>"+
-			"<input type='checkbox' id='ch_ch_19'><label for='ch_ch_19' class='ch_lb'>16</label>"+
-			"<input type='checkbox' id='ch_ch_20'><label for='ch_ch_20' class='ch_lb'>17</label>"+
-			"<input type='checkbox' id='ch_ch_21'><label for='ch_ch_21' class='ch_lb'>18</label>"+
-			"<input type='checkbox' id='ch_ch_22'><label for='ch_ch_22' class='ch_lb'>19</label>"+
-			"<input type='checkbox' id='ch_ch_23'><label for='ch_ch_23' class='ch_lb'>20</label>"+
-			"<input type='checkbox' id='ch_ch_24'><label for='ch_ch_24' class='ch_lb'>21</label>"+
-			"<input type='checkbox' id='ch_ch_25'><label for='ch_ch_25' class='ch_lb'>22</label>"+
-			"<input type='checkbox' id='ch_ch_26'><label for='ch_ch_26' class='ch_lb'>23</label>"+
-			"<input type='checkbox' id='ch_ch_27'><label for='ch_ch_27' class='ch_lb'>24</label>"+
-		"</div>";
-		
-		var arr_challenge = [0]; // уровень вызова
-		var arr_size = []; // размер
-		var arr_size_etalon = [
-			"Крошечный",
-			"Маленький",
-			"Средний",
-			"Большой",
-			"Огромный",
-			"Колоссальный"
-		];
-		var arr_type = []; // тип
-		var arr_subtype = []; // тип
+var TENTACULUS_APP_VERSION = "2.0.0";
 
-		$(".monster, .monster_card").each(function(){
-			var cr = $(this).find(".cr_num").text().trim(); // уровень вызова
-			var size = $(this).find(".size").text().trim(); // размер
-			var type = $(this).find(".type").text().trim(); // тип
-				type = /^[А-Яа-яЁёA-Za-z]+/.exec(type)[0].trim();
-			var subtype = $(this).find(".type").text().trim(); // подтип
-				subtype = /\(([^\(\)]+)\)/.exec(subtype);
-				subtype = subtype? subtype[1].trim(): false;
-			
-			var f_challenge_is=0; // флаг вызова
-			var f_size_is=0; // флаг вызова
-			var f_type_is=0; // флаг типа
-			var f_subtype_is=0; // флаг подтипа
-			
-			// вызов
-			for(i=0; i<arr_challenge.length; i++)
-				{
-				if(arr_challenge[i]==cr)
-					{
-					f_challenge_is=1;
-					break;					
-					}					
-				}
-			if(f_challenge_is==0)
-				{
-				arr_challenge[arr_challenge.length]=cr;	
-				}
-				
-
-			// тип
-			for(i=0; i<arr_type.length; i++)
-				{
-				if(arr_type[i]==type)
-					{
-					f_type_is=1;
-					break;					
-					}					
-				}
-			if(f_type_is==0)
-				{
-				arr_type[arr_type.length]=type;	
-				}
-			
-			// подтип
-			if(subtype) {
-				a_st = subtype.split(",");
-				for (var t=0; t<a_st.length; t++) {
-					var t_st = a_st[t];
-					for(i=0; i<arr_subtype.length; i++)
-						{
-						if(arr_subtype[i]==t_st)
-							{
-							f_subtype_is=1;
-							break;					
-							}					
-						}
-					if(f_subtype_is==0)
-						{
-						arr_subtype[arr_subtype.length]=t_st;	
-						}					
-				}
-			}
-		});		
-		
-		// уровень вызова
-		for (var j = 0, len = arr_challenge.length - 1; j < len; j++) 
-			{
-			swapped = 0;
-			var i = 0;
-			while (i < len) 
-				{
-				if (parseFloat(eval(arr_challenge[i])) > parseFloat(eval(arr_challenge[i + 1]))) 
-					{
-					var c = arr_challenge[i];
-					arr_challenge[i] = arr_challenge[i + 1];
-					arr_challenge[i + 1] = c;
-					swapped = 1;
-					}
-				i++;
-				}
-			
-			if(swapped==0)
-				break;
-			}		
-	
-		filter_challenge_out='';
-		arr_challenge.forEach(function(item, i, arr_challenge) {			
-		  filter_challenge_out+="<input type='checkbox' id='ch_ch_"+i+"'><label for='ch_ch_"+i+"' class='ch_lb'>"+item+"</label>";	
-		});
-		
-		filter_size_out='';
-		arr_size_etalon.forEach(function(item, i) {	
-			var font_size = "";
-			if(item.length > 9) {
-				font_size = 100 - (item.length - 9) * 5;
-				font_size = " style='font-size: " + font_size + "%' ";
-			}
-		  filter_size_out+="<input type='checkbox' id='ch_sz_"+i+"'><label for='ch_sz_"+i+"' class='ch_lb' " + font_size + ">"+item+"</label>";	
-		});
-		
-		filter_type_out='';
-		arr_type.forEach(function(item, i) {	
-			var font_size = "";
-			if(item.length > 9) {
-				font_size = 100 - (item.length - 9) * 5;
-				font_size = " style='font-size: " + font_size + "%' ";
-			}
-		  filter_type_out+="<input type='checkbox' id='ch_tp_"+i+"'><label for='ch_tp_"+i+"' class='ch_lb' " + font_size + ">"+item+"</label>";	
-		});
-		
-		filter_subtype_out='';
-		arr_subtype.forEach(function(item, i) {	
-			var font_size = "";
-			if(item.length > 9) {
-				font_size = 100 - (item.length - 9) * 5;
-				font_size = font_size<70? 70: font_size;
-				font_size = " style='font-size: " + font_size + "%' ";
-			}
-		  filter_subtype_out+="<input type='checkbox' id='ch_sbt_"+i+"'><label for='ch_sbt_"+i+"' class='ch_lb' " + font_size + ">"+item+"</label>";	
-		});
-		
-			
-			challenge="<div class='challenge block'><h2>Класс Сложности:</h2>"+filter_challenge_out+"</div>";
-			size="<div class='size block'><h2>Размер:</h2>"+filter_size_out+"</div>";
-			type="<div class='type block'><h2>Тип:</h2>"+filter_type_out+"</div>";	
-			subtype="<div class='subtype block'><h2>Подтип:</h2>"+filter_subtype_out+"</div>";	
-		var monsters = "<div class='monsters block' style='display: none'>"+
-			"<input type='checkbox' id='ch_mn_1'><label for='ch_mn_1' class='ch_mn' data-mn='Гигантский паук (Giant Spider)'>Гигантский паук (Giant Spider)</label>"+
-			"<input type='checkbox' id='ch_mn_2'><label for='ch_mn_2' class='ch_mn' data-mn='Паук (Spider)'>Паук (Spider)</label>"+
-			"<input type='checkbox' id='ch_mn_3'><label for='ch_mn_3' class='ch_mn' data-mn='Рой крыс (Swarm of Rats)'>Рой крыс (Swarm of Rats)</label>"+
-			"<input type='checkbox' id='ch_mn_4'><label for='ch_mn_4' class='ch_mn' data-mn='Крыса (Rat)'>Крыса (Rat)</label>"+
-			"<input type='checkbox' id='ch_mn_5'><label for='ch_mn_5' class='ch_mn' data-mn='Летучая мышь (Bat)'>Летучая мышь (Bat)</label>"+
-			"<input type='checkbox' id='ch_mn_6'><label for='ch_mn_6' class='ch_mn' data-mn='Гигантская летучая мышь (Giant Bat)'>Гигантская летучая мышь (Giant Bat)</label>"+
-			"<input type='checkbox' id='ch_mn_7'><label for='ch_mn_7' class='ch_mn' data-mn='Черный Пудинг (Black Pudding)'>Черный Пудинг (Black Pudding)</label>"+
-			"<input type='checkbox' id='ch_mn_8'><label for='ch_mn_8' class='ch_mn' data-mn='Желатиновый куб (Gelatinous Cube)'>Желатиновый куб (Gelatinous Cube)</label>"+
-			"<input type='checkbox' id='ch_mn_9'><label for='ch_mn_9' class='ch_mn' data-mn='Охряное желе'>Охряное желе</label>"+
-			"<input type='checkbox' id='ch_mn_10'><label for='ch_mn_10' class='ch_mn' data-mn='Фиолетовая плесень (Violet Fungus)'>Фиолетовая плесень (Violet Fungus)</label>"+
-			"<input type='checkbox' id='ch_mn_11'><label for='ch_mn_11' class='ch_mn' data-mn='Капитан Бандитов (Bandit Captain)'>Капитан Бандитов (Bandit Captain)</label>"+
-			"<input type='checkbox' id='ch_mn_12'><label for='ch_mn_12' class='ch_mn' data-mn='Бандит (Thug)'>Бандит (Thug)</label>"+
-			"<input type='checkbox' id='ch_mn_13'><label for='ch_mn_13' class='ch_mn' data-mn='Культист (Cultist)'>Культист (Cultist)</label>"+
-			"<input type='checkbox' id='ch_mn_14'><label for='ch_mn_14' class='ch_mn' data-mn='Анкег (Ankheg)'>Анкег (Ankheg)</label>"+
-			"<input type='checkbox' id='ch_mn_15'><label for='ch_mn_15' class='ch_mn' data-mn='Разбуженное Дерево (Awakened Tree)'>Разбуженное Дерево (Awakened Tree)</label>"+
-			"<input type='checkbox' id='ch_mn_16'><label for='ch_mn_16' class='ch_mn' data-mn='Ползущий Падальшик (Carrion Crawler)'>Ползущий Падальшик (Carrion Crawler)</label>"+
-			"<input type='checkbox' id='ch_mn_17'><label for='ch_mn_17' class='ch_mn' data-mn='Фанатик (Cult Fanatic)'>Фанатик (Cult Fanatic)</label>"+
-			"<input type='checkbox' id='ch_mn_18'><label for='ch_mn_18' class='ch_mn' data-mn='Эттеркап (Ettercap)'>Эттеркап (Ettercap)</label>"+
-			"<input type='checkbox' id='ch_mn_19'><label for='ch_mn_19' class='ch_mn' data-mn='Вурдалак (Ghast)'>Вурдалак (Ghast)</label>"+
-			"<input type='checkbox' id='ch_mn_20'><label for='ch_mn_20' class='ch_mn' data-mn='Мимик (Mimic)'>Мимик (Mimic)</label>"+
-			"<input type='checkbox' id='ch_mn_21'><label for='ch_mn_21' class='ch_mn' data-mn='Нотик (Nothic)'>Нотик (Nothic)</label>"+
-			"<input type='checkbox' id='ch_mn_22'><label for='ch_mn_22' class='ch_mn' data-mn='Перитон (Peryton)'>Перитон (Peryton)</label>"+
-			"<input type='checkbox' id='ch_mn_23'><label for='ch_mn_23' class='ch_mn' data-mn='Огонек (Will-o'-Wisp)'>Огонек (Will-o'-Wisp)</label>"+
-		"</div>";
-		var lists = "<div class='lists block' style='display: none'><h2>Выборка:</h2>"+
-			"<input type='checkbox' id='ch_ml_1'><label for='ch_ml_1' class='ml_1'>Простые монстры</label>"+
-		"</div>"
-		var view = "<div class='view block'><h2>Вид:</h2>\
-			<input type='checkbox' id='ch_vw_1' class='ch_vw' checked><label for='ch_vw_1' class='vw_1'><i class='fa fa-align-justify'></i> Текст</label>\
-			<input type='checkbox' id='ch_vw_2' class='ch_vw'><label for='ch_vw_2' class='vw_2'><i class='fa fa-th-large'></i> Карточки</label>\
-			</div>";
-		var hidden_m = "<div class='hidden block' style='display: none'><h2>Скрытые:</h2></div>";
-		var f_name="<div class='s_name s_block flt'>"+
-						"<span class='n_zero'>Название: </span>"+
-						"<input type='text' class='f_name s_sp'>"+
-					"</div>";
-		var panel='<div class="panl block">\
-		<a href="/" class="bt"><i class="fa fa-home"></i></a>\
-		<a href="/message/?theme=dndmonsters" class="bt" target="_blanc">Написать отзыв или предложение</a>\
-		<a href="#" class="bt" id="info"><i class="fa fa-question-circle"></i></a></div>';
-		var generator=panel + challenge + size + type +subtype + f_name +view + hidden_m+  lists + monsters ;
-		$("#panel").html(generator);
+var oConfig = {}; // global app config data
+function setConfig(prop, val) {
+	if(prop && val != undefined && oConfig) {
+		oConfig[prop] = val;
+		localStorage.setItem("configMonsters", JSON.stringify(oConfig));
 	}
-	$.ajax({
-        type: "GET",
-        url: "data/all_monters_notabenoid.xml",
-        dataType: "xml",
-        success: xmlParser
-    });
-	
-function monster_filter(name){
-	console.log("monster_filter")
-		tmp1=0, tmp2=0;
-		$(".monster, .monster_card").show();
-		var atr="";
-		var atr2='';
-		var f_atr2=0;
-		
-		// имя
-		if(name!=undefined && name!='')
-		{
-			atr+= "[data-name*='"+name+"']";
-		}
-		
-		if(atr!='') {	// if name
-			$(".monster, .monster_card").hide();
-			$(".monster"+atr+", .monster_card"+atr).show();
-		}
-		
-		// сложность
-		var str_ch="";
-		if($(".challenge input[type=checkbox]:checked").length>0) {
-			$(".challenge input[type=checkbox]:not(:checked)").each(function(){
-				str_ch+=$(this).next("label").text()+",";
-				});	
-		}
-		if(str_ch!='') {	
-			var arr_ch = str_ch.split(",");		
-			$(".monster, .monster_card").each(function(){ 
-				var cr = String($(this).find(".cr_num").text());
-				for (var i=0; i < arr_ch.length; i++) {
-					var tmp_str = cr.trim();
-					while (tmp_str.length > 1 && cr[0] == 0) {
-						tmp_str = tmp_str.slice(1);
-					}
-					if (String(arr_ch[i]) == String(tmp_str) || tmp_str == arr_ch[i])
-						$(this).hide();	
-				}	
-			});
-		}
-		
-		// размер
-		str_ch="";
-		if($(".size input[type=checkbox]:checked").length>0) {
-			$(".size input[type=checkbox]:not(:checked)").each(function(){
-				str_ch+=$(this).next("label").text()+",";
-				});	
-		}
-		if(str_ch!='') {	
-			var arr_ch = str_ch.split(",");		
-			$(".monster, .monster_card").each(function(){ 
-				var monster_size = String($(this).find(".size").text()).trim();
-				for(var i=0; i< arr_ch.length; i++) {	
-					var size = arr_ch[i].trim();
-					if(monster_size == size)
-						$(this).hide();	
-				}	
-			});
-		}
-		
-		// тип
-		str_ch="";
-		if($(".type input[type=checkbox]:checked").length>0) {
-			$(".type input[type=checkbox]:not(:checked)").each(function(){
-				str_ch+=$(this).next("label").text()+",";
-				});	
-		}
-		if(str_ch!='') {	
-			var arr_ch = str_ch.split(",");		
-			$(".monster, .monster_card").each(function(){ 
-				var monster_type = String($(this).find(".type").text()).trim();
-					monster_type = /^[А-Яа-яЁёA-Za-z]+/.exec(monster_type)[0].trim();
-				for(var i=0; i< arr_ch.length; i++) {	
-					var type = arr_ch[i].trim();
-					if(monster_type == type)
-						$(this).hide();	
-				}	
-			});
-		}		
-		
-			
-		// подтип
-		str_ch="";
-		var arr_ch = [];
-		if($(".subtype input[type=checkbox]:checked").length>0) {
-			$(".subtype input[type=checkbox]:not(:checked)").each(function(){
-				arr_ch.push($(this).next("label").text()); //str_ch+=$(this).next("label").text()+",";
-				});	
-		}
-		if(arr_ch.length>0) {	
-			//var arr_ch = str_ch.split(",");		
-			$(".monster, .monster_card").each(function(){ 
-				var monster_type = String($(this).find(".type").text()).trim();
-				var monster_subtype = monster_type; // подтип
-					monster_subtype = /\(([^\(\)]+)\)/.exec(monster_subtype);
-					monster_subtype = monster_subtype? monster_subtype[1].trim(): false;
-					if(monster_subtype) {						
-						for(var i=0; i< arr_ch.length; i++) {	
-							var subtype = arr_ch[i].trim();
-							if(monster_subtype.match(subtype))
-								$(this).hide();	
-						}	
-					} else{
-						$(this).hide();	
-					}
-			});
-		}
-		
-	}	
-function get_filter(){
-		var nm=$(".f_name").val().toLowerCase();		
-		monster_filter(nm);
+}
+function getConfig(prop) {
+	oConfig = JSON.parse(localStorage.getItem("configMonsters")) || {};
+	if(prop!=undefined) {
+		return localStorage.getItem("configMonsters")? oConfig[prop] : {};
 	}
-	
+	return oConfig;
+}
 function count_mod(num){
 	var mod=Math.floor((num-10)/2);
 	if(mod>0)
 		mod="+"+mod;
-	num = num+" ("+mod+")";
+	num = num+"&nbsp;("+mod+")";
 	return num;
 }
-
 function c_string(clas, s_clas, title, cont){
 	//'<div class="vulnerable"><span class="i2-tipe">Уязвимость </span>' + $(this).find("vulnerable").text() + '</div>'+
 	var string ='';
-	if(cont!='')
+	if(cont != '' && cont != undefined)
 		string = '<div class="'+clas+' i4-tipe"><span class="'+s_clas+'">'+title+' </span>'+cont+'</div>';
 	return string;
 }
 
-function xmlParser(xml) {
-    //$('#load').fadeOut();
-	console.log("start xml-parsing");
-	var data_id=0;
-	var to_hidden='';
-    $(xml).find("monster").each(function () {
-		console.log("monster in work...");
-/*
-        $("#result").append('<div class="book"><div class="title">' + $(this).find("Title").text() + '</div><div class="description">' + $(this).find("Description").text() + '</div><div class="date">Published ' + $(this).find("Date").text() + '</div></div>');
-*/		
+function ToNormalFraction(sFraction) {
+	if(/\d+\/\d+/.test(sFraction))
+		return eval(sFraction);
+	if(/\d+/.test(sFraction))
+		return Number(sFraction);
+	return sFraction;
+}
+
+function getCardView() {
+	var sView = $("#ViewSegmented input:radio:checked").val();
+	var sClass = "";
+	switch (sView){
+		case "card": 
+			sClass = "monster_card";
+			break;
+		default:
+			sClass = "monster";
+	}
+	return sClass;
+}
+
+window.onload = function(){
+	var monsterLevels = [];
+	var monsterTypes = [];
+	var aHiddenMonsters = [];
+
+	var oTimer; // for TimeOut (filtering)
+	var nTimerSeconds = 100;
+	
+	var aHiddenMonsters = [];
+	var aLockedMonsters = {};
+	var filteredMonsters = [];
+	
+	var oSource = {};
+	
+	function translateCR(str){
+		str = String(eval(str)*1000);
+		while (str.length<7) {
+			str = "0" + str;
+		}
+		return str;
+	}
+	
+	function arrDiff(arr1, arr2) {
+		var arr3 = arr2;//.map(function(item){return item.en});
+		return arr1.filter(
+			function(item){ 
+				return (arr3.indexOf(item.name.toLowerCase())>=0)? false: true;
+			}
+		);
+	}
+	
+	function removeFromArr(arr, el) {
+		var index;
+		
+		for (var i=0; i<arr.length; i++) {
+			if(arr[i] == el) {
+				index = i;
+				break;
+			}
+		}
+		arr.splice(i, 1);
+		return arr
+	}
+	
+	function getViewPortSize(mod) {
+		var viewportwidth;
+		var viewportheight;
+
+		//Standards compliant browsers (mozilla/netscape/opera/IE7)
+		if (typeof window.innerWidth != 'undefined')
+		{
+			viewportwidth = window.innerWidth,
+			viewportheight = window.innerHeight
+		}
+
+		// IE6
+		else if (typeof document.documentElement != 'undefined'
+		&& typeof document.documentElement.clientWidth !=
+		'undefined' && document.documentElement.clientWidth != 0)
+		{
+			viewportwidth = document.documentElement.clientWidth,
+			viewportheight = document.documentElement.clientHeight
+		}
+
+		//Older IE
+		else
+		{
+			viewportwidth = document.getElementsByTagName('body')[0].clientWidth,
+			viewportheight = document.getElementsByTagName('body')[0].clientHeight
+		}
+
+		if(mod=="width")
+			return viewportwidth;
+		
+		return viewportwidth + "~" + viewportheight;
+	}
+	
+	function createSegmentedButton(src, params) {
+		var ret = '';
+		var id =  params.id? "id='"+params.id+"'": "";
+		var mode = params.mode || "fix";
+		var subtypes = params.subtypes || false;
+		
+		var name = new Date().getTime();
+		if(params.id) {
+			var name = params.id;
+		}		
+		
+		var modeClass = " class='mode_"+mode+"' ";
+		
+		function getOption(el) {
+			var sOptionValue, sOptionLabel;
+			if(typeof el == "number" || typeof el == "string") {
+				sOptionValue = sOptionLabel = el;
+			} else {
+				sOptionValue = el.key;
+				sOptionLabel = el.title;
+			}
+			
+			var selected = el.selected? " checked " : "";
+			
+			return "<input "+selected+" name='"+name+"' type='radio' value='"+sOptionValue+"' id='tg_"+sOptionValue+"'><label for='tg_"+sOptionValue+"' "+modeClass+" data-hierarchy='root'>"+sOptionLabel+"</label>";
+		}
+
+		var oItems = [];
+		for (var i =0; i < src.length; i++) {
+			var type = src[i];	
+	
+			var key = (typeof type == "number" || typeof type == "string")? type: type.key;
+			oItems[key] = type;
+			
+		}
+
+		for(var i in oItems) {
+			ret+= getOption(oItems[i]);
+		}
+		ret = "<div "+id+" class='segmented_button'>"+ret+"</div>";
+		return ret;	
+	}
+		
+	function createToggle(src, params) {
+		var ret = '';
+		var id =  params.id? "id='"+params.id+"'": "";
+		var mode = params.mode || "fix";
+		var subtypes = params.subtypes || false;
+		
+		var modeClass = " class='mode_"+mode+"' ";
+		
+		function getOption(el) {
+			var sOptionValue, sOptionLabel;
+			if(typeof el == "number" || typeof el == "string") {
+				sOptionValue = sOptionLabel = el;
+			} else {
+				sOptionValue = el.key;
+				sOptionLabel = el.title;
+			}
+			
+			return "<input type='checkbox' value='"+sOptionValue+"' id='tg_"+sOptionValue+"'><label for='tg_"+sOptionValue+"' "+modeClass+" data-hierarchy='root'>"+sOptionLabel+"</label>";
+		}
+		var aItems = [];
+		var oItems = [];
+		for (var i =0; i < src.length; i++) {
+			var type = src[i];
+			
+			
+			if (subtypes == "only") {
+				for (var sbt in type.subtype) {
+					//aItems.push(type.subtype[sbt]);
+					oItems[type.subtype[sbt].key]=type.subtype[sbt];
+					//ret+= getOption(type.subtype[sbt]);
+				}
+			} else {	
+				//aItems.push(type);
+				var key = (typeof type == "number" || typeof type == "string")? type: type.key;
+				oItems[key] = type;
+				//ret+= getOption(type);
+			}
+			
+		}
+		/*/
+		aItems.forEach(function(el) {
+			ret+= getOption(el);
+		});
+		/*/
+		/**/
+		for(var i in oItems) {
+			//ret+= getOption(oItems[i]);
+			aItems.push(i);
+		}
+		aItems.sort(function (a, b) {
+			if(ToNormalFraction(a) < ToNormalFraction(b))
+				return -1;
+			if(ToNormalFraction(a) > ToNormalFraction(b))
+				return 1;
+			return 0;
+		})
+		aItems.forEach(function(el) {
+			ret+= getOption(el);
+		})
+		/**/
+		ret = "<div "+id+" class='toggle_box'><div class='toggle_box_content'>"+ret+"</div></div>";
+		return ret;	
+	}
+	
+	function createSelect(src, params) {
+		var options = "";
+		var selected_key = params.selected_key;
+		var id = params.id? "id='"+params.id+"'" : "";
+		var sClass = params.controlClass? params.controlClass : "";
+		var atr_class = params.class? params.class : "";
+		var width = params.width? "; width: "+ params.width: "";
+		var lableText;
+		var min_width = 0;
+		var oParams = params.params;
+		var aParams = [], sParams="";
+		if(oParams) {
+			oParams.forEach(function(item) {
+				aParams.push(item.name+"='"+item.value+"'");
+			});
+			sParams = aParams.join(" ");
+		}
+		src.forEach(function(item){
+			var key = item.name;
+			var text = item.title;
+			if(text.length > min_width)
+				min_width = text.length/2;
+			options += "<li class='option' data-key='"+key+"'>"+text+"</li>"; 
+			if(key == selected_key){
+				lableText = text
+			}
+		});
+		min_width = min_width>20? 20: min_width;
+		min_width = min_width<5? 5: min_width;
+		min_width = ~~(min_width*0.75);
+
+		var list = "<ul class='list'>" + options + "</ul>";
+
+		var selectedKey = selected_key; 
+		var label="<div class='label "+atr_class+"' data-selected-key='" + selectedKey + "' "+width+"'>" + lableText + "</div>";
+		var select = "<button " + id + " " + sParams + " class='customSelect "+sClass+"' "+width+"'>" + label + list + "</button>"
+
+		return select;
+	}	
+	
+	function createComboBox(src, param) {
+		var ARR_DOWN = '<i class="fa fa-arrow-down"></i>';
+		var ARR_UP = '<i class="fa fa-arrow-up"></i>';
+		var ret = '';
+		var id =  param.id? "id='"+param.id+"'": "";
+		var title = param.title? param.title: "Выберите";
+		var checked = param.checkAll? "checked": "";
+		var isOpen = (param.isOpen!=undefined) ? param.isOpen : true;
+		var arrow, display = "", content_open=true;
+		var min_width = 0;
+		if(isOpen && isOpen != "false"){
+			arrow="<div class='combo_box_arrow'><span class='arr_down' style='display:none'>"+ARR_DOWN+"</span><span class='arr_up'>"+ARR_UP+"</span></div>";
+		} else {
+			arrow="<div class='combo_box_arrow'><span class='arr_down'>"+ARR_DOWN+"</span><span class='arr_up' style='display:none'>"+ARR_UP+"</span></div>";
+			display = " style='display:none' ";
+			content_open = false;
+		}			
+		for (var i =0; i < src.length; i++) {
+			var type = src[i];
+			var max = type.title.length/2;
+			if (max > min_width) {
+				min_width = max;
+			}
+			
+			var sOptionValue = type.key || "";
+			var sOptionTitle = type.title || "";
+			
+			var oSubtype = type.subtype;
+			if(oSubtype) {
+				
+			}
+			
+			ret+="<input "+checked+" type='checkbox' value='"+sOptionValue+"' id='ch_"+sOptionValue+"'><label for='ch_"+sOptionValue+"' data-hierarchy='root'>"+sOptionTitle+"</label>";
+			
+		}
+		min_width = min_width>20? 20: min_width;
+		min_width = min_width<5? 5: min_width;
+		min_width = ~~(min_width*0.9)+2;
+		ret = "<div "+id+" class='combo_box' data-text='"+title+"' data-content-open='"+content_open+"'><div class='combo_box_title'>"+title+"</div><div class='combo_box_content' "+display+" >"+ret+"</div>"+arrow+"</div>";
+		return ret;
+	}
+	
+	function createInput(params){
+		var id = params.id? "id='"+params.id+"'" : "";
+		return "<div "+id+" class='customInput'><input type='text'><span class='cross'></span></div>";
+	}
+	
+	function showInfoWin(sText) {
+		if(!$(".mod_win_wrapper").length){
+			var bCross = "<span class='bCloseInfoWin'>×</span>";
+			$("body").append("<div class='mod_win_wrapper'><div class='mod_win'>"+bCross+sText+"</div></div>");
+		}
+		$(".mod_win_wrapper").fadeIn();
+	}
+	function hideInfoWin() {
+		if($(".mod_win_wrapper").length){
+			$(".mod_win_wrapper").fadeOut();
+		}
+	}
+	function showDBG() {
+		if(!$("#dbg").length){
+			$("body").append("<div id='dbg'></div>");
+		}
+		$("#dbg").fadeIn();
+		$("body").height();
+	}
+	function hideDBG() {
+		if($("#dbg")){
+			$("#dbg").fadeOut();		
+		}		
+	}
+	
+	function pretifyString(s) {
+		return s.substr(0,1).toUpperCase() + s.substr(1);
+	}
+		
+	function createCard(oMonster, sLockedSpell, sClass) {
 		var size = '';
-		size = $(this).find("size").text();
+		size = oMonster.size;
+		if (sClass == undefined || sClass == "") {
+			sClass = "monster";
+		}
 		switch(size)
 		{
 			case "T": size="Крошечный"; break;
@@ -531,53 +365,103 @@ function xmlParser(xml) {
 			case "H": size="Огромный"; break;
 			case "G": size="Колоссальный"; break;
 		}
-		size='<span class="size">' + size + ' </span>'
+		size='<span class="size">' + size + '</span>';
+		
 		var trait = '';
-		$(this).find("trait").each(function(){
+		if(Array.isArray(oMonster.trait)) {
+			for(var i in oMonster.trait){
+				trait+="<div class='trait i4-tipe'>"+
+					"<span class='i2-tipe'>"+oMonster.trait[i].name+"</span>"+
+					oMonster.trait[i].text+
+				"</div>";
+			}	
+		}		
+		else if(typeof oMonster.trait == "object") {
 			trait+="<div class='trait i4-tipe'>"+
-				"<span class='i2-tipe'>"+$(this).find("name").text()+"</span>"+
-				$(this).find("text").text()+
+				"<span class='i2-tipe'>"+oMonster.trait.name+"</span>"+
+				oMonster.trait.text+
 			"</div>";
-		});
+		}
+		
+		var reaction = '';
+		if(Array.isArray(oMonster.reaction)) {
+			for(var i in oMonster.reaction){
+				reaction+="<div class='reaction i4-tipe'>"+
+					"<span class='i2-tipe'>"+oMonster.reaction[i].name+"</span>"+
+					oMonster.reaction[i].text+
+				"</div>";
+			}	
+		}		
+		else if(typeof oMonster.reaction == "object") {
+			reaction+="<div class='reaction i4-tipe'>"+
+				"<span class='i2-tipe'>"+oMonster.reaction.name+"</span>"+
+				oMonster.reaction.text+
+			"</div>";
+		}		
+
 		var action = '';
-		$(this).find("action").each(function(){
+		if(Array.isArray(oMonster.action)) {
+			for(var i in oMonster.action){
+				action+="<div class='action i4-tipe'>"+
+					"<span class='i2-tipe'>"+oMonster.action[i].name+"</span>"+
+					oMonster.action[i].text+
+				"</div>";
+			}	
+		}		
+		else if(typeof oMonster.action == "object") {
 			action+="<div class='action i4-tipe'>"+
-				"<span class='i2-tipe'>"+$(this).find("name").text()+"</span>"+
-				$(this).find("text").text()+
+				"<span class='i2-tipe'>"+oMonster.action.name+"</span>"+
+				oMonster.action.text+
 			"</div>";
-		});
+		}		
 		if(action!='')			
 			action="<div class='actions i3-tipe'>Действия</div>"+action;
+		
 		var legendary = '';
-		$(this).find("legendary").each(function(){
-			legendary+="<div class='legendary i4-tipe'>"+
-				"<span class='i2-tipe'>"+$(this).find("name").text()+"</span>"+
-				$(this).find("text").text()+
-			"</div>";
-		});
-		if(legendary!='')			
-			legendary="<div class='legendary i3-tipe'>Легендарные Действия</div>"+legendary;			
-		var spells = '';
-		$(this).find("spells").each(function(){
-			if($(this).text()!='')
-				{
-				spells+="<div class='spells'>"+
-					"<span class='name'>"+$(this).find("name").text()+"</span>"+
-					$(this).find("text").text()+
+		if(Array.isArray(oMonster.legendary)) {
+			for(var i in oMonster.legendary){
+				legendary+="<div class='legendary i4-tipe'>"+
+					"<span class='i2-tipe'>"+oMonster.legendary[i].name+"</span>"+
+					oMonster.legendary[i].text+
 				"</div>";
-				}
-		});
+			}	
+		}		
+		else if(typeof oMonster.legendary == "object") {
+			legendary+="<div class='legendary i4-tipe'>"+
+				"<span class='i2-tipe'>"+oMonster.legendary.name+"</span>"+
+				oMonster.legendary.text+
+			"</div>";
+		}
+		if(legendary!='')			
+			legendary="<div class='legendary i3-tipe'>Легендарные Действия</div>"+legendary;
+		
+		var spells = '';
+		if(Array.isArray(oMonster.spells)) {
+			for(var i in oMonster.spells){
+				spells+="<div class='spells'>"+
+					"<span class='i2-tipe'>"+oMonster.spells[i].name+"</span>"+
+					oMonster.spells[i].text+
+				"</div>";
+			}	
+		}		
+		else if(typeof oMonster.spells == "object") {
+			spells+="<div class='spells'>"+
+				"<span class='i2-tipe'>"+oMonster.spells.name+"</span>"+
+				oMonster.spells.text+
+			"</div>";
+		}
+
 		//console.log("spells: "+spells);
 		if(spells!='')			
 			spells="<div class='spellist i3-tipe'>Заклинания</div>"+spells;	
 		var stats = '';
-		var str = parseInt($(this).find("str").text());
-		var dex = parseInt($(this).find("dex").text());
-		var con = parseInt($(this).find("con").text());
-		var inl = parseInt($(this).find("int").text());
-		var wis = parseInt($(this).find("wis").text());
-		var cha = parseInt($(this).find("cha").text());
-		stats = '<div class="stats"">'+
+		var str = oMonster.str;
+		var dex = oMonster.dex;
+		var con = oMonster.con;
+		var inl = oMonster.int;
+		var wis = oMonster.wis;
+		var cha = oMonster.cha;
+		stats = '<div class="stats">'+
 				'<span class="str"><span class="i-tipe">STR </span>' + count_mod(str) + '</span>'+
 				'<span class="dex"><span class="i-tipe">DEX </span>' + count_mod(dex) + '</span>'+
 				'<span class="con"><span class="i-tipe">CON </span>' + count_mod(con) + '</span>'+
@@ -585,14 +469,14 @@ function xmlParser(xml) {
 				'<span class="wis"><span class="i-tipe">WIS </span>' + count_mod(wis) + '</span>'+
 				'<span class="cha"><span class="i-tipe">CHA </span>' + count_mod(cha) + '</span>'+
 			'</div>';
-		var skill = c_string("skill", "i2-tipe", "Способность", $(this).find("skill").text());
-		var vulnerable = c_string("vulnerable", "i2-tipe", "Уязвимость", $(this).find("vulnerable").text());
-		var immune = c_string("immune", "i2-tipe", "Иммунитет", $(this).find("immune").text());
-		var conditionImmune = c_string("conditionImmune", "i2-tipe", "Иммунитет к состояниям", $(this).find("conditionImmune").text());
-		var senses = c_string("senses", "i2-tipe", "Чувства", $(this).find("senses").text());
-		var passive = c_string("passive", "i2-tipe", "Пассивное восприятие", $(this).find("passive").text());
-		var languages = c_string("languages", "i2-tipe", "Язык", $(this).find("languages").text());
-		var name= $(this).find("name").eq(0).text();
+		var skill = c_string("skill", "i2-tipe", "Способность", oMonster.skill);
+		var vulnerable = c_string("vulnerable", "i2-tipe", "Уязвимость", oMonster.vulnerable);
+		var immune = c_string("immune", "i2-tipe", "Иммунитет", oMonster.immune);
+		var conditionImmune = c_string("conditionImmune", "i2-tipe", "Иммунитет к состояниям", oMonster.conditionImmune);
+		var senses = c_string("senses", "i2-tipe", "Чувства", oMonster.senses);
+		var passive = c_string("passive", "i2-tipe", "Пассивное восприятие", oMonster.passive);
+		var languages = c_string("languages", "i2-tipe", "Язык", oMonster.languages);
+		var name= oMonster.name;
 		
 		// experience
 		var expa = {
@@ -634,25 +518,34 @@ function xmlParser(xml) {
 		
 		var experience = "?";
 		try{
-			experience = expa[$(this).find("cr").text()].replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+			experience = expa[oMonster.cr].replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
 		} catch (err) {
 			
 		}
 		experience = "<span style='color: #999;'> ("+experience+" XP)</span>";
-		var cr = c_string("cr", "i2-tipe", "Сложность", "<span class='cr_num'>"+$(this).find("cr").text()+"</span>" + experience);
+		var cr = c_string("cr", "i2-tipe", "Сложность", "<span class='cr_num'>"+oMonster.cr+"</span>" + experience);
 		
-		$("#result").append('<div class="monster" data-id="'+data_id+'" data-name="'+name.toLowerCase()+'"><button class="hide_monster">Скрыть Х</button>'+
+		var oLock = sLockedSpell? '<a href="#" class="unlock_monster" title="Открепить"><i class="fa fa fa-unlock-alt" aria-hidden="true"></i></a>':
+		'<a href="#" class="lock_monster" title="Закрепить"><i class="fa fa-lock" aria-hidden="true"></i></a>';
+		
+		var oHide = sLockedSpell? "" : '<a href="#" class="hide_monster" title="Скрыть"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>';
+		
+		var add = oMonster.add? "<hr>"+oMonster.add : "";
+		
+		var ret = '<div class="' + sClass + '" data-name="'+name.toLowerCase()+'">'+
+		oHide+
+		oLock+
 			"<div class='left'><div class='inner'>"+
 			'<div class="name">' + name + '</div>'+
 			'<div>'+
 				size+
-				'<span class="type">' + $(this).find("type").text() + '</span>'+
-				'<span class="alignment">' + $(this).find("alignment").text() + '</span>'+
+				'<span class="type">' + oMonster.type + '</span>'+
+				'<span class="alignment">' + oMonster.alignment + '</span>'+
 			'</div>'+
 			'<hr>'+	
-			'<div class="ac"><span class="i-tipe">AC </span>' + $(this).find("ac").text() + '</div>'+
-			'<div class="hp"><span class="i-tipe">HP </span>' + $(this).find("hp").text() + '</div>'+
-			'<div class="speed"><span class="i-tipe">Скорось </span>' + $(this).find("speed").text() + '</div>'+
+			'<div class="ac"><span class="i-tipe">AC </span>' + oMonster.ac + '</div>'+
+			'<div class="hp"><span class="i-tipe">HP </span>' + oMonster.hp + '</div>'+
+			'<div class="speed"><span class="i-tipe">Скорось </span>' + oMonster.speed + '</div>'+
 			'<hr>'+	
 			stats+
 			'<hr>'+
@@ -670,144 +563,837 @@ function xmlParser(xml) {
 			action+
 			legendary+
 			spells+
+			reaction+
+			add+
 			"</div></div>"+
-			'</div>');
-        $(".book").fadeIn(1000);
-		to_hidden+="<a href='#' class='hidden_m' data-id='"+data_id+"'>"+name+"</a>";
-		data_id++;
-    });
-	console.log("end xml-parsing");
-	//$("#result").html("");
-	make_generator();
-	$("#panel .hidden").append(to_hidden);
-	$(".load").hide();
-	//$("#result").wrapInner("<div class='page_list'></div>");
-	find_type();
-	$("#before_monsters").hide();
-   };
-	function make_side(){
+			'</div>';
+		return ret;
 	}
-	//make_generator();
-	$("body").on("click", "#dbg", function(){
-		$("#dbg").hide();
-		$(".mod_win").hide();
-	});
-	$("body").on("click", ".hide_monster", function(){
-		$(this).parent().hide();
-		var id = $(this).parent().attr("data-id");
-		$("#panel .hidden").show();
-		$(".hidden_m[data-id='"+id+"']").css("display", "block");
-	});
-	$("body").on("click", ".hidden_m", function(){		
-		var id = $(this).attr("data-id");
-		$(".monster[data-id='"+id+"'], .monster_card[data-id='"+id+"']").show();
-		$(this).hide();
-		//$(".hidden_m[data-id='"+id+"']").css("display", "block");
-		if($(".hidden_m:visible").length<1)
-			$("#panel .hidden").hide();
-		return false;
-	});
-	$(".ml_1").on("click", function(){
-		console.log("secect list");
-		$("#panel .monsters input[type=checkbox]").each(function(){
-			//console.log($(this).attr("id"));
-			if($("#ch_ml_1").prop("checked"))
-			{
-				console.log("unckeck!");
-				$(this).prop('checked', false);
+	
+	
+	function createMonstersIndex() {
+		var monsters = "";
+		allMonsters.forEach(function(item) {
+			monsters += createCard(item);
+		});
+		$(".monsterContainer").html(monsters);		
+		$("#info_text").hide();
+	}
+	function showFiltered(oParams) {
+		
+		var sName = oParams.sName || ""; 
+		var aLevels = oParams.aLevels || [];
+		var aTypes = oParams.aTypes || []; 
+		var aSubTypes = oParams.aSubTypes || []; 
+		var aSources = oParams.aSources || []; 
+		var aSize = oParams.aSize || [];
+		var sClass = oParams.sClass || "monster";
+		var fHidden = oParams.fHidden;
+
+		$(".monsterContainer").empty();
+		var monsters = "";		
+
+		filteredMonsters = []; //arrDiff(filteredMonsters, aHiddenMonsters);
+		allMonsters.forEach(function(el) {
+			filteredMonsters.push(el);
+		});
+		
+		// name
+		if (sName) {
+			sName = sName.toLowerCase().trim();
+			filteredMonsters = filteredMonsters.filter(function(monster){
+				return (monster.name.toLowerCase().trim().indexOf(sName)>=0);
+			});
+		}
+		
+		// level		
+		if(aLevels && aLevels.length>0 && aLevels.length<99) {
+			filteredMonsters = filteredMonsters.filter(function(monster){
+				for(var i = 0; i < aLevels.length; i++) {
+					if(aLevels[i].toLowerCase().trim() == monster.cr.toLowerCase().trim()) {
+						return true;
+					}
+				}
+				return false;
+			});
+		}
+		
+		// types		
+		if(aTypes && aTypes.length>0 && aTypes.length<99) {
+			filteredMonsters = filteredMonsters.filter(function(monster){
+				for(var i = 0; i < aTypes.length; i++) {
+					if(aTypes[i].toLowerCase().trim() == monster.sType.toLowerCase().trim()) {
+						return true;
+					}
+				}
+				return false;
+			});
+		}
+		// subtypes		
+		if(aSubTypes && aSubTypes.length>0 && aSubTypes.length<99) {
+			filteredMonsters = filteredMonsters.filter(function(monster){
+				for(var i = 0; i < aSubTypes.length; i++) {
+					if(monster.aSubtypes.indexOf(aSubTypes[i].toLowerCase().trim()) >= 0) {
+						return true;
+					}
+				}
+				return false;
+			});
+		}
+		
+		// sizes		
+		if(aSize && aSize.length>0 && aSize.length<99) {
+			filteredMonsters = filteredMonsters.filter(function(monster){
+				for(var i = 0; i < aSize.length; i++) {
+					if(aSize[i].toLowerCase().trim() == monster.size.toLowerCase().trim()) {
+						return true;
+					}
+				}
+				return false;
+			});
+		}		
+		
+		//source		
+		if(aSources && aSources.length>0 && aSources.length<9) {
+			filteredMonsters = filteredMonsters.filter(function(spell){
+				for(var i = 0; i < aSources.length; i++) {
+					if(aSources[i].toLowerCase().trim() == spell.source.toLowerCase().trim()) {
+						return true;
+					}
+				}
+				return false;
+			});
+		}
+			
+		
+		filteredMonsters = fHidden? arrDiff(filteredMonsters, aHiddenMonsters) : filteredMonsters;
+		
+		// sort
+		filteredMonsters.sort(function(a, b) {	
+			
+			if (translateCR(a.cr)+a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") < translateCR(b.cr)+b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
+				return -1;
+			if (translateCR(a.cr)+a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") > translateCR(b.cr)+b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
+				return 1;	
+			
+			return 0
+		});
+					
+		for (var i in filteredMonsters) {
+			if(filteredMonsters[i]) {
+				var fLocked = filteredMonsters[i].locked? true: false;
+				var tmp = createCard(filteredMonsters[i], fLocked, sClass);
+				if (tmp)
+					monsters += tmp;
+			} 
+		}
+
+		$(".monsterContainer").html(monsters);
+		createLockedMonstersArea();
+		//$("#before_spells").hide();
+		$("#info_text").hide();
+	}
+	
+	function filterMonsters(oParams){
+		var sName = $("#NameInput input").val();
+		var aLevels = [];
+		$("#levelToggle .toggle_box_content input:checkbox:checked").each(function(i, el){
+			aLevels.push(el.value);
+		});
+
+		var aTypes = [];
+		$("#TypeToggle .toggle_box_content input:checkbox:checked").each(function(i, el){
+			aTypes.push(el.value);
+		});
+		
+		var aSubTypes = [];
+		$("#SubTypeToggle .toggle_box_content input:checkbox:checked").each(function(i, el){
+			aSubTypes.push(el.value);
+		});
+
+		var aSources = [];
+		$("#SourceCombobox .combo_box_content input:checkbox:checked").each(function(i, el){
+			aSources.push(el.value);
+		});
+			
+		var aSize = [];
+		$("#SizeCombobox .combo_box_content input:checkbox:checked").each(function(i, el){
+			aSize.push(el.value);
+		});
+		
+		var sClass = getCardView();
+		
+		var fHidden = (aHiddenMonsters.length>0)? true: false;
+		
+		//setConfig("schoolOpen", $("#SchoolCombobox").attr("data-content-open"));
+		clearTimeout(oTimer);
+		oTimer = setTimeout(function(){
+			showFiltered({
+				sName: sName, 
+				aLevels: aLevels, 
+				aTypes: aTypes, 
+				aSubTypes: aSubTypes, 
+				aSources: aSources, 
+				aSize: aSize,
+				sClass: sClass,
+				fHidden: fHidden
+				});
+		}, nTimerSeconds/4);		
+		
+	}
+	
+	function colectMonstersParams() {
+		//monsterLevels[]
+		//monsterTypes[]
+		var tmpMonsterTypes = {};
+		
+		allMonsters.forEach(function(el) {
+			// level
+			if(monsterLevels.indexOf(el.cr)<0) {
+				monsterLevels.push(el.cr);
 			}
-			else
+			
+			// types
+			var sTypeString = el.type;
+			var sTypeTest = sTypeString.match(/^([^(]+)(\([^)]+\))?/);
+			var sType = (sTypeTest[1] || "").trim().toLowerCase();
+			var aSubtype = (sTypeTest[2]|| "").replace(/[)(]+/g, "").split(",").map(function(el){return el.trim().toLowerCase()});
+			
+			if(sType) {
+				if(!tmpMonsterTypes[sType]){
+					tmpMonsterTypes[sType] = {};
+				}
+				if(aSubtype.length>0) {
+					aSubtype.forEach(function(el){
+						if(el.length>0)
+							tmpMonsterTypes[sType][el] = "";
+					});					
+				}	
+			}
+			
+			el.sType = sType;
+			if(aSubtype.length>0)
+				el.aSubtypes = aSubtype;
+		});
+		
+		// transform monster object to array
+		for (var type in tmpMonsterTypes) {
+			var aSubtype = [];
+			for (var subtype in tmpMonsterTypes[type]) {
+				aSubtype.push({
+					"title": subtype,
+					"key": subtype
+				});
+			}
+			var oType = {
+				"title": type,
+				"key": type
+			}
+			if(aSubtype.length > 0){
+				aSubtype.sort(function(a, b) {
+					if(a.title > b.title)
+						return 1;
+					if(a.title < b.title)
+						return -1;
+					return 0;
+				});
+			
+				oType.subtype = aSubtype;
+			}
+			monsterTypes.push(oType);
+		}
+		monsterTypes.sort(function(a, b) {
+			if(a.title > b.title)
+				return 1;
+			if(a.title < b.title)
+				return -1;
+			return 0;
+		});
+		
+		// sorting monsters levels
+		monsterLevels.sort(function(a, b) {
+			if(eval(a) < eval(b))
+				return -1
+			if(eval(a) > eval(b))
+				return 1
+			return 0
+		});
+	}
+	
+	function createButtons() {
+		var bHome = "<a href='/' class='bt flexChild' title='На главную страницу'><i class='fa fa-home'></i></a>";
+		var bInfo = "<a href='#' class='bt flexChild' id='bInfo' title='Справка'><i class='fa fa-question-circle'></i></a>";
+		var bPrint = "<a href='#' class='bt flexChild' id='bPrint' title='Распечатать'><i class='fa fa-print' aria-hidden='true'></i></a>";
+		$(".p_side").append("<div class='mediaWidth flexParent'>" + bHome + bInfo + bPrint + "</div>");		
+	}
+	
+	function createLabel(text) {
+		return "<div class='filterLabel'>"+text+"</div>";
+	}
+	function createSizeCombobox(isOpen){
+		
+		var aSizes = [
 			{
-				console.log("ckeck!");
-				$(this).prop('checked', true);
+				"title": "Крошечный",
+				"key": "T"
+			},
+			{
+				"title": "Маленький",
+				"key": "S"
+			},
+			{
+				"title": "Средний",
+				"key": "M"
+			},
+			{
+				"title": "Большой",
+				"key": "L"
+			},
+			{
+				"title": "Огромный",
+				"key": "H"
+			},
+			{
+				"title": "Колоссальный",
+				"key": "G"
+			}
+		]
+		
+		if(isOpen == undefined)
+			isOpen = false;
+		var s1=createComboBox(aSizes, {
+			id: "SizeCombobox", 
+			title: "Размер", 
+			checkAll: true, 
+			isOpen: isOpen
+			});
+		$(".p_side").append("<div class='mediaWidth'>" + s1 + "</div>");
+	}
+		
+	function createSourceCombobox(isOpen) {	
+		if(isOpen == undefined)
+			isOpen = false;
+		var s1=createComboBox(monsterSources, {id: "SourceCombobox", title: "Источники", checkAll: true, isOpen: isOpen});
+		$(".p_side").append("<div class='mediaWidth'>" + s1 + "</div>");
+	}
+		
+	function createViewSegmented() {
+		var aViews = [
+			{
+				key: "text",
+				title: "<i class='fa fa-align-justify' aria-hidden='true'></i> Текст",
+				selected: true
+			},
+			{
+				key: "card",
+				title: "<i class='fa fa-th-large' aria-hidden='true'></i> Карточки"
+			}
+		];
+		var s1=createSegmentedButton(aViews, {id: "ViewSegmented"});
+		var label = createLabel("Вид");
+		$(".p_side").append("<div class='mediaWidth'>" + label + s1 + "</div>");
+	}
+	
+	function createTypeToggle() {	
+		var label = createLabel("Типы");
+		var s1=createToggle(monsterTypes, {id: "TypeToggle", title: "Типы", checkAll: true});
+		$(".p_side").append("<div class='mediaWidth max_width_2'>" + label + s1 + "</div>");
+
+	}
+	
+	function createSubTypeToggle() {	
+		var label = createLabel("Подтипы");
+		var s1=createToggle(monsterTypes, {id: "SubTypeToggle", title: "Подтипы", checkAll: true, subtypes: "only"});
+		$(".p_side").append("<div class='mediaWidth max_width_2'>" + label + s1 + "</div>");
+
+	}
+	function createNameFilter() {
+		var ret=createInput({id: "NameInput"});
+		var label = createLabel("Название");
+		$(".p_side").append("<div class='mediaWidth'>" + label + ret + "</div>");		
+	}
+	
+	function createLevelToggle(){
+		var label = createLabel("Класс Сложности");
+		var s1 = createToggle(monsterLevels, {"id": "levelToggle"});
+		$(".p_side").append("<div class='mediaWidth max_width_2'>"  + label +  s1 + "</div>");
+	}
+	
+	function createHiddenMonstersList(){
+		if(aHiddenMonsters.length < 1){
+			$("#HiddenMonsters").parent().remove();
+			return;
+		}
+		if(!$("#HiddenMonsters").length>0){
+			var label = createLabel("Скрытые монстры");
+			$(".p_side").append("<div class='mediaWidth'>" + label + "<div id='HiddenMonsters'></div></div>");
+		}
+		var listHiddenMonsters = aHiddenMonsters.map(function(item){
+			return "<a href='#' title='Вернуть на место' class='bUnhideMonster' data-name='"+item+"'>"+item +"</a>";
+		}).join(" ");
+			
+		var bReturnAll = "<a href='#' class='bReturnUnvisible'>Вернуть все обратно</a>";
+		$("#HiddenMonsters").html(bReturnAll + listHiddenMonsters);			
+	}
+	
+	function createLockedMonstersArea(){
+		var aLocked = [];
+		for (var i in aLockedMonsters){
+			aLocked.push(i);
+		}
+		var sClass = getCardView();
+		var aResult = [];
+		var l = aLocked.length;
+		if(l>0){
+			for (var i=0; i<allMonsters.length; i++) {
+				for (var j=0; j< l; j++) {
+					if(allMonsters[i].name.toLowerCase() == aLocked[j].toLowerCase()) {
+						aResult.push(allMonsters[i]);
+					}
+				}
+			}
+			
+			if($("#lockedMonstersArea").length<1){
+				$(".p_cont").prepend("<div id='lockedMonstersArea'><span class='bUnlockAll'>Открепить все</span><span class='topHeader'></span><div class='content row'></div><span class='bottomHeader'></span></div>");
+
+			}
+			$("#lockedMonstersArea .content").html(aResult.sort(function(a, b) {
+
+				if (translateCR(a.cr)+a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") < translateCR(b.cr)+b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
+				return -1;
+				if (translateCR(a.cr)+a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") > translateCR(b.cr)+b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
+				return 1;	
+
+				return 0
+			}).map(function(el){return createCard(el, true, sClass)}));	
+			
+			//COUNTER
+			$("#lockedMonstersArea .topHeader").html("("+l+")");
+			$(".monsterContainer").addClass("noprint");
+		} else {
+			$("#lockedMonstersArea").remove();
+			$(".monsterContainer").removeClass("noprint");
+		}
+	}
+	
+	function createSidebar() {
+		// menu buttons
+		createButtons();
+		
+		// name
+		createNameFilter();		
+		
+		// collect data for level & type
+		colectMonstersParams();
+		
+		// level
+		createLevelToggle();	
+		
+		
+		// type
+		createTypeToggle();
+		
+		createSubTypeToggle();
+		
+		//size
+		createSizeCombobox();
+		
+		//source
+		createSourceCombobox();	
+		
+		// view
+		createViewSegmented()
+		
+		$(".p_side").fadeIn();	
+	}
+	
+	function setSubtypeToggleEnable() {
+		var aTypes = [];
+		var aSubTypes = [];
+		$("#TypeToggle .toggle_box_content input:checkbox:checked").each(function(i, el){
+			aTypes.push(el.value);
+		});
+		//console.dir(aTypes);
+		//console.dir(monsterTypes);
+		if(aTypes.length>0){
+			$("#SubTypeToggle input[type='checkbox']").each(function () {			
+				$(this).attr("disabled", true);			
+			});
+			for (var t in monsterTypes) {
+				aTypes.forEach(function(el) {
+					if(monsterTypes[t].key == el) {
+						if(monsterTypes[t].subtype){
+							monsterTypes[t].subtype.forEach(function (item) {
+								$("#SubTypeToggle input[type='checkbox']").each(function () {
+									if($(this).attr('value') == item.key){
+										$(this).removeAttr("disabled");	
+									}				
+								})
+							})
+						}
+					}
+				})
+				
+			}
+		} else{
+			$("#SubTypeToggle input[type='checkbox']").each(function () {			
+				$(this).removeAttr("disabled");		
+			});
+		}
+	}
+	
+	/// handlers
+	
+	// close Mod Win
+	$("body").on("click", ".bCloseInfoWin", function() {		
+		$("#dbg").fadeOut();
+		hideInfoWin();
+	});
+	
+	// hide DBG
+	$("body").on("click", "#dbg", function() {
+		$(this).fadeOut();
+		hideInfoWin();
+	});
+	
+
+	// custom Combobox
+	$("body").on('click', ".combo_box_title, .combo_box_arrow", function(){
+		var el = $(this).closest(".combo_box").find(".combo_box_content");
+		if(el.is(":visible"))
+		{
+			el.slideUp();
+			el.next(".combo_box_arrow").find(".arr_down").show();
+			el.next(".combo_box_arrow").find(".arr_up").hide();
+			el.parent().attr("data-content-open", false);
+		}
+		else
+		{
+			el.slideDown();
+			el.next(".combo_box_arrow").find(".arr_down").hide();
+			el.next(".combo_box_arrow").find(".arr_up").show();
+			el.parent().attr("data-content-open", true);
+		}
+	});// get item
+	
+	function onSelectItemPress(src) {
+		var d_root='', d_parent='', trig=true;
+		
+		var attrFor = src.attr("for"); // $("input#"+attrFor)
+		var oComboBox = src.closest(".combo_box");
+		var sComboBoxId = oComboBox.attr("id");
+		d_root = $("#"+sComboBoxId+" input#"+attrFor).attr("data-root");
+		d_parent = $("#"+sComboBoxId+" input#"+attrFor).attr("data-parent");
+		if($("#"+sComboBoxId+" input#"+attrFor).prop("checked"))
+			{
+			trig=false;
+			}
+		$("#"+sComboBoxId+" input#"+attrFor).prop("checked", trig);
+		/**/
+		if(d_root!='' && d_root!=undefined) {
+			$("#"+sComboBoxId+" input[type=checkbox][data-parent="+d_root+"]").each(function(){
+				$(this).prop( "checked", trig );
+			});
+		}
+		/**/
+		if(d_parent!='' && d_parent!=undefined && trig==false) {
+			$("#"+sComboBoxId+" input[type=checkbox][data-root="+d_parent+"]").prop( "checked", trig);
+
+		}
+
+
+		function make_val(ex, ad, dp){
+			var ret = '';
+			if(dp!=undefined) {
+				ad = dp + " " + ad;
+			}
+			if(ex!=undefined && ex!=""){
+				ret = ex+", "+ad;
+			} else {
+				ret = ad;
+			}
+			return ret;
+		}
+
+		/**/
+		var d_root='';
+		var before_root='';
+		var d_parent='';
+		var txt='';
+		var value='';
+		var title=''
+		$("#"+sComboBoxId+" .combo_box_title").html("");
+		$("#"+sComboBoxId+" .combo_box_title").attr('data-val',"");
+		$("#"+sComboBoxId+" input[type=checkbox]:checked").each(function(){
+			d_root='';
+			d_parent='';
+			d_parent=$(this).attr("data-parent");
+			d_root=$(this).attr("data-root");
+
+			title=$("#"+sComboBoxId+" .combo_box_title").html();
+			value=$("#"+sComboBoxId+" .combo_box_title").attr('data-val');
+
+			if(title!="" && title.charAt(title.length-1)!="(") {
+				$("#"+sComboBoxId+" .combo_box_title").append(", ");
+			}
+			// обычный пункт
+			if(d_parent==undefined && d_root==undefined)
+				{
+				txt = $(this).next("label").html().replace("<br>", " | ");
+				title_value = $("#"+sComboBoxId+" .combo_box_title").attr("data-val");
+				value = $(this).attr('value');
+				dp = $(this).attr('data-parent');
+				value = make_val(title_value, value, dp);
+				//$(".combo_box_title").append(txt).attr("data-val", value);
+				$("#"+sComboBoxId+" .combo_box_title").attr("data-val", value);
+				}
+			// если root
+			if(d_root!=undefined)
+				{
+					// если есть отмеченные потомки
+				if($("#"+sComboBoxId+" input[type=checkbox][data-parent="+d_root+"]:checked").length>0)
+					{
+					txt=$(this).next("label").text()+" (";
+					//$(".combo_box_title").append(txt);
+
+					before_root=d_root;
+					}
+				}
+			// если parent
+			if(d_parent!=undefined)
+				{
+
+					txt=$(this).next("label").text();
+					title_value = $("#"+sComboBoxId+" .combo_box_title").attr("data-val");
+					value = $(this).attr('value');
+					dp = $(this).attr('data-parent');
+					value = make_val(title_value, value, dp);
+					var ind = $("#"+sComboBoxId+" input[type=checkbox][data-parent="+d_parent+"").index(this);
+					if(ind==$("#"+sComboBoxId+" input[type=checkbox][data-parent="+d_parent+"").length-1 && d_parent==before_root){
+						txt+=")";
+					}
+
+					$("#"+sComboBoxId+" .combo_box_title").append(txt).attr("data-val", value);
+				}
+			});
+
+			if($("#"+sComboBoxId+" .combo_box_title").html()=='')
+				$("#"+sComboBoxId+" .combo_box_title").html(src.closest(".combo_box").attr('data-text'));
+
+		/*/
+		var bg = $("#selector").find("input:checked + label[data-bg] ").attr("data-bg");
+		var leng = $("#selector").find("input:checked + label[data-bg] ").length;
+		$("#selector").find("input:checked + label[data-bg] ").each(function(){
+			if ($(this).attr("data-bg") != bg){
+				leng = 0;
 			}
 		});
-	});
-	
-	// фильтр по разнм параметрам (одна функция для всех)
-	$("body").on('click',".ch_lb", function(){
-		var fr=$(this).attr("for");
-		if($("#"+fr).prop("checked"))
-			{
-			$("#"+fr).prop('checked', false);	
-			}
-		else
-			{
-			$("#"+fr).prop('checked', true);	
-			}
-		get_filter();	
-		return false;		
-	});
-	
-	
-	$(".ch_mn").on('click', function(){
-		var fr=$(this).attr("for");
-		if($("#"+fr).prop("checked"))
-			{
-			$("#"+fr).prop('checked', false);	
-			}
-		else
-			{
-			$("#"+fr).prop('checked', true);	
-			}
-		filter_mn();	
-		return false;		
-	});
-	$(".ml_1").on('click', function(){
-		var fr=$(this).attr("for");
-		if($("#"+fr).prop("checked"))
-			{
-			$("#"+fr).prop('checked', false);	
-			}
-		else
-			{
-			$("#"+fr).prop('checked', true);	
-			}
-		filter_mn();	
-		return false;		
-	});
-	$("body").on('click',".ch_vw", function(){
-		//alert(1);
-	$('#load').show();
-		$(".ch_vw").prop('checked', false);
-		$(this).prop('checked', true);
-		find_type();
-		//return false;		
-	});
-	// ввод в фильтр
-	$("body").on('keyup',".flt input", function(){
-		console.log('keyup');
-		if($(this).val().length==1)
-			{
-			setTimeout(function(){get_filter();console.log('timeout');}, 500);
-			}
-		else
-			get_filter();
-	});
-	// при нажатии кнопки с вопросом
-	$("body").on("click", "#info", function(){
-		if($("#dbg").length<1)
-		{
-			$("body").append("<div id='dbg'></div>");
+		if(bg && leng>0) {
+			$("body").attr("class", bg);
+		} else {
+			$("body").attr("class", "");
 		}
-		$("#dbg").show();
-		if($(".mod_win").length<1)
-		{
-			$("body").append("<div class='mod_win'></div>");
+		/**/
+			
+		// bg /
+		return false;
+	}
+
+	$("body").on('click', ".combo_box input", function(event){
+		return false;
+	});
+
+	$("body").on('click', ".combo_box label", function(){
+		onSelectItemPress($(this));
+		return false;
+	});
+	
+	// custom Input
+	$("body").on('click', ".customInput .cross", function(){
+		$(this).parent().find("input").val("");
+		$(this).parent().focusout();
+	});
+	
+	// filters
+	
+	// name select
+	$("body").on('focusout', "#NameInput", function(){
+		clearTimeout(oTimer);
+		oTimer = setTimeout(function(){
+			filterMonsters();
+		}, nTimerSeconds);		
+	});
+	$("body").on('keyup', "#NameInput input", function(){
+		clearTimeout(oTimer);
+		oTimer = setTimeout(function(){
+			filterMonsters();
+		}, nTimerSeconds*3);		
+	});
+	
+	
+	// level select
+	$("body").on('click', "#levelToggle label", function(){
+		clearTimeout(oTimer);
+		oTimer = setTimeout(function(){
+			filterMonsters();
+		}, nTimerSeconds);		
+	});
+	
+	// type select
+	$("body").on('click', "#TypeToggle label", function(){
+		clearTimeout(oTimer);
+		oTimer = setTimeout(function(){
+			setSubtypeToggleEnable();
+			filterMonsters();
+		}, nTimerSeconds);		
+	});
+	
+	// subtype select
+	$("body").on('click', "#SubTypeToggle label", function(){
+		clearTimeout(oTimer);
+		oTimer = setTimeout(function(){
+			filterMonsters();
+		}, nTimerSeconds);		
+	});
+	
+	// source combobox
+	$("body").on('click', "#SourceCombobox label", function(){
+		clearTimeout(oTimer);
+		oTimer = setTimeout(function(){
+			filterMonsters();
+		}, nTimerSeconds);		
+	});
+	$("body").on('click', "#SourceCombobox .combo_box_title, #SourceCombobox .combo_box_arrow", function(){
+		setConfig("sourceOpen", $("#SourceCombobox").attr("data-content-open"));	
+	});	
+	// size combobox
+	$("body").on('click', "#SizeCombobox label", function(){
+		clearTimeout(oTimer);
+		oTimer = setTimeout(function(){
+			filterMonsters();
+		}, nTimerSeconds);		
+	});
+	$("body").on('click', "#SizeCombobox .combo_box_title, #SizeCombobox .combo_box_arrow", function(){
+		setConfig("sizeOpen", $("#SizeCombobox").attr("data-content-open"));	
+	});
+	
+	//
+	
+	// show all moncters
+	$("body").on('click', "#showAllMonsters", function(){
+		setConfig("infiIsShown", true);
+		filterMonsters();	
+		hideInfoWin();
+		hideDBG();
+		return false;
+	});
+	
+	//info_textbInfo
+	$("body").on('click', "#bInfo", function(){
+		var sInfo = $("#info_text").html();
+		showDBG();
+		showInfoWin(sInfo);
+		return false;
+	});
+	
+
+	//hide monsters
+	$("body").on('click', ".hide_monster", function(){
+		var sName = $(this).closest("[class^='monster']").attr("data-name");
+		
+		$(this).hide();
+		// update hidden Monsters array
+		aHiddenMonsters.push(sName); 
+		
+		// show list of hidden Monsters
+		createHiddenMonstersList();
+		
+		// show Monsters without hidden
+		filterMonsters({fHidden: true});
+		
+		return false;
+	})
+	// unhide spells
+	$("body").on('click', ".bUnhideMonster", function(){
+		var sName = $(this).attr("data-name")
+		// update hidden spells array
+		aHiddenMonsters.splice(aHiddenMonsters.indexOf(sName), 1); 
+		
+		// show list of hidden spells
+		createHiddenMonstersList();
+		
+		// show spells without hidden
+		filterMonsters({fHidden: true});
+		
+		return false;
+	})
+	$("body").on("click", ".bReturnUnvisible", function() {
+		aHiddenMonsters = [];// show list of hidden spells
+		createHiddenMonstersList();
+		
+		// show spells without hidden
+		filterMonsters({fHidden: true});
+		
+		return false;
+	});
+	
+	// lock spells
+	$("body").on('click', ".lock_monster", function(){
+		var sName = $(this).closest("[class^='monster']").attr("data-name");		
+		
+		aLockedMonsters[sName] = "";
+		
+		// show locked
+		createLockedMonstersArea();
+		
+		return false;
+	})
+	
+	// unlock spells
+	$("body").on('click', ".unlock_monster", function(){
+		var sName = $(this).closest("[class^='monster']").attr("data-name");
+		
+		delete aLockedMonsters[sName];
+		
+		// show locked
+		createLockedMonstersArea();
+		
+		return false;
+	})
+	$("body").on('click', "#lockedMonstersArea .topHeader", function(){
+		$(this).next(".content").slideToggle();
+		$(this).next(".content").next(".bottomHeader").fadeToggle();
+	});
+	$("body").on('click', ".bUnlockAll", function(){
+		aLockedMonsters = [];
+		// show locked
+		createLockedMonstersArea();
+	});
+	
+	// print
+	$("body").on('click', "#bPrint", function(){
+		window.print();
+		
+		return false;
+	});
+	
+	// view
+	$("body").on('change', "#ViewSegmented input", function() {		
+		clearTimeout(oTimer);
+		oTimer = setTimeout(function(){
+			filterMonsters();
+		}, nTimerSeconds);	
+	});
+		
+	
+	$.when(createSidebar()).done(
+		function(){
+			$("#showAllMonsters").slideDown();
+			if(getViewPortSize("width") > 600){
+				if(getConfig("infiIsShown")==true)
+					filterMonsters();
+
+			}
 		}
-		$(".mod_win").show();
-		var info="<div class='m_head'>Справка</div>"+
-		"<p> Список монстров из Monster Manual D&d 5</p>"+
-		"<p> Можно отфильтровать выборку по Классу Сложности.</p>"+
-		"<p> Данные можно отобразить в двух видах. По умолчанию показывается в текстовом виде, близком тому, как выглядит в книге. Второй вариант - карточки - монстры отображаются на карточках, на левой стороне основная информация, на правой его возможные действия. Такой вид удобен для печати. При переключении видов требуется НЕМНОГО ПОДОЖДАТЬ.</p>"+
-		"<br>"+
-		"<p>Версия 0.2 [28.01.2016]<br>"+
-		"Стабильная версия<br>";
-		$(".mod_win").html(info);
-	});
-	// убираем затемнение при нажатии на него
-	$("body").on("click", "#dbg", function(){
-		$("#dbg").hide();
-		$(".mod_win").hide();
-	});
-}); 
+	);
+}; 

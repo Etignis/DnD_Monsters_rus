@@ -6,15 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> <!-- for monile -->
   <meta name="description" content="Каталог монстров D&D5 на русском языке"> 
   <meta name="Keywords" content="днд, монстры, dnd, monsters, monster manual, d&d"> 
-  <link rel="stylesheet" type="text/css" href="css/Monsters.css"><!-- include css styles  -->
+  <link rel="stylesheet" type="text/css" href="css/style.css"><!-- include css styles  -->
   <link href="../_fonts/FortAwesome/css/font-awesome.min.css" rel="stylesheet">
   <link rel="shortcut icon" href="favicon.ico" /><!-- include icon for browser -->
-  <script type='text/javascript' src='js/jquery-1.11.3.min.js'></script><!-- jQuery -->
-  <script type='text/javascript' src='js/monsters.js'></script><!-- your script -->
+  <script type='text/javascript' src='../_js/jquery-1.11.3.min.js' defer></script><!-- jQuery -->
+  <script type='text/javascript' src='data/monsters.js' defer></script><!-- your script -->
+  <script type='text/javascript' src='js/monsters.js' defer></script><!-- your script -->
   
   <meta property="og:image" content="img/t1.jpg" />
   <meta property="og:image" content="img/og.jpg" />
-  <meta property="og:title" content="Monster Manual D&D5" />
+  <meta property="og:title" content="Монстры D&D5" />
   <meta property="og:description" content="Каталог монстров D&D5 на русском языке" />
   <!-- IE must understand HTML5: -->
   <!--[if IE]>
@@ -30,15 +31,77 @@
 </head>
 
 <body>
-	<div id='helper'>	
+<div class='wrap'>
+	<div class='p_side'>		
 	</div>
-	<div id='wrap'>
-		<div id='panel'>
-		</div>	
-			<span id='before_monsters'><div class='loader'></div>Созываем монстров...</span>
-		<div id='result'>
+	<div class='p_cont'>
+		<!--span id='before_spells'><div class='loader'></div>Читаем заклинания...</span-->
+		<div id='info_text'>
+			<h1>Монстры D&D5</h2>
+			<h2>
+				Что есть
+			</h2>
+			<p>
+				Список монстров из Monster Manual D&D5 и Volo's Guide to Monsters на русском языке.			
+			</p>
+			<p>
+				Монстров можно фильтровать по:
+				<ul>
+				  <li>названию</li>
+				  <li>уровню опасности</li>
+				  <li>типу и подтипу</li>
+				  <li>размеру</li>
+				  <li>источнику</li>
+				</ul>				
+			</p>
+			<h2>
+				Скрытие монстров
+			</h2>
+			<p>
+				Карточку монстра можно скрыть из общего списка, если нажать на <i class="fa fa-eye-slash" aria-hidden="true"></i> в правом верхнем углу карточки. В таком случае монстр исчезнет из общего списка и его название будет отображаться в самом низу панели фильтров. Если нажать на название, монстр вернется в общий список.	
+			</p>
+			<h2>
+				Закрепление монстров
+			</h2>
+			<p>
+				Карточки монстров можно закреплять - в таком случае они будут отображаться в самом верху списка монстров. Для закрепления нужно нажать на <i class="fa fa-lock" aria-hidden="true"></i> в левом верхнем углу карточки монстра. При закреплении монстра, оно не исчезает из общего списка. Если нажать на заголовок "Закрепленные монстры", закрепленные карточки скроются (чтобы не мешать). На закрепленных монстров не действуют никакие фильтры.
+			</p>
+			<h2>
+				Отображение монстров
+			</h2>
+			<p>
+				Чтобы увидеть монстров примените любой фильтр. Либо нажмите:
+			</p>
+			<p style="padding: .3em 0; text-align: center">
+				<a class="button" id="showAllMonsters" href="#" style="display: none">Показать всех монстров</a>
+			</p>
+			
+			<h2>Печать монстров</h2>
+			<p>
+				Если есть закрепленные монстры, то печататься будут только они.<br>
+				Если вы хотите распечатать карточки монстров, лучше всего делать это через Chrome (удобные настройки печати). Для этого надо:
+					<ul>
+						<li>нажать сочетание клавиш [Ctrl]+[P]</li>
+					</ul>
+					И, если все устраивает, нажать кнопку "Печать", либо:
+					<ul>
+						<li>в появившемся окне нажать "Дополнительные настройки"</li>
+						<li>выбрать поля "Персонализированные"</li>
+						<li>перетянуть мышкой поля так, чтобы карточки нормально распределились по листу <small>(помните, что обычно принтер печатает с полями, если сделать поля слишком маленькие, при печати часть карточек может обрезаться)</small></li>
+	
+					</ul>
+			</p>
+			<p>				
+				Если есть вопросы или предложения - <a style="color: #0288D1" href="https://tentaculus.ru/message?theme=dndmonsters">пишите</a>.
+			</p>
+			<p>
+				<a style="color: #0288D1"  href="https://github.com/Etignis/DnD_Monsters_rus" target="_blanc">Страница проекта на GitHub.</a>
+			</p>
 		</div>
-	</div>	
+		<div class='monsterContainer row'>
+		</div>
+	</div>
+</div>
  <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
     (function (d, w, c) {

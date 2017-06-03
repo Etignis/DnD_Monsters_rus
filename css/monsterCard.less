@@ -1,0 +1,244 @@
+@dred: #5A0000;
+@pr: .4em;
+.monster, .monster_card{
+    position: relative;    
+    
+    .lock_monster, .unlock_monster, .hide_monster{
+    	//display: none;
+        display: block; 
+        opacity: .9;
+        padding: .8em .7em .6em;
+        color: @l-gray - #222;
+        position: absolute;
+        transition: color .3s, opacity .3s .3s;
+        &:hover{
+        	color: @color;
+        }
+    }
+    .hide_monster{
+        top: 0;
+        right: 0;
+    }
+    .lock_monster, .unlock_monster{        
+    	top: 0;
+        left: 0em;
+    }
+    hr{
+		border: none;
+		height: 1px;
+		background: @dred;
+	}
+    
+    &:hover{
+        .hide_monster, .lock_monster, .unlock_monster{
+        	opacity: 1;
+        }
+    }
+}
+.monster{
+	.frame();
+	/*float: left;
+	width: 30%;*/
+	margin: 10px 15px;
+	padding: 10px;
+	position: relative;
+	
+	.i-tipe{
+		text-transform: uppercase;
+		font-weight: bold;			
+		color: 	@dred;
+	}	
+	.i2-tipe{
+		//text-transform: uppercase;
+		font-weight: bold;	
+		padding: 0 @pr 0 0;
+		font-style: italic;
+	}
+	.i3-tipe{
+		font-weight: bold;	
+		color: @dred;
+		margin: .5em 0 0 .2em;
+		font-size: 120%;
+		border-bottom: 1px solid @dred;
+	}
+	.i4-tipe{
+		margin: .5em 0;
+	}	
+
+	.name{
+		font-size: 120%;
+		font-weight: bold;
+		color: 	@dred;
+		margin-left: .7em;
+	}
+	.size, .type, .alignment{
+		font-style: italic;
+		padding: 0 @pr 0 0;
+	}
+	.size, .type{
+		&:after{
+			content:",";
+		}
+	}
+	.stats{
+		&>span{
+			padding:  0 @pr*1.5 0 0;
+		}
+		.str, .dex, .con, .int, .wis, .cha{				
+			span{
+				
+				
+			}
+		}
+	}
+}
+
+.monster_card{
+	.frame();
+	/*float: left;
+	width: 30%;*/
+	font-size: 90%;
+	width: 100%;
+	min-width: 45em;
+	max-width: 188mm;
+	//width: 170mm;
+    height: 136mm;
+    
+    background: @dred;
+    border-color: @dred;
+    
+	margin: 10px auto;
+	padding: 0;
+	
+	overflow: hidden;
+	float: none;
+	clear: both;
+	
+	position: relative;
+	
+	page-break-inside: avoid; 
+	&:after, &:before{
+	    content: "";
+	    .clear();
+	}
+	
+	.left, .right{
+	    display: block;
+        //width: 94mm;
+        width: 50%;
+        height: 136mm;
+        float: left;
+        //background: @white; // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        padding: .2mm;
+        
+        .inner{
+	        .fr();
+            background: @white;
+            padding: .4em;            
+            height: 133mm;
+            margin: 1mm;
+        }
+	}
+	
+	
+	
+	.i-tipe{
+		text-transform: uppercase;
+		font-weight: bold;			
+		color: 	@dred;
+		//font-size: 85%;
+	}	
+	.i2-tipe{
+		//text-transform: uppercase;
+		font-weight: bold;	
+		padding: 0 @pr 0 0;
+		font-style: italic;
+	}
+	.i3-tipe{
+		font-weight: bold;	
+		color: @dred;
+		margin: 0 0 0 .2em;
+		font-size: 120%;
+		border-bottom: 1px solid @dred;
+	}
+	.i4-tipe{
+		margin: .5em 0;
+		font-size: 90%;
+	}	
+
+	.name{
+		font-size: 120%;
+		font-weight: bold;
+		color: 	@dred;
+		margin-left: 1em;
+	}
+	.size, .type, .alignment{
+		font-style: italic;
+		padding: 0 @pr 0 0;
+		font-size: 90%;
+	}
+	.stats{
+		&>span{
+			padding:  0 @pr*1.5 0 0;
+		}
+		.str, .dex, .con, .int, .wis, .cha{	
+		    display: inline-block;
+		    width: 4em;
+			span{
+				
+				
+			}
+		}
+	}	
+	
+}
+
+#lockedMonstersArea{
+    margin-bottom: .3em;
+    position: relative;
+    
+    .topHeader, .bottomHeader, .bUnlockAll{
+        font-weight: 600;
+       // display: block;
+        padding: .2em;
+        text-shadow: 0 0 4px rgba(255,255,255,.9);
+        background: rgba(255,255,255,.5);
+        color: @d-gray;
+        border-radius: .1em;
+    }
+    .topHeader, .bottomHeader{
+    	margin-left: 1em;
+    }
+    .bUnlockAll{
+        position: absolute;
+        top: 0;
+        right: 1em;
+        cursor: pointer;
+        
+        &:hover{
+            background: rgba(255,255,255,.7);
+        }
+    }
+    .topHeader{
+        cursor: pointer;        
+        &:hover{
+            background: rgba(255,255,255,.7);
+        }
+        &:before{
+            content: "Закрепленные монстры "
+        }
+        
+    }
+    .bottomHeader{
+        &:before{
+            content: "Каталог монстров "
+        }
+        
+    }
+    .content{
+        margin-bottom: .3em;
+    }
+    .bHideSpell{
+        display: none;
+    }
+}
