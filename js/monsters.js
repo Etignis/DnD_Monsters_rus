@@ -18,7 +18,7 @@ function count_mod(num){
 	var mod=Math.floor((num-10)/2);
 	if(mod>0)
 		mod="+"+mod;
-	num = num+" ("+mod+")";
+	num = num+"&nbsp;("+mod+")";
 	return num;
 }
 function c_string(clas, s_clas, title, cont){
@@ -35,6 +35,19 @@ function ToNormalFraction(sFraction) {
 	if(/\d+/.test(sFraction))
 		return Number(sFraction);
 	return sFraction;
+}
+
+function getCardView() {
+	var sView = $("#ViewSegmented input:radio:checked").val();
+	var sClass = "";
+	switch (sView){
+		case "card": 
+			sClass = "monster_card";
+			break;
+		default:
+			sClass = "monster";
+	}
+	return sClass;
 }
 
 window.onload = function(){
@@ -156,8 +169,7 @@ window.onload = function(){
 		ret = "<div "+id+" class='segmented_button'>"+ret+"</div>";
 		return ret;	
 	}
-	
-	
+		
 	function createToggle(src, params) {
 		var ret = '';
 		var id =  params.id? "id='"+params.id+"'": "";
@@ -338,9 +350,12 @@ window.onload = function(){
 		return s.substr(0,1).toUpperCase() + s.substr(1);
 	}
 		
-	function createCard(oMonster, sLockedSpell) {
+	function createCard(oMonster, sLockedSpell, sClass) {
 		var size = '';
 		size = oMonster.size;
+		if (sClass == undefined || sClass == "") {
+			sClass = "monster";
+		}
 		switch(size)
 		{
 			case "T": size="Крошечный"; break;
@@ -365,6 +380,22 @@ window.onload = function(){
 			trait+="<div class='trait i4-tipe'>"+
 				"<span class='i2-tipe'>"+oMonster.trait.name+"</span>"+
 				oMonster.trait.text+
+			"</div>";
+		}
+		
+		var reaction = '';
+		if(Array.isArray(oMonster.reaction)) {
+			for(var i in oMonster.reaction){
+				reaction+="<div class='reaction i4-tipe'>"+
+					"<span class='i2-tipe'>"+oMonster.reaction[i].name+"</span>"+
+					oMonster.reaction[i].text+
+				"</div>";
+			}	
+		}		
+		else if(typeof oMonster.reaction == "object") {
+			reaction+="<div class='reaction i4-tipe'>"+
+				"<span class='i2-tipe'>"+oMonster.reaction.name+"</span>"+
+				oMonster.reaction.text+
 			"</div>";
 		}		
 
@@ -497,8 +528,12 @@ window.onload = function(){
 		var oLock = sLockedSpell? '<a href="#" class="unlock_monster" title="Открепить"><i class="fa fa fa-unlock-alt" aria-hidden="true"></i></a>':
 		'<a href="#" class="lock_monster" title="Закрепить"><i class="fa fa-lock" aria-hidden="true"></i></a>';
 		
-		var ret = '<div class="monster" data-name="'+name.toLowerCase()+'">'+
-		'<a href="#" class="hide_monster" title="Скрыть"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>'+
+		var oHide = sLockedSpell? "" : '<a href="#" class="hide_monster" title="Скрыть"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>';
+		
+		var add = oMonster.add? "<hr>"+oMonster.add : "";
+		
+		var ret = '<div class="' + sClass + '" data-name="'+name.toLowerCase()+'">'+
+		oHide+
 		oLock+
 			"<div class='left'><div class='inner'>"+
 			'<div class="name">' + name + '</div>'+
@@ -528,6 +563,8 @@ window.onload = function(){
 			action+
 			legendary+
 			spells+
+			reaction+
+			add+
 			"</div></div>"+
 			'</div>';
 		return ret;
@@ -550,6 +587,7 @@ window.onload = function(){
 		var aSubTypes = oParams.aSubTypes || []; 
 		var aSources = oParams.aSources || []; 
 		var aSize = oParams.aSize || [];
+		var sClass = oParams.sClass || "monster";
 		var fHidden = oParams.fHidden;
 
 		$(".monsterContainer").empty();
@@ -626,20 +664,9 @@ window.onload = function(){
 				return false;
 			});
 		}
+			
 		
 		filteredMonsters = fHidden? arrDiff(filteredMonsters, aHiddenMonsters) : filteredMonsters;
-		/*/
-		if (fLockedMonsters) {
-			for (var i = 0; i<allMonsters.length; i++){	
-				for (var j=0; j<aLockedMonsters.length; j++){
-					if(allMonsters[i].name == aMonsterSpells[j]) {
-						filteredMonsters.push(allMonsters[i]);
-						break;
-					}
-				}
-			}
-		}
-		/**/
 		
 		// sort
 		filteredMonsters.sort(function(a, b) {	
@@ -655,13 +682,14 @@ window.onload = function(){
 		for (var i in filteredMonsters) {
 			if(filteredMonsters[i]) {
 				var fLocked = filteredMonsters[i].locked? true: false;
-				var tmp = createCard(filteredMonsters[i], fLocked)
+				var tmp = createCard(filteredMonsters[i], fLocked, sClass);
 				if (tmp)
 					monsters += tmp;
 			} 
 		}
 
 		$(".monsterContainer").html(monsters);
+		createLockedMonstersArea();
 		//$("#before_spells").hide();
 		$("#info_text").hide();
 	}
@@ -693,6 +721,8 @@ window.onload = function(){
 			aSize.push(el.value);
 		});
 		
+		var sClass = getCardView();
+		
 		var fHidden = (aHiddenMonsters.length>0)? true: false;
 		
 		//setConfig("schoolOpen", $("#SchoolCombobox").attr("data-content-open"));
@@ -705,6 +735,7 @@ window.onload = function(){
 				aSubTypes: aSubTypes, 
 				aSources: aSources, 
 				aSize: aSize,
+				sClass: sClass,
 				fHidden: fHidden
 				});
 		}, nTimerSeconds/4);		
@@ -895,7 +926,7 @@ window.onload = function(){
 		}
 		if(!$("#HiddenMonsters").length>0){
 			var label = createLabel("Скрытые монстры");
-			$("#SourceCombobox").parent().after("<div class='mediaWidth'>" + label + "<div id='HiddenMonsters'></div></div>");
+			$(".p_side").append("<div class='mediaWidth'>" + label + "<div id='HiddenMonsters'></div></div>");
 		}
 		var listHiddenMonsters = aHiddenMonsters.map(function(item){
 			return "<a href='#' title='Вернуть на место' class='bUnhideMonster' data-name='"+item+"'>"+item +"</a>";
@@ -910,6 +941,7 @@ window.onload = function(){
 		for (var i in aLockedMonsters){
 			aLocked.push(i);
 		}
+		var sClass = getCardView();
 		var aResult = [];
 		var l = aLocked.length;
 		if(l>0){
@@ -933,7 +965,7 @@ window.onload = function(){
 				return 1;	
 
 				return 0
-			}).map(function(el){return createCard(el, true)}));	
+			}).map(function(el){return createCard(el, true, sClass)}));	
 			
 			//COUNTER
 			$("#lockedMonstersArea .topHeader").html("("+l+")");
@@ -1233,6 +1265,16 @@ window.onload = function(){
 	});
 	$("body").on('click', "#SourceCombobox .combo_box_title, #SourceCombobox .combo_box_arrow", function(){
 		setConfig("sourceOpen", $("#SourceCombobox").attr("data-content-open"));	
+	});	
+	// size combobox
+	$("body").on('click', "#SizeCombobox label", function(){
+		clearTimeout(oTimer);
+		oTimer = setTimeout(function(){
+			filterMonsters();
+		}, nTimerSeconds);		
+	});
+	$("body").on('click', "#SizeCombobox .combo_box_title, #SizeCombobox .combo_box_arrow", function(){
+		setConfig("sizeOpen", $("#SizeCombobox").attr("data-content-open"));	
 	});
 	
 	//
@@ -1257,7 +1299,7 @@ window.onload = function(){
 
 	//hide monsters
 	$("body").on('click', ".hide_monster", function(){
-		var sName = $(this).closest(".monster").attr("data-name");
+		var sName = $(this).closest("[class^='monster']").attr("data-name");
 		
 		$(this).hide();
 		// update hidden Monsters array
@@ -1268,6 +1310,8 @@ window.onload = function(){
 		
 		// show Monsters without hidden
 		filterMonsters({fHidden: true});
+		
+		return false;
 	})
 	// unhide spells
 	$("body").on('click', ".bUnhideMonster", function(){
@@ -1295,22 +1339,26 @@ window.onload = function(){
 	
 	// lock spells
 	$("body").on('click', ".lock_monster", function(){
-		var sName = $(this).closest(".monster").attr("data-name");		
+		var sName = $(this).closest("[class^='monster']").attr("data-name");		
 		
 		aLockedMonsters[sName] = "";
 		
 		// show locked
 		createLockedMonstersArea();
+		
+		return false;
 	})
 	
 	// unlock spells
 	$("body").on('click', ".unlock_monster", function(){
-		var sName = $(this).closest(".monster").attr("data-name");
+		var sName = $(this).closest("[class^='monster']").attr("data-name");
 		
 		delete aLockedMonsters[sName];
 		
 		// show locked
 		createLockedMonstersArea();
+		
+		return false;
 	})
 	$("body").on('click', "#lockedMonstersArea .topHeader", function(){
 		$(this).next(".content").slideToggle();
@@ -1329,21 +1377,12 @@ window.onload = function(){
 		return false;
 	});
 	
-	$("body").on('change', "#ViewSegmented input", function() {
-		var sValue = $(this).val();
-		
-		if(sValue == "text") {
-			$(".monster_card").each(function(){
-				$(this).removeClass("monster_card");
-				$(this).addClass("monster");
-			});	
-		} else {
-			$(".monster").each(function(){
-				$(this).removeClass("monster");
-				$(this).addClass("monster_card");
-			});		
-			
-		}
+	// view
+	$("body").on('change', "#ViewSegmented input", function() {		
+		clearTimeout(oTimer);
+		oTimer = setTimeout(function(){
+			filterMonsters();
+		}, nTimerSeconds);	
 	});
 		
 	
