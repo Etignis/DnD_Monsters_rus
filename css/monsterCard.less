@@ -137,6 +137,8 @@
             padding: .4em;            
             height: 133mm;
             margin: 1mm;
+            overflow-y: auto;
+            .scrollbars(5px, @m-gray, @l-gray);
         }
 	}
 	
@@ -191,6 +193,12 @@
 		}
 	}	
 	
+}
+
+.i2-tipe{
+	&:after{
+		content: ":";
+	}	
 }
 
 #lockedMonstersArea{

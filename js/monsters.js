@@ -25,7 +25,7 @@ function c_string(clas, s_clas, title, cont){
 	//'<div class="vulnerable"><span class="i2-tipe">Уязвимость </span>' + $(this).find("vulnerable").text() + '</div>'+
 	var string ='';
 	if(cont != '' && cont != undefined)
-		string = '<div class="'+clas+' i4-tipe"><span class="'+s_clas+'">'+title+' </span>'+cont+'</div>';
+		string = '<div class="'+clas+' i4-tipe"><span class="'+s_clas+'">'+title+'</span>'+cont+'</div>';
 	return string;
 }
 
@@ -371,14 +371,14 @@ window.onload = function(){
 		if(Array.isArray(oMonster.trait)) {
 			for(var i in oMonster.trait){
 				trait+="<div class='trait i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.trait[i].name+"</span>"+
+					"<span class='i2-tipe'>"+oMonster.trait[i].name.trim()+"</span>"+
 					oMonster.trait[i].text+
 				"</div>";
 			}	
 		}		
 		else if(typeof oMonster.trait == "object") {
 			trait+="<div class='trait i4-tipe'>"+
-				"<span class='i2-tipe'>"+oMonster.trait.name+"</span>"+
+				"<span class='i2-tipe'>"+oMonster.trait.name.trim()+"</span>"+
 				oMonster.trait.text+
 			"</div>";
 		}
@@ -387,14 +387,14 @@ window.onload = function(){
 		if(Array.isArray(oMonster.reaction)) {
 			for(var i in oMonster.reaction){
 				reaction+="<div class='reaction i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.reaction[i].name+"</span>"+
+					"<span class='i2-tipe'>"+oMonster.reaction[i].name.trim()+"</span>"+
 					oMonster.reaction[i].text+
 				"</div>";
 			}	
 		}		
 		else if(typeof oMonster.reaction == "object") {
 			reaction+="<div class='reaction i4-tipe'>"+
-				"<span class='i2-tipe'>"+oMonster.reaction.name+"</span>"+
+				"<span class='i2-tipe'>"+oMonster.reaction.name.trim()+"</span>"+
 				oMonster.reaction.text+
 			"</div>";
 		}		
@@ -403,14 +403,14 @@ window.onload = function(){
 		if(Array.isArray(oMonster.action)) {
 			for(var i in oMonster.action){
 				action+="<div class='action i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.action[i].name+"</span>"+
+					"<span class='i2-tipe'>"+oMonster.action[i].name.trim()+"</span>"+
 					oMonster.action[i].text+
 				"</div>";
 			}	
 		}		
 		else if(typeof oMonster.action == "object") {
 			action+="<div class='action i4-tipe'>"+
-				"<span class='i2-tipe'>"+oMonster.action.name+"</span>"+
+				"<span class='i2-tipe'>"+oMonster.action.name.trim()+"</span>"+
 				oMonster.action.text+
 			"</div>";
 		}		
@@ -421,14 +421,14 @@ window.onload = function(){
 		if(Array.isArray(oMonster.legendary)) {
 			for(var i in oMonster.legendary){
 				legendary+="<div class='legendary i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.legendary[i].name+"</span>"+
+					"<span class='i2-tipe'>"+oMonster.legendary[i].name.trim()+"</span>"+
 					oMonster.legendary[i].text+
 				"</div>";
 			}	
 		}		
 		else if(typeof oMonster.legendary == "object") {
 			legendary+="<div class='legendary i4-tipe'>"+
-				"<span class='i2-tipe'>"+oMonster.legendary.name+"</span>"+
+				"<span class='i2-tipe'>"+oMonster.legendary.name.trim()+"</span>"+
 				oMonster.legendary.text+
 			"</div>";
 		}
@@ -439,14 +439,14 @@ window.onload = function(){
 		if(Array.isArray(oMonster.spells)) {
 			for(var i in oMonster.spells){
 				spells+="<div class='spells'>"+
-					"<span class='i2-tipe'>"+oMonster.spells[i].name+"</span>"+
+					"<span class='i2-tipe'>"+oMonster.spells[i].name.trim()+"</span>"+
 					oMonster.spells[i].text+
 				"</div>";
 			}	
 		}		
 		else if(typeof oMonster.spells == "object") {
 			spells+="<div class='spells'>"+
-				"<span class='i2-tipe'>"+oMonster.spells.name+"</span>"+
+				"<span class='i2-tipe'>"+oMonster.spells.name.trim()+"</span>"+
 				oMonster.spells.text+
 			"</div>";
 		}

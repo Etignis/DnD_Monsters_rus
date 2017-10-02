@@ -1138,6 +1138,43 @@ p {
   padding: .4em;
   height: 133mm;
   margin: 1mm;
+  overflow-y: auto;
+}
+.monster_card .left .inner::-webkit-scrollbar,
+.monster_card .right .inner::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.monster_card .left .inner::-webkit-scrollbar-thumb,
+.monster_card .right .inner::-webkit-scrollbar-thumb {
+  background: #777;
+}
+.monster_card .left .inner::-webkit-scrollbar-track,
+.monster_card .right .inner::-webkit-scrollbar-track {
+  background: #ddd;
+}
+.monster_card .left .inner body,
+.monster_card .right .inner body {
+  scrollbar-face-color: #777;
+  scrollbar-track-color: #ddd;
+}
+.monster_card .left .inner::-webkit-scrollbar,
+.monster_card .right .inner::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.monster_card .left .inner::-webkit-scrollbar-thumb,
+.monster_card .right .inner::-webkit-scrollbar-thumb {
+  background: #777;
+}
+.monster_card .left .inner::-webkit-scrollbar-track,
+.monster_card .right .inner::-webkit-scrollbar-track {
+  background: #ddd;
+}
+.monster_card .left .inner body,
+.monster_card .right .inner body {
+  scrollbar-face-color: #777;
+  scrollbar-track-color: #ddd;
 }
 .monster_card .i-tipe {
   text-transform: uppercase;
@@ -1184,6 +1221,9 @@ p {
 .monster_card .stats .cha {
   display: inline-block;
   width: 4em;
+}
+.i2-tipe:after {
+  content: ":";
 }
 #lockedMonstersArea {
   margin-bottom: .3em;
@@ -1472,6 +1512,10 @@ p {
   }
   .card:hover .hide_monster {
     display: none;
+  }
+  .monster_card .left .inner,
+  .monster_card .right .inner {
+    overflow-y: hidden;
   }
   * {
     -webkit-print-color-adjust: exact;
