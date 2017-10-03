@@ -533,7 +533,14 @@ window.onload = function(){
 		var add = oMonster.add? "<hr>"+oMonster.add : "";
 
 		var sFiction = oMonster.fiction? 	'<div class="fiction">' + oMonster.fiction + '</div>' : "";
-		var sImage = oMonster.image? 	'<div class="image"><img src="img/monsters/' + oMonster.image + '" style="max-width: 200px"></div>' : "";
+		var sImage = "";
+		if(oMonster.image) {
+			if(typeof oMonster.image == "string") {
+				sImage = '<div class="image"><img src="img/monsters/' + oMonster.image + '" style="max-width: 200px"></div>';
+			} else if(oMonster.image.src && oMonster.image.type) {
+				sImage = '<div class="image '+oMonster.image.type+'"><img src="img/monsters/' + oMonster.image.src + '" style="max-width: 200px"></div>';
+			}
+		}
 
 		var ret = '<div class="' + sClass + '" data-name="'+name.toLowerCase()+'">'+
 		oHide+
