@@ -585,11 +585,16 @@ window.onload = function(){
 
 	function createMonstersIndex() {
 		var monsters = "";
-		allMonsters.forEach(function(item) {
-			monsters += createCard(item);
-		});
-		$(".monsterContainer").html(monsters);
-		$("#info_text").hide();
+		try{
+			allMonsters.forEach(function(item) {
+				monsters += createCard(item);
+			});
+			$(".monsterContainer").html(monsters);
+			$("#info_text").hide();
+		} catch (err) {
+			$("#info_text p").first().append("<br>[ОШИБКА]: Не могу загрузить базу монстров!");
+			return false;
+		}
 	}
 	function showFiltered(oParams) {
 
@@ -606,9 +611,14 @@ window.onload = function(){
 		var monsters = "";
 
 		filteredMonsters = []; //arrDiff(filteredMonsters, aHiddenMonsters);
-		allMonsters.forEach(function(el) {
-			filteredMonsters.push(el);
-		});
+		try{
+			allMonsters.forEach(function(el) {
+				filteredMonsters.push(el);
+			});
+		} catch(err) {
+			$("#info_text p").first().append("<br>[ОШИБКА]: Не могу загрузить базу монстров!");
+			return false;
+		}
 
 		// name
 		if (sName) {
@@ -758,35 +768,39 @@ window.onload = function(){
 		//monsterLevels[]
 		//monsterTypes[]
 		var tmpMonsterTypes = {};
-
-		allMonsters.forEach(function(el) {
-			// level
-			if(monsterLevels.indexOf(el.cr)<0) {
-				monsterLevels.push(el.cr);
-			}
-
-			// types
-			var sTypeString = el.type;
-			var sTypeTest = sTypeString.match(/^([^(]+)(\([^)]+\))?/);
-			var sType = (sTypeTest[1] || "").trim().toLowerCase();
-			var aSubtype = (sTypeTest[2]|| "").replace(/[)(]+/g, "").split(",").map(function(el){return el.trim().toLowerCase()});
-
-			if(sType) {
-				if(!tmpMonsterTypes[sType]){
-					tmpMonsterTypes[sType] = {};
+		try{
+			allMonsters.forEach(function(el) {
+				// level
+				if(monsterLevels.indexOf(el.cr)<0) {
+					monsterLevels.push(el.cr);
 				}
-				if(aSubtype.length>0) {
-					aSubtype.forEach(function(el){
-						if(el.length>0)
-							tmpMonsterTypes[sType][el] = "";
-					});
-				}
-			}
 
-			el.sType = sType;
-			if(aSubtype.length>0)
-				el.aSubtypes = aSubtype;
-		});
+				// types
+				var sTypeString = el.type;
+				var sTypeTest = sTypeString.match(/^([^(]+)(\([^)]+\))?/);
+				var sType = (sTypeTest[1] || "").trim().toLowerCase();
+				var aSubtype = (sTypeTest[2]|| "").replace(/[)(]+/g, "").split(",").map(function(el){return el.trim().toLowerCase()});
+
+				if(sType) {
+					if(!tmpMonsterTypes[sType]){
+						tmpMonsterTypes[sType] = {};
+					}
+					if(aSubtype.length>0) {
+						aSubtype.forEach(function(el){
+							if(el.length>0)
+								tmpMonsterTypes[sType][el] = "";
+						});
+					}
+				}
+
+				el.sType = sType;
+				if(aSubtype.length>0)
+					el.aSubtypes = aSubtype;
+			});
+		} catch (err) {
+			$("#info_text p").first().append("<br>[ОШИБКА]: Не могу загрузить базу монстров!");
+			return false;
+		}
 
 		// transform monster object to array
 		for (var type in tmpMonsterTypes) {
