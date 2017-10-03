@@ -531,7 +531,7 @@ window.onload = function(){
 
 		var add = oMonster.add? "<hr>"+oMonster.add : "";
 
-		var sFiction = oMonster.fiction? 	'<div class="fiction">' + oMonster.fiction + '</div>' : "";
+		var sFiction = oMonster.fiction? 	'<div class="fiction">' + oMonster.fiction + '</div><hr>' : "";
 		var sImage = "";
 		if(oMonster.image) {
 			if(typeof oMonster.image == "string") {
