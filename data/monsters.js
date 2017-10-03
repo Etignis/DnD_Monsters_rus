@@ -54,6 +54,11 @@ var allMonsters = [
       },
       {
         "name": "Аболет (Aboleth)",
+        "image": {
+          "src": "aboleth.jpg",
+          "type": "horisontal"
+        },
+        "fiction": "Красивое описание жуткого Аболета",
         "size": "L",
         "type": "искаженное",
     		"source": "MM",
