@@ -22,7 +22,6 @@ function count_mod(num){
 	return num;
 }
 function c_string(clas, s_clas, title, cont){
-	//'<div class="vulnerable"><span class="i2-tipe">Уязвимость </span>' + $(this).find("vulnerable").text() + '</div>'+
 	var string ='';
 	if(cont != '' && cont != undefined)
 		string = '<div class="'+clas+' i4-tipe"><span class="'+s_clas+'">'+title+'</span>'+cont+'</div>';
@@ -1003,6 +1002,8 @@ window.onload = function(){
 	}
 
 	function createSidebar() {
+		$(".p_side").empty();
+
 		// menu buttons
 		createButtons();
 
@@ -1014,7 +1015,6 @@ window.onload = function(){
 
 		// level
 		createLevelToggle();
-
 
 		// type
 		createTypeToggle();
@@ -1412,14 +1412,29 @@ window.onload = function(){
 	});
 
 
+
+
+function startCatalog() {
+	console.log("Try to start...");
 	$.when(createSidebar()).done(
 		function(){
 			$("#showAllMonsters").slideDown();
 			if(getViewPortSize("width") > 600){
 				if(getConfig("infiIsShown")==true)
 					filterMonsters();
-
 			}
 		}
 	);
+}
+var nMaxTry = 3;
+	try {
+		if(typeof allMonsters) {
+			console.log("Start will be successfull");
+		}
+		startCatalog();
+	} catch(err) {
+			console.log("Start was unsuccessfull, try after 4 seconds.");
+			setTimeout(startCatalog, 4000);
+	}
+
 };
