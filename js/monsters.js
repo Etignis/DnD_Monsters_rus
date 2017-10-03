@@ -536,9 +536,9 @@ window.onload = function(){
 		var sImage = "";
 		if(oMonster.image) {
 			if(typeof oMonster.image == "string") {
-				sImage = '<div class="image"><img src="img/monsters/' + oMonster.image + '" style="max-width: 200px"></div>';
+				sImage = '<div class="image" style="float: right;"><img src="img/monsters/' + oMonster.image + '" style="max-width: 200px"></div>';
 			} else if(oMonster.image.src && oMonster.image.type) {
-				sImage = '<div class="image '+oMonster.image.type+'"><img src="img/monsters/' + oMonster.image.src + '" style="max-width: 200px"></div>';
+				sImage = '<div class="image '+oMonster.image.type+'"  style="float: right;"><img src="img/monsters/' + oMonster.image.src + '" style="max-width: 200px"></div>';
 			}
 		}
 
