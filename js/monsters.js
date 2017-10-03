@@ -532,6 +532,9 @@ window.onload = function(){
 
 		var add = oMonster.add? "<hr>"+oMonster.add : "";
 
+		var sFiction = oMonster.fiction? 	'<div class="fiction">' + oMonster.fiction + '</div>' : "";
+		var sImage = oMonster.image? 	'<div class="image"><img src="img/monsters/' + oMonster.image + '"></div>' : "";
+
 		var ret = '<div class="' + sClass + '" data-name="'+name.toLowerCase()+'">'+
 		oHide+
 		oLock+
@@ -543,6 +546,8 @@ window.onload = function(){
 				'<span class="alignment">' + oMonster.alignment + '</span>'+
 			'</div>'+
 			'<hr>'+
+			sImage+
+			sFiction+
 			'<div class="ac"><span class="i-tipe">AC </span>' + oMonster.ac + '</div>'+
 			'<div class="hp"><span class="i-tipe">HP </span>' + oMonster.hp + '</div>'+
 			'<div class="speed"><span class="i-tipe">Скорость </span>' + oMonster.speed + '</div>'+

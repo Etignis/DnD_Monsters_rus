@@ -12,7 +12,7 @@ var allMonsters = [
       {
         "name": "Ааракокра (Aarakocra)",
         "image": "aarakocra.jpg",
-        "fiction": "Красивое описание",
+        "fiction": "Красивое описание Ааракокры",
         "size": "M",
         "type": "гуманоид (ааракокра)",
     		"source": "MM",
