@@ -8,7 +8,7 @@ var monsterSources = [
 		key: "VGtM"
 	}
 ];
-var allMonsters0 = [
+var allMonsters = [
       {
         "name": "Ааракокра (Aarakocra)",
         "image": "aarakocra.jpg",
