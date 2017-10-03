@@ -533,7 +533,7 @@ window.onload = function(){
 		var add = oMonster.add? "<hr>"+oMonster.add : "";
 
 		var sFiction = oMonster.fiction? 	'<div class="fiction">' + oMonster.fiction + '</div>' : "";
-		var sImage = oMonster.image? 	'<div class="image"><img src="img/monsters/' + oMonster.image + '"></div>' : "";
+		var sImage = oMonster.image? 	'<div class="image"><img src="img/monsters/' + oMonster.image + '" style="max-width: 200px"></div>' : "";
 
 		var ret = '<div class="' + sClass + '" data-name="'+name.toLowerCase()+'">'+
 		oHide+
