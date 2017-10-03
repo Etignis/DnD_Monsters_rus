@@ -592,7 +592,7 @@ window.onload = function(){
 			$(".monsterContainer").html(monsters);
 			$("#info_text").hide();
 		} catch (err) {
-			$("#info_text p").first().append("<br>[ОШИБКА]: Не могу загрузить базу монстров!");
+			$("#info_text p").first().append("<br>[ОШИБКА]: Не могу загрузить базу монстров! {createMonstersIndex}");
 			return false;
 		}
 	}
@@ -616,7 +616,7 @@ window.onload = function(){
 				filteredMonsters.push(el);
 			});
 		} catch(err) {
-			$("#info_text p").first().append("<br>[ОШИБКА]: Не могу загрузить базу монстров!");
+			$("#info_text p").first().append("<br>[ОШИБКА]: Не могу загрузить базу монстров! {showFiltered}");
 			return false;
 		}
 
@@ -798,7 +798,7 @@ window.onload = function(){
 					el.aSubtypes = aSubtype;
 			});
 		} catch (err) {
-			$("#info_text p").first().append("<br>[ОШИБКА]: Не могу загрузить базу монстров!");
+			$("#info_text p").first().append("<br>[ОШИБКА]: Не могу загрузить базу монстров! {colectMonstersParams}");
 			return false;
 		}
 
