@@ -1246,12 +1246,14 @@ window.onload = function(){
 	$("body").on('focusout', "#NameInput", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
+			updateHash();
 			filterMonsters();
 		}, nTimerSeconds);
 	});
 	$("body").on('keyup', "#NameInput input", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
+			updateHash();
 			filterMonsters();
 		}, nTimerSeconds*3);
 	});
@@ -1411,6 +1413,46 @@ window.onload = function(){
 		}, nTimerSeconds);
 	});
 
+// url filters
+	function updateHash() {
+		var sName = $("#NameInput input").val();
+
+		//#q=spell_name
+		if(sName && sName.length>0) {
+			var sHash = "q="+sName.replace(/\s+/g, "_");
+			window.location.hash = sHash;
+		} else {
+			removeHash();
+		}
+	}
+  function getHash(){
+    $('html, body').animate({scrollTop:0}, 'fast');
+
+    var sHash = window.location.hash.slice(1); // /archive#q=spell_name
+    if(sHash && !/[^А-Яа-яЁё\w\d\/&?|_=-]/.test(sHash)) {
+      var sName = sHash.match(/q=([А-Яа-яЁё\/\w\d_]+)/);
+      if(sName && sName[1]) {
+      	$("#NameInput input").val(sName[1].replace(/[_]+/g," "));
+      	//filterSpells();
+      } else {
+      	/*/
+        $('html, body').animate({
+          scrollTop: $("#"+sHash).offset().top
+        }, 200);
+        /**/
+      }
+    } else {
+      removeHash();
+      //hideClerFilter();
+    }
+    filterSpells();
+  }
+
+  function removeHash() {
+    history.pushState("", document.title, window.location.pathname + window.location.search);
+    return false;
+  }
+  //window.onhashchange = getHash;
 
 
 
