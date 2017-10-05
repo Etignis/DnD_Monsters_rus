@@ -673,7 +673,7 @@ window.onload = function(){
 			cr+
 			'<hr>'+
 			trait+
-			"</div></div><div class='right'><div class='inner'>"+
+			"</div></div><!-- left end --><div class='right'><div class='inner'>"+
 			action+
 			legendary+
 			lair+
