@@ -353,53 +353,55 @@ window.onload = function(){
 	// helpers for monster parameters
 	function getMonsterTraits(oData) {
 		var trait = '';
-		if(Array.isArray(oMonster.trait)) {
-			for(var i in oMonster.trait){
+		if(Array.isArray(oData)) {
+			for(var i in oData){
 				trait+="<div class='trait i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.trait[i].name.trim()+"</span>"+
-					oMonster.trait[i].text+
+					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span>"+
+					oData[i].text+
 				"</div>";
 			}
 		}
-		else if(typeof oMonster.trait == "object") {
+		else if(typeof oData == "object") {
 			trait+="<div class='trait i4-tipe'>"+
-				"<span class='i2-tipe'>"+oMonster.trait.name.trim()+"</span>"+
-				oMonster.trait.text+
+				"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+				oData.text+
 			"</div>";
 		}
 		return trait;
 	}
 	function getMonsterReactions(oData) {
-		var reaction = '';
-		if(Array.isArray(oMonster.reaction)) {
-			for(var i in oMonster.reaction){
+				var reaction = '';
+		if(Array.isArray(oData)) {
+			for(var i in oData){
 				reaction+="<div class='reaction i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.reaction[i].name.trim()+"</span>"+
-					oMonster.reaction[i].text+
+					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span>"+
+					oData[i].text+
 				"</div>";
 			}
 		}
-		else if(typeof oMonster.reaction == "object") {
+		else if(typeof oData == "object") {
 			reaction+="<div class='reaction i4-tipe'>"+
-				"<span class='i2-tipe'>"+oMonster.reaction.name.trim()+"</span>"+
-				oMonster.reaction.text+
+				"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+				oData.text+
+			"</div>";
+		}
 
 		return reaction;
 	}
 	function getMonsterActions(oData) {
 		var action = '';
-		if(Array.isArray(oMonster.action)) {
-			for(var i in oMonster.action){
+		if(Array.isArray(oData)) {
+			for(var i in oData){
 				action+="<div class='action i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.action[i].name.trim()+"</span>"+
-					oMonster.action[i].text+
+					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span>"+
+					oData[i].text+
 				"</div>";
 			}
 		}
-		else if(typeof oMonster.action == "object") {
+		else if(typeof oData == "object") {
 			action+="<div class='action i4-tipe'>"+
-				"<span class='i2-tipe'>"+oMonster.action.name.trim()+"</span>"+
-				oMonster.action.text+
+				"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+				oData.text+
 			"</div>";
 		}
 		if(action!='')
@@ -409,21 +411,21 @@ window.onload = function(){
 	}
 	function getMonsterLegendary(oData) {
 		var legendary = '';
-		if(Array.isArray(oMonster.legendary)) {
-			for(var i in oMonster.legendary){
+		if(Array.isArray(oData)) {
+			for(var i in oData){
 				legendary+="<div class='legendary i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.legendary[i].name.trim()+"</span>"+
-					oMonster.legendary[i].text+
+					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span>"+
+					oData[i].text+
 				"</div>";
 			}
 		}
-		else if(typeof oMonster.legendary == "object") {
-			if(oMonster.legendary.list) {
+		else if(typeof oData == "object") {
+			if(oData.list) {
 				// new
-				var sLenendaryText = oMonster.legendary.text? "<span class='i2-tipe'>"+oMonster.legendary.text+"</span>" : "";
+				var sLenendaryText = oData.text? "<span class='i2-tipe'>"+oData.text+"</span>" : "";
 				legendary+="<div class='legendary i4-tipe'>"+
 					sLenendaryText+
-					oMonster.legendary.list.map(function(el){
+					oData.list.map(function(el){
 						var sLeg = "";
 						if(el.name) {
 							sLeg = el.name + " - ";
@@ -439,8 +441,8 @@ window.onload = function(){
 			} else{
 				// old
 				legendary+="<div class='legendary i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.legendary.name.trim()+"</span>"+
-					oMonster.legendary.text+
+					"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+					oData.text+
 				"</div>";
 			}
 
@@ -452,21 +454,21 @@ window.onload = function(){
 	}
 	function getMonsterLair(oData) {
 		var lair = '';
-		if(Array.isArray(oMonster.lair)) {
-			for(var i in oMonster.lair){
+		if(Array.isArray(oData)) {
+			for(var i in oData){
 				lair+="<div class='lair i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.lair[i].name.trim()+"</span>"+
-					oMonster.lair[i].text+
+					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span>"+
+					oData[i].text+
 				"</div>";
 			}
 		}
-		else if(typeof oMonster.lair == "object") {
-			if(oMonster.lair.list) {
+		else if(typeof oData == "object") {
+			if(oData.list) {
 				// new
-				var sLenendaryText = oMonster.lair.text? "<span class='i2-tipe'>"+oMonster.lair.text+"</span>" : "";
+				var sLenendaryText = oData.text? "<span class='i2-tipe'>"+oData.text+"</span>" : "";
 				lair+="<div class='lair i4-tipe'>"+
 					sLenendaryText+
-					oMonster.lair.list.map(function(el){
+					oData.list.map(function(el){
 						var sLeg = "";
 						if(el.name) {
 							sLeg = el.name + " - ";
@@ -482,8 +484,8 @@ window.onload = function(){
 			} else{
 				// old
 				lair+="<div class='lair i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.lair.name.trim()+"</span>"+
-					oMonster.lair.text+
+					"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+					oData.text+
 				"</div>";
 			}
 
@@ -495,21 +497,21 @@ window.onload = function(){
 	}
 	function getMonsterLocal(oData) {
 		var local = '';
-		if(Array.isArray(oMonster.local)) {
-			for(var i in oMonster.local){
+		if(Array.isArray(oData)) {
+			for(var i in oData){
 				local+="<div class='local i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.local[i].name.trim()+"</span>"+
-					oMonster.local[i].text+
+					"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+					oData[i].text+
 				"</div>";
 			}
 		}
-		else if(typeof oMonster.local == "object") {
-			if(oMonster.local.list) {
+		else if(typeof oData == "object") {
+			if(oData.list) {
 				// new
-				var sLenendaryText = oMonster.local.text? "<span class='i2-tipe'>"+oMonster.local.text+"</span>" : "";
+				var sLenendaryText = oData.text? "<span class='i2-tipe'>"+oData.text+"</span>" : "";
 				local+="<div class='local i4-tipe'>"+
 					sLenendaryText+
-					oMonster.local.list.map(function(el){
+					oData.list.map(function(el){
 						var sLeg = "";
 						if(el.name) {
 							sLeg = el.name + " - ";
@@ -525,8 +527,8 @@ window.onload = function(){
 			} else{
 				// old
 				local+="<div class='local i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.local.name.trim()+"</span>"+
-					oMonster.local.text+
+					"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+					oData.text+
 				"</div>";
 			}
 
@@ -536,20 +538,20 @@ window.onload = function(){
 
 		return local;
 	}
-	function getMonsterSprlls(oData) {
+	function getMonsterSpells(oData) {
 		var spells = '';
-		if(Array.isArray(oMonster.spells)) {
-			for(var i in oMonster.spells){
+		if(Array.isArray(oData)) {
+			for(var i in oData){
 				spells+="<div class='spells'>"+
-					"<span class='i2-tipe'>"+oMonster.spells[i].name.trim()+"</span>"+
-					oMonster.spells[i].text+
+					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span>"+
+					oData[i].text+
 				"</div>";
 			}
 		}
-		else if(typeof oMonster.spells == "object") {
+		else if(typeof oData == "object") {
 			spells+="<div class='spells'>"+
-				"<span class='i2-tipe'>"+oMonster.spells.name.trim()+"</span>"+
-				oMonster.spells.text+
+				"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+				oData.text+
 			"</div>";
 		}
 
@@ -566,8 +568,7 @@ window.onload = function(){
 		if (sClass == undefined || sClass == "") {
 			sClass = "monster";
 		}
-		switch(size)
-		{
+		switch(size){
 			case "T": size="Крошечный"; break;
 			case "S": size="Маленький"; break;
 			case "M": size="Средний"; break;
@@ -577,195 +578,20 @@ window.onload = function(){
 		}
 		size='<span class="size">' + size + '</span>';
 
-		var trait = '';
-		if(Array.isArray(oMonster.trait)) {
-			for(var i in oMonster.trait){
-				trait+="<div class='trait i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.trait[i].name.trim()+"</span>"+
-					oMonster.trait[i].text+
-				"</div>";
-			}
-		}
-		else if(typeof oMonster.trait == "object") {
-			trait+="<div class='trait i4-tipe'>"+
-				"<span class='i2-tipe'>"+oMonster.trait.name.trim()+"</span>"+
-				oMonster.trait.text+
-			"</div>";
-		}
+		var trait = getMonsterTraits(oMonster.trait);
+		
+		var reaction = getMonsterReactions(oMonster.reaction);
+		
+		var action = getMonsterActions(oMonster.action);
+		
+		var legendary = getMonsterLegendary(oMonster.legendary);
+		
+		var lair = getMonsterLair(oMonster.lair);		
 
-		var reaction = '';
-		if(Array.isArray(oMonster.reaction)) {
-			for(var i in oMonster.reaction){
-				reaction+="<div class='reaction i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.reaction[i].name.trim()+"</span>"+
-					oMonster.reaction[i].text+
-				"</div>";
-			}
-		}
-		else if(typeof oMonster.reaction == "object") {
-			reaction+="<div class='reaction i4-tipe'>"+
-				"<span class='i2-tipe'>"+oMonster.reaction.name.trim()+"</span>"+
-				oMonster.reaction.text+
-			"</div>";
-		}
+		var local = getMonsterLocal(oMonster.local);		
 
-		var action = '';
-		if(Array.isArray(oMonster.action)) {
-			for(var i in oMonster.action){
-				action+="<div class='action i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.action[i].name.trim()+"</span>"+
-					oMonster.action[i].text+
-				"</div>";
-			}
-		}
-		else if(typeof oMonster.action == "object") {
-			action+="<div class='action i4-tipe'>"+
-				"<span class='i2-tipe'>"+oMonster.action.name.trim()+"</span>"+
-				oMonster.action.text+
-			"</div>";
-		}
-		if(action!='')
-			action="<div class='actions i3-tipe'>Действия</div>"+action;
-
-		var legendary = '';
-		if(Array.isArray(oMonster.legendary)) {
-			for(var i in oMonster.legendary){
-				legendary+="<div class='legendary i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.legendary[i].name.trim()+"</span>"+
-					oMonster.legendary[i].text+
-				"</div>";
-			}
-		}
-		else if(typeof oMonster.legendary == "object") {
-			if(oMonster.legendary.list) {
-				// new
-				var sLenendaryText = oMonster.legendary.text? "<span class='i2-tipe'>"+oMonster.legendary.text+"</span>" : "";
-				legendary+="<div class='legendary i4-tipe'>"+
-					sLenendaryText+
-					oMonster.legendary.list.map(function(el){
-						var sLeg = "";
-						if(el.name) {
-							sLeg = el.name + " - ";
-						}
-						if(el.text) {
-							sLeg += el.text;
-						}
-
-						return sLeg;
-					}).join("")+
-				"</div>";
-
-			} else{
-				// old
-				legendary+="<div class='legendary i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.legendary.name.trim()+"</span>"+
-					oMonster.legendary.text+
-				"</div>";
-			}
-
-		}
-		if(legendary!='')
-			legendary="<div class='legendary i3-tipe'>Легендарные Действия</div>"+legendary;
-
-		var lair = '';
-		if(Array.isArray(oMonster.lair)) {
-			for(var i in oMonster.lair){
-				lair+="<div class='lair i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.lair[i].name.trim()+"</span>"+
-					oMonster.lair[i].text+
-				"</div>";
-			}
-		}
-		else if(typeof oMonster.lair == "object") {
-			if(oMonster.lair.list) {
-				// new
-				var sLenendaryText = oMonster.lair.text? "<span class='i2-tipe'>"+oMonster.lair.text+"</span>" : "";
-				lair+="<div class='lair i4-tipe'>"+
-					sLenendaryText+
-					oMonster.lair.list.map(function(el){
-						var sLeg = "";
-						if(el.name) {
-							sLeg = el.name + " - ";
-						}
-						if(el.text) {
-							sLeg += el.text;
-						}
-
-						return sLeg;
-					}).join("")+
-				"</div>";
-
-			} else{
-				// old
-				lair+="<div class='lair i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.lair.name.trim()+"</span>"+
-					oMonster.lair.text+
-				"</div>";
-			}
-
-		}
-		if(lair!='')
-			lair="<div class='lair i3-tipe'>Легендарные Действия</div>"+lair;
-
-		var local = '';
-		if(Array.isArray(oMonster.local)) {
-			for(var i in oMonster.local){
-				local+="<div class='local i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.local[i].name.trim()+"</span>"+
-					oMonster.local[i].text+
-				"</div>";
-			}
-		}
-		else if(typeof oMonster.local == "object") {
-			if(oMonster.local.list) {
-				// new
-				var sLenendaryText = oMonster.local.text? "<span class='i2-tipe'>"+oMonster.local.text+"</span>" : "";
-				local+="<div class='local i4-tipe'>"+
-					sLenendaryText+
-					oMonster.local.list.map(function(el){
-						var sLeg = "";
-						if(el.name) {
-							sLeg = el.name + " - ";
-						}
-						if(el.text) {
-							sLeg += el.text;
-						}
-
-						return sLeg;
-					}).join("")+
-				"</div>";
-
-			} else{
-				// old
-				local+="<div class='local i4-tipe'>"+
-					"<span class='i2-tipe'>"+oMonster.local.name.trim()+"</span>"+
-					oMonster.local.text+
-				"</div>";
-			}
-
-		}
-		if(local!='')
-			local="<div class='local i3-tipe'>Легендарные Действия</div>"+local;
-
-		var spells = '';
-		if(Array.isArray(oMonster.spells)) {
-			for(var i in oMonster.spells){
-				spells+="<div class='spells'>"+
-					"<span class='i2-tipe'>"+oMonster.spells[i].name.trim()+"</span>"+
-					oMonster.spells[i].text+
-				"</div>";
-			}
-		}
-		else if(typeof oMonster.spells == "object") {
-			spells+="<div class='spells'>"+
-				"<span class='i2-tipe'>"+oMonster.spells.name.trim()+"</span>"+
-				oMonster.spells.text+
-			"</div>";
-		}
-
-		//console.log("spells: "+spells);
-		if(spells!='')
-			spells="<div class='spellist i3-tipe'>Заклинания</div>"+spells;
+		var spells = getMonsterSpells(oMonster.spells);
+		
 
 		var stats = '';
 		var str = oMonster.str;
