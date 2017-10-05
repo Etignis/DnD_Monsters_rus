@@ -1588,7 +1588,7 @@ window.onload = function(){
       removeHash();
       //hideClerFilter();
     }
-    filterSpells();
+    filterMonsters();
   }
 
   function removeHash() {
@@ -1601,15 +1601,19 @@ window.onload = function(){
 
 function startCatalog() {
 	console.log("Try to start...");
-	$.when(createSidebar()).done(
-		function(){
-			$("#showAllMonsters").slideDown();
-			if(getViewPortSize("width") > 600){
-				if(getConfig("infiIsShown")==true)
-					filterMonsters();
-			}
-		}
-	);
+	// $.when(createSidebar()).done(
+		// function(){
+			// $("#showAllMonsters").slideDown();
+			// if(getViewPortSize("width") > 600){
+				// if(getConfig("infiIsShown")==true)
+					// getHash();
+			// } else{
+        // getHash();
+      // }
+		// }
+	// );
+  createSidebar();
+  getHash();
 }
 var nMaxTry = 3;
 	try {
