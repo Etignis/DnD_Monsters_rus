@@ -642,15 +642,16 @@ window.onload = function(){
 				sImage = '<div class="image '+oMonster.image.type+'"  style="float: right;"><img src="img/monsters/' + oMonster.image.src + '" style="max-width: 350px"></div>';
 			}
 		}
+		var sMonsterType = oMonster.type? '<span class="type">' + (oMonster.typeLink? "<a href='#"+oMonster.typeLink+"'>"+oMonster.type+"</a>" : oMonster.type) + '</span>' : "";
 
 		var ret = '<div class="' + sClass + '" data-name="'+name.toLowerCase()+'">'+
-		oHide+
-		oLock+
+			oHide+
+			oLock+
 			"<div class='left'><div class='inner'>"+
 			'<div class="name">' + name + '</div>'+
 			'<div>'+
 				size+
-				'<span class="type">' + oMonster.type + '</span>'+
+				oMonster.type+
 				'<span class="alignment">' + oMonster.alignment + '</span>'+
 			'</div>'+
 			'<hr>'+
