@@ -426,13 +426,115 @@ window.onload = function(){
 			}
 		}
 		else if(typeof oMonster.legendary == "object") {
-			legendary+="<div class='legendary i4-tipe'>"+
-				"<span class='i2-tipe'>"+oMonster.legendary.name.trim()+"</span>"+
-				oMonster.legendary.text+
-			"</div>";
+			if(oMonster.legendary.list) {
+				// new
+				var sLenendaryText = oMonster.legendary.text? "<span class='i2-tipe'>"+oMonster.legendary.text+"</span>" : "";
+				legendary+="<div class='legendary i4-tipe'>"+
+					sLenendaryText+
+					oMonster.legendary.list.map(function(el){
+						var sLeg = "";
+						if(el.name) {
+							sLeg = el.name + " - ";
+						}
+						if(el.text) {
+							sLeg += el.text;
+						}
+
+						return sLeg;
+					}).join("")+
+				"</div>";
+
+			} else{
+				// old
+				legendary+="<div class='legendary i4-tipe'>"+
+					"<span class='i2-tipe'>"+oMonster.legendary.name.trim()+"</span>"+
+					oMonster.legendary.text+
+				"</div>";
+			}
+
 		}
 		if(legendary!='')
 			legendary="<div class='legendary i3-tipe'>Легендарные Действия</div>"+legendary;
+
+		var lair = '';
+		if(Array.isArray(oMonster.lair)) {
+			for(var i in oMonster.lair){
+				lair+="<div class='lair i4-tipe'>"+
+					"<span class='i2-tipe'>"+oMonster.lair[i].name.trim()+"</span>"+
+					oMonster.lair[i].text+
+				"</div>";
+			}
+		}
+		else if(typeof oMonster.lair == "object") {
+			if(oMonster.lair.list) {
+				// new
+				var sLenendaryText = oMonster.lair.text? "<span class='i2-tipe'>"+oMonster.lair.text+"</span>" : "";
+				lair+="<div class='lair i4-tipe'>"+
+					sLenendaryText+
+					oMonster.lair.list.map(function(el){
+						var sLeg = "";
+						if(el.name) {
+							sLeg = el.name + " - ";
+						}
+						if(el.text) {
+							sLeg += el.text;
+						}
+
+						return sLeg;
+					}).join("")+
+				"</div>";
+
+			} else{
+				// old
+				lair+="<div class='lair i4-tipe'>"+
+					"<span class='i2-tipe'>"+oMonster.lair.name.trim()+"</span>"+
+					oMonster.lair.text+
+				"</div>";
+			}
+
+		}
+		if(lair!='')
+			lair="<div class='lair i3-tipe'>Легендарные Действия</div>"+lair;
+
+		var local = '';
+		if(Array.isArray(oMonster.local)) {
+			for(var i in oMonster.local){
+				local+="<div class='local i4-tipe'>"+
+					"<span class='i2-tipe'>"+oMonster.local[i].name.trim()+"</span>"+
+					oMonster.local[i].text+
+				"</div>";
+			}
+		}
+		else if(typeof oMonster.local == "object") {
+			if(oMonster.local.list) {
+				// new
+				var sLenendaryText = oMonster.local.text? "<span class='i2-tipe'>"+oMonster.local.text+"</span>" : "";
+				local+="<div class='local i4-tipe'>"+
+					sLenendaryText+
+					oMonster.local.list.map(function(el){
+						var sLeg = "";
+						if(el.name) {
+							sLeg = el.name + " - ";
+						}
+						if(el.text) {
+							sLeg += el.text;
+						}
+
+						return sLeg;
+					}).join("")+
+				"</div>";
+
+			} else{
+				// old
+				local+="<div class='local i4-tipe'>"+
+					"<span class='i2-tipe'>"+oMonster.local.name.trim()+"</span>"+
+					oMonster.local.text+
+				"</div>";
+			}
+
+		}
+		if(local!='')
+			local="<div class='local i3-tipe'>Легендарные Действия</div>"+local;
 
 		var spells = '';
 		if(Array.isArray(oMonster.spells)) {
@@ -573,6 +675,8 @@ window.onload = function(){
 			"</div></div><div class='right'><div class='inner'>"+
 			action+
 			legendary+
+			lair+
+			local+
 			spells+
 			reaction+
 			add+
