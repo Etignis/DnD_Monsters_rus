@@ -1080,6 +1080,26 @@ p {
 .monster .type:after {
   content: ",";
 }
+.monster .beautifullDescription {
+  position: relative;
+}
+.monster .sh_beautifullDescription {
+  position: absolute;
+  top: -2rem;
+  right: 0rem;
+  text-decoration: none;
+  padding: .1em .3em .2em;
+  float: right;
+  color: #c4c4c4;
+  background: #fff;
+  transition: color .2s;
+}
+.monster .sh_beautifullDescription:hover {
+  color: #9d9d9d;
+}
+.monster .sh_beautifullDescription:active {
+  color: #5e5e5e;
+}
 .monster .stats > span {
   padding: 0 0.6em 0 0;
 }
@@ -1119,6 +1139,9 @@ p {
   height: 0!important;
   margin: 0!important;
   padding: 0!important;
+}
+.monster_card .beautifullDescription {
+  display: none;
 }
 .monster_card .left,
 .monster_card .right {

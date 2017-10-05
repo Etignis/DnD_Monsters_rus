@@ -491,7 +491,7 @@ window.onload = function(){
 
 		}
 		if(lair!='')
-			lair="<div class='lair i3-tipe'>Легендарные Действия</div>"+lair;
+			lair="<div class='lair i3-tipe'>Действия логова</div>"+lair;
 
 		return lair;
 	}
@@ -534,7 +534,7 @@ window.onload = function(){
 
 		}
 		if(local!='')
-			local="<div class='local i3-tipe'>Легендарные Действия</div>"+local;
+			local="<div class='local i3-tipe'>Эффекты местности</div>"+local;
 
 		return local;
 	}
@@ -562,35 +562,77 @@ window.onload = function(){
 		return spells;
 	}
 
+  function getMonsterAbils(oData, sTitle, sClassName) {
+    var ret = '';
+		if(Array.isArray(oData)) {
+			for(var i in oData){
+				ret+="<div class='"+sClassName+" i4-tipe'>"+
+					(oData[i].name? "<span class='i2-tipe'>"+oData[i].name.trim()+"</span>" : "")+
+					oData[i].text+
+				"</div>";
+			}
+		}
+		else if(typeof oData == "object") {
+			if(oData.list) {
+				// new
+				//var sLenendaryText = oData.text? "<span class='i2-tipe'>"+oData.text+"</span>" : "";
+				var sText = oData.text? oData.text : "";
+				ret+="<div class='"+sClassName+" i4-tipe'>"+
+					sText+
+          "<ul>"+
+					oData.list.map(function(el){
+						var sLeg = "";
+						if(el.name) {
+							sLeg = el.name + " - ";
+						}
+						if(el.text) {
+							sLeg += el.text;
+						}
+
+						return "<li>" + sLeg + "</li>";
+					}).join("")+
+          "</ul>"+
+				"</div>";
+
+			} else{
+				// old
+				ret+="<div class='"+sClassName+" i4-tipe'>"+
+					"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+					oData.text+
+				"</div>";
+			}
+
+		}
+		if(ret!='' && sTitle) {
+      
+			ret= "<div class='"+sClassName+" i3-tipe'>"+sTitle+"</div>"+ret;
+    }
+
+		return ret;
+  }
+  
 	function createCard(oMonster, sLockedSpell, sClass) {
 		var size = '';
-		size = oMonster.size;
+		size = monsterSize[oMonster.size];
 		if (sClass == undefined || sClass == "") {
 			sClass = "monster";
 		}
-		switch(size){
-			case "T": size="Крошечный"; break;
-			case "S": size="Маленький"; break;
-			case "M": size="Средний"; break;
-			case "L": size="Большой"; break;
-			case "H": size="Огромный"; break;
-			case "G": size="Колоссальный"; break;
-		}
+
 		size='<span class="size">' + size + '</span>';
 
-		var trait = getMonsterTraits(oMonster.trait);
+		var trait = getMonsterAbils(oMonster.trait, null, "trait");//getMonsterTraits(oMonster.trait);
 		
-		var reaction = getMonsterReactions(oMonster.reaction);
+		var reaction = getMonsterAbils(oMonster.reaction, "Реакция", "reaction");//getMonsterReactions(oMonster.reaction);
 		
-		var action = getMonsterActions(oMonster.action);
+		var action = getMonsterAbils(oMonster.action, "Действия", "action");//getMonsterActions(oMonster.action);
 		
-		var legendary = getMonsterLegendary(oMonster.legendary);
+		var legendary = getMonsterAbils(oMonster.legendary, "Легендарные действия", "legendary");//getMonsterLegendary(oMonster.legendary);
 		
-		var lair = getMonsterLair(oMonster.lair);		
+		var lair = getMonsterAbils(oMonster.lair, "Действия логова", "lair");//getMonsterLair(oMonster.lair);		
 
-		var local = getMonsterLocal(oMonster.local);		
+		var local = getMonsterAbils(oMonster.local, "Эффекты местности", "local");//getMonsterLocal(oMonster.local);		
 
-		var spells = getMonsterSpells(oMonster.spells);
+		var spells = getMonsterAbils(oMonster.spells, "Заклинания", "spells");//getMonsterSpells(oMonster.spells);
 		
 
 		var stats = '';
@@ -618,46 +660,9 @@ window.onload = function(){
 		var name= oMonster.name;
 
 		// experience
-		var expa = {
-			"0": "0 - 10",
-			"1/8": "25",
-			"1/4": "50",
-			"1/2": "100",
-			"1": "200",
-			"2": "450",
-			"3": "700",
-			"4": "1100",
-			"5": "1800",
-			"6": "2300",
-			"7": "2900",
-			"8": "3900",
-			"9": "5000",
-			"10": "5900",
-			"11": "7200",
-			"12": "8400",
-			"13": "10000",
-			"14": "11500",
-			"15": "13000",
-			"16": "15000",
-			"17": "18000",
-			"18": "20000",
-			"19": "22000",
-			"20": "25000",
-			"21": "33000",
-			"22": "41000",
-			"23": "50000",
-			"24": "62000",
-			"25": "75000",
-			"26": "90000",
-			"27": "105000",
-			"28": "120000",
-			"29": "135000",
-			"30": "155000"
-		};
-
 		var experience = "?";
 		try{
-			experience = expa[oMonster.cr].replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
+			experience = monsterExpa[oMonster.cr].replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
 		} catch (err) {
 
 		}
@@ -675,11 +680,16 @@ window.onload = function(){
 		var sImage = "";
 		if(oMonster.image) {
 			if(typeof oMonster.image == "string") {
-				sImage = '<div class="image" style="float: right;"><img src="img/monsters/' + oMonster.image + '" style="max-width: 350px"></div>';
+				//sImage = '<div class="image" style="float: right;"><img src="img/monsters/' + oMonster.image + '" style="max-width: 350px"></div>';
+        sImage = '<img src="img/monsters/' + oMonster.image + '" style="max-width: 350px; float: right">';
 			} else if(oMonster.image.src && oMonster.image.type) {
-				sImage = '<div class="image '+oMonster.image.type+'"  style="float: right;"><img src="img/monsters/' + oMonster.image.src + '" style="max-width: 350px"></div>';
+				//sImage = '<div class="image '+oMonster.image.type+'"  style="float: right;"><img src="img/monsters/' + oMonster.image.src + '" style="max-width: 350px"></div>';
+        sImage = '<img src="img/monsters/' + oMonster.image.src + '" style="max-width: 350px; float: right">';
 			}
 		}
+    
+    var sBeautifullDescription = (sFiction || sImage)? "<div class='beautifullDescription'><a href='#' class='sh_beautifullDescription'>Скрыть/показать описание</a><div class='beautifullDescriptionInner'>" +sImage+sFiction+"</div></div>" : "";
+    
 		var sMonsterType = oMonster.type? '<span class="type">' + (oMonster.typeLink? "<a href='#"+oMonster.typeLink+"'>"+oMonster.type+"</a>" : oMonster.type) + '</span>' : "";
 
 		var ret = '<div class="' + sClass + '" data-name="'+name.toLowerCase()+'">'+
@@ -689,12 +699,11 @@ window.onload = function(){
 			'<div class="name">' + name + '</div>'+
 			'<div>'+
 				size+
-				oMonster.type+
+				sMonsterType+
 				'<span class="alignment">' + oMonster.alignment + '</span>'+
 			'</div>'+
 			'<hr>'+
-			sImage+
-			sFiction+
+      sBeautifullDescription+
 			'<div class="ac"><span class="i-tipe">AC </span>' + oMonster.ac + '</div>'+
 			'<div class="hp"><span class="i-tipe">HP </span>' + oMonster.hp + '</div>'+
 			'<div class="speed"><span class="i-tipe">Скорость </span>' + oMonster.speed + '</div>'+
@@ -1484,7 +1493,7 @@ window.onload = function(){
 
 		return false;
 	})
-	// unhide spells
+	// unhide monsters
 	$("body").on('click', ".bUnhideMonster", function(){
 		var sName = $(this).attr("data-name")
 		// update hidden spells array
@@ -1498,6 +1507,12 @@ window.onload = function(){
 
 		return false;
 	})
+  
+  // show/hide beautifull description
+  $("body").on("click", ".sh_beautifullDescription", function() {
+    $(this).next(".beautifullDescriptionInner").toggle();
+    return false;
+  });
 	$("body").on("click", ".bReturnUnvisible", function() {
 		aHiddenMonsters = [];// show list of hidden spells
 		createHiddenMonstersList();

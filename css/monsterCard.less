@@ -80,6 +80,26 @@
 			content:",";
 		}
 	}
+	.beautifullDescription{
+		position: relative;
+	}
+	.sh_beautifullDescription{
+		position: absolute;
+		top: -2rem;		
+		right: 0rem;
+		text-decoration: none;
+		padding: .1em .3em .2em;
+		float: right;
+		color: darken(@l-gray, 10%);
+		background: @white;
+		transition: color .2s;
+		&:hover{
+			color: darken(@l-gray, 25%);	
+		}
+		&:active{
+			color: darken(@l-gray, 50%);	
+		}
+	}
 	.stats{
 		&>span{
 			padding:  0 @pr*1.5 0 0;
@@ -120,6 +140,10 @@
 	&:after, &:before{
 	    content: "";
 	    .clear();
+	}
+	
+	.beautifullDescription{
+		display: none;
 	}
 	
 	.left, .right{
