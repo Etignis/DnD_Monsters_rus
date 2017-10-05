@@ -577,9 +577,9 @@ window.onload = function(){
 				// new
 				//var sLenendaryText = oData.text? "<span class='i2-tipe'>"+oData.text+"</span>" : "";
 				var sText = oData.text? oData.text : "";
-				ret+="<div class='"+sClassName+" i4-tipe'>"+
+				ret+=
 					sText+
-          "<ul>"+
+
 					oData.list.map(function(el){
 						var sLeg = "";
 						if(el.name) {
@@ -589,10 +589,8 @@ window.onload = function(){
 							sLeg += el.text;
 						}
 
-						return "<li>" + sLeg + "</li>";
-					}).join("")+
-          "</ul>"+
-				"</div>";
+						return "<div class='"+sClassName+" i4-tipe'>"+sLeg+"</div>";
+					}).join("");
 
 			} else{
 				// old
