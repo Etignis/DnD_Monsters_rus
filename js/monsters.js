@@ -583,7 +583,7 @@ window.onload = function(){
 					oData.list.map(function(el){
 						var sLeg = "";
 						if(el.name) {
-							sLeg = el.name + " - ";
+							sLeg =  "<span class='i2-tipe'>"+el.name+"</span>";
 						}
 						if(el.text) {
 							sLeg += el.text;
