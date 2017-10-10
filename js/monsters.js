@@ -361,18 +361,22 @@ window.onload = function(){
 				"</div>";
 			}
 		}
+
 		else if(typeof oData == "object") {
+
 			trait+="<div class='trait i4-tipe'>"+
 				"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
 				oData.text+
 			"</div>";
 		}
+
 		return trait;
 	}
 	function getMonsterReactions(oData) {
 				var reaction = '';
 		if(Array.isArray(oData)) {
 			for(var i in oData){
+
 				reaction+="<div class='reaction i4-tipe'>"+
 					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span>"+
 					oData[i].text+
@@ -380,6 +384,7 @@ window.onload = function(){
 			}
 		}
 		else if(typeof oData == "object") {
+
 			reaction+="<div class='reaction i4-tipe'>"+
 				"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
 				oData.text+
@@ -399,6 +404,7 @@ window.onload = function(){
 			}
 		}
 		else if(typeof oData == "object") {
+
 			action+="<div class='action i4-tipe'>"+
 				"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
 				oData.text+
@@ -407,9 +413,11 @@ window.onload = function(){
 		if(action!='')
 			action="<div class='actions i3-tipe'>Действия</div>"+action;
 
+
 		return action;
 	}
 	function getMonsterLegendary(oData) {
+
 		var legendary = '';
 		if(Array.isArray(oData)) {
 			for(var i in oData){
@@ -548,7 +556,9 @@ window.onload = function(){
 				"</div>";
 			}
 		}
+
 		else if(typeof oData == "object") {
+
 			spells+="<div class='spells'>"+
 				"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
 				oData.text+
@@ -602,13 +612,13 @@ window.onload = function(){
 
 		}
 		if(ret!='' && sTitle) {
-      
+
 			ret= "<div class='"+sClassName+" i3-tipe'>"+sTitle+"</div>"+ret;
     }
 
 		return ret;
   }
-  
+
 	function createCard(oMonster, sLockedSpell, sClass) {
 		var size = '';
 		size = monsterSize[oMonster.size];
@@ -619,19 +629,19 @@ window.onload = function(){
 		size='<span class="size">' + size + '</span>';
 
 		var trait = getMonsterAbils(oMonster.trait, null, "trait");//getMonsterTraits(oMonster.trait);
-		
-		var reaction = getMonsterAbils(oMonster.reaction, "Реакция", "reaction");//getMonsterReactions(oMonster.reaction);
-		
-		var action = getMonsterAbils(oMonster.action, "Действия", "action");//getMonsterActions(oMonster.action);
-		
-		var legendary = getMonsterAbils(oMonster.legendary, "Легендарные действия", "legendary");//getMonsterLegendary(oMonster.legendary);
-		
-		var lair = getMonsterAbils(oMonster.lair, "Действия логова", "lair");//getMonsterLair(oMonster.lair);		
 
-		var local = getMonsterAbils(oMonster.local, "Эффекты местности", "local");//getMonsterLocal(oMonster.local);		
+		var reaction = getMonsterAbils(oMonster.reaction, "Реакция", "reaction");//getMonsterReactions(oMonster.reaction);
+
+		var action = getMonsterAbils(oMonster.action, "Действия", "action");//getMonsterActions(oMonster.action);
+
+		var legendary = getMonsterAbils(oMonster.legendary, "Легендарные действия", "legendary");//getMonsterLegendary(oMonster.legendary);
+
+		var lair = getMonsterAbils(oMonster.lair, "Действия логова", "lair");//getMonsterLair(oMonster.lair);
+
+		var local = getMonsterAbils(oMonster.local, "Эффекты местности", "local");//getMonsterLocal(oMonster.local);
 
 		var spells = getMonsterAbils(oMonster.spells, "Заклинания", "spells");//getMonsterSpells(oMonster.spells);
-		
+
 
 		var stats = '';
 		var str = oMonster.str;
@@ -674,6 +684,7 @@ window.onload = function(){
 
 		var add = oMonster.add? "<hr>"+oMonster.add : "";
 
+
 		var sFiction = oMonster.fiction? 	'<div class="fiction">' + oMonster.fiction + '</div><hr>' : "";
 		var sImage = "";
 		if(oMonster.image) {
@@ -685,9 +696,9 @@ window.onload = function(){
         sImage = '<img src="img/monsters/' + oMonster.image.src + '">';
 			}
 		}
-    
+
     var sBeautifullDescription = (sFiction || sImage)? "<div class='beautifullDescription'><a href='#' class='sh_beautifullDescription'>Скрыть/показать описание</a><div class='beautifullDescriptionInner'>" +sImage+sFiction+"</div></div>" : "";
-    
+
 		var sMonsterType = oMonster.type? '<span class="type">' + (oMonster.typeLink? "<a href='#"+oMonster.typeLink+"'>"+oMonster.type+"</a>" : oMonster.type) + '</span>' : "";
 
 		var ret = '<div class="' + sClass + '" data-name="'+name.toLowerCase()+'">'+
@@ -768,6 +779,7 @@ window.onload = function(){
 			$("#info_text p").first().append("<br>[ОШИБКА]: Не могу загрузить базу монстров! {showFiltered}");
 			return false;
 		}
+
 
 		// name
 		if (sName) {
@@ -1505,7 +1517,7 @@ window.onload = function(){
 
 		return false;
 	})
-  
+
   // show/hide beautifull description
   $("body").on("click", ".sh_beautifullDescription", function() {
     $(this).next(".beautifullDescriptionInner").toggle();
