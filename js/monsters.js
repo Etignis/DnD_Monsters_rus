@@ -41,7 +41,7 @@ function getCardView() {
 	var sView = $("#ViewSegmented input:radio:checked").val();
 	var sClass = "";
 	switch (sView){
-		case "card": 
+		case "card":
 			sClass = "monster_card";
 			break;
 		default:
@@ -57,13 +57,13 @@ window.onload = function(){
 
 	var oTimer; // for TimeOut (filtering)
 	var nTimerSeconds = 100;
-	
+
 	var aHiddenMonsters = [];
 	var aLockedMonsters = {};
 	var filteredMonsters = [];
-	
+
 	var oSource = {};
-	
+
 	function translateCR(str){
 		str = String(eval(str)*1000);
 		while (str.length<7) {
@@ -71,19 +71,19 @@ window.onload = function(){
 		}
 		return str;
 	}
-	
+
 	function arrDiff(arr1, arr2) {
 		var arr3 = arr2;//.map(function(item){return item.en});
 		return arr1.filter(
-			function(item){ 
+			function(item){
 				return (arr3.indexOf(item.name.toLowerCase())>=0)? false: true;
 			}
 		);
 	}
-	
+
 	function removeFromArr(arr, el) {
 		var index;
-		
+
 		for (var i=0; i<arr.length; i++) {
 			if(arr[i] == el) {
 				index = i;
@@ -93,7 +93,7 @@ window.onload = function(){
 		arr.splice(i, 1);
 		return arr
 	}
-	
+
 	function getViewPortSize(mod) {
 		var viewportwidth;
 		var viewportheight;
@@ -123,23 +123,23 @@ window.onload = function(){
 
 		if(mod=="width")
 			return viewportwidth;
-		
+
 		return viewportwidth + "~" + viewportheight;
 	}
-	
+
 	function createSegmentedButton(src, params) {
 		var ret = '';
 		var id =  params.id? "id='"+params.id+"'": "";
 		var mode = params.mode || "fix";
 		var subtypes = params.subtypes || false;
-		
+
 		var name = new Date().getTime();
 		if(params.id) {
 			var name = params.id;
-		}		
-		
+		}
+
 		var modeClass = " class='mode_"+mode+"' ";
-		
+
 		function getOption(el) {
 			var sOptionValue, sOptionLabel;
 			if(typeof el == "number" || typeof el == "string") {
@@ -148,36 +148,36 @@ window.onload = function(){
 				sOptionValue = el.key;
 				sOptionLabel = el.title;
 			}
-			
+
 			var selected = el.selected? " checked " : "";
-			
+
 			return "<input "+selected+" name='"+name+"' type='radio' value='"+sOptionValue+"' id='tg_"+sOptionValue+"'><label for='tg_"+sOptionValue+"' "+modeClass+" data-hierarchy='root'>"+sOptionLabel+"</label>";
 		}
 
 		var oItems = [];
 		for (var i =0; i < src.length; i++) {
-			var type = src[i];	
-	
+			var type = src[i];
+
 			var key = (typeof type == "number" || typeof type == "string")? type: type.key;
 			oItems[key] = type;
-			
+
 		}
 
 		for(var i in oItems) {
 			ret+= getOption(oItems[i]);
 		}
 		ret = "<div "+id+" class='segmented_button'>"+ret+"</div>";
-		return ret;	
+		return ret;
 	}
-		
+
 	function createToggle(src, params) {
 		var ret = '';
 		var id =  params.id? "id='"+params.id+"'": "";
 		var mode = params.mode || "fix";
 		var subtypes = params.subtypes || false;
-		
+
 		var modeClass = " class='mode_"+mode+"' ";
-		
+
 		function getOption(el) {
 			var sOptionValue, sOptionLabel;
 			if(typeof el == "number" || typeof el == "string") {
@@ -186,28 +186,28 @@ window.onload = function(){
 				sOptionValue = el.key;
 				sOptionLabel = el.title;
 			}
-			
+
 			return "<input type='checkbox' value='"+sOptionValue+"' id='tg_"+sOptionValue+"'><label for='tg_"+sOptionValue+"' "+modeClass+" data-hierarchy='root'>"+sOptionLabel+"</label>";
 		}
 		var aItems = [];
 		var oItems = [];
 		for (var i =0; i < src.length; i++) {
 			var type = src[i];
-			
-			
+
+
 			if (subtypes == "only") {
 				for (var sbt in type.subtype) {
 					//aItems.push(type.subtype[sbt]);
 					oItems[type.subtype[sbt].key]=type.subtype[sbt];
 					//ret+= getOption(type.subtype[sbt]);
 				}
-			} else {	
+			} else {
 				//aItems.push(type);
 				var key = (typeof type == "number" || typeof type == "string")? type: type.key;
 				oItems[key] = type;
 				//ret+= getOption(type);
 			}
-			
+
 		}
 		/*/
 		aItems.forEach(function(el) {
@@ -231,9 +231,9 @@ window.onload = function(){
 		})
 		/**/
 		ret = "<div "+id+" class='toggle_box'><div class='toggle_box_content'>"+ret+"</div></div>";
-		return ret;	
+		return ret;
 	}
-	
+
 	function createSelect(src, params) {
 		var options = "";
 		var selected_key = params.selected_key;
@@ -256,7 +256,7 @@ window.onload = function(){
 			var text = item.title;
 			if(text.length > min_width)
 				min_width = text.length/2;
-			options += "<li class='option' data-key='"+key+"'>"+text+"</li>"; 
+			options += "<li class='option' data-key='"+key+"'>"+text+"</li>";
 			if(key == selected_key){
 				lableText = text
 			}
@@ -267,13 +267,13 @@ window.onload = function(){
 
 		var list = "<ul class='list'>" + options + "</ul>";
 
-		var selectedKey = selected_key; 
+		var selectedKey = selected_key;
 		var label="<div class='label "+atr_class+"' data-selected-key='" + selectedKey + "' "+width+"'>" + lableText + "</div>";
 		var select = "<button " + id + " " + sParams + " class='customSelect "+sClass+"' "+width+"'>" + label + list + "</button>"
 
 		return select;
-	}	
-	
+	}
+
 	function createComboBox(src, param) {
 		var ARR_DOWN = '<i class="fa fa-arrow-down"></i>';
 		var ARR_UP = '<i class="fa fa-arrow-up"></i>';
@@ -290,24 +290,24 @@ window.onload = function(){
 			arrow="<div class='combo_box_arrow'><span class='arr_down'>"+ARR_DOWN+"</span><span class='arr_up' style='display:none'>"+ARR_UP+"</span></div>";
 			display = " style='display:none' ";
 			content_open = false;
-		}			
+		}
 		for (var i =0; i < src.length; i++) {
 			var type = src[i];
 			var max = type.title.length/2;
 			if (max > min_width) {
 				min_width = max;
 			}
-			
+
 			var sOptionValue = type.key || "";
 			var sOptionTitle = type.title || "";
-			
+
 			var oSubtype = type.subtype;
 			if(oSubtype) {
-				
+
 			}
-			
+
 			ret+="<input "+checked+" type='checkbox' value='"+sOptionValue+"' id='ch_"+sOptionValue+"'><label for='ch_"+sOptionValue+"' data-hierarchy='root'>"+sOptionTitle+"</label>";
-			
+
 		}
 		min_width = min_width>20? 20: min_width;
 		min_width = min_width<5? 5: min_width;
@@ -315,12 +315,12 @@ window.onload = function(){
 		ret = "<div "+id+" class='combo_box' data-text='"+title+"' data-content-open='"+content_open+"'><div class='combo_box_title'>"+title+"</div><div class='combo_box_content' "+display+" >"+ret+"</div>"+arrow+"</div>";
 		return ret;
 	}
-	
+
 	function createInput(params){
 		var id = params.id? "id='"+params.id+"'" : "";
 		return "<div "+id+" class='customInput'><input type='text'><span class='cross'></span></div>";
 	}
-	
+
 	function showInfoWin(sText) {
 		if(!$(".mod_win_wrapper").length){
 			var bCross = "<span class='bCloseInfoWin'>×</span>";
@@ -342,14 +342,14 @@ window.onload = function(){
 	}
 	function hideDBG() {
 		if($("#dbg")){
-			$("#dbg").fadeOut();		
-		}		
+			$("#dbg").fadeOut();
+		}
 	}
-	
+
 	function pretifyString(s) {
 		return s.substr(0,1).toUpperCase() + s.substr(1);
 	}
-		
+
 	function createCard(oMonster, sLockedSpell, sClass) {
 		var size = '';
 		size = oMonster.size;
@@ -366,7 +366,7 @@ window.onload = function(){
 			case "G": size="Колоссальный"; break;
 		}
 		size='<span class="size">' + size + '</span>';
-		
+
 		var trait = '';
 		if(Array.isArray(oMonster.trait)) {
 			for(var i in oMonster.trait){
@@ -374,15 +374,15 @@ window.onload = function(){
 					"<span class='i2-tipe'>"+oMonster.trait[i].name.trim()+"</span>"+
 					oMonster.trait[i].text+
 				"</div>";
-			}	
-		}		
+			}
+		}
 		else if(typeof oMonster.trait == "object") {
 			trait+="<div class='trait i4-tipe'>"+
 				"<span class='i2-tipe'>"+oMonster.trait.name.trim()+"</span>"+
 				oMonster.trait.text+
 			"</div>";
 		}
-		
+
 		var reaction = '';
 		if(Array.isArray(oMonster.reaction)) {
 			for(var i in oMonster.reaction){
@@ -390,14 +390,14 @@ window.onload = function(){
 					"<span class='i2-tipe'>"+oMonster.reaction[i].name.trim()+"</span>"+
 					oMonster.reaction[i].text+
 				"</div>";
-			}	
-		}		
+			}
+		}
 		else if(typeof oMonster.reaction == "object") {
 			reaction+="<div class='reaction i4-tipe'>"+
 				"<span class='i2-tipe'>"+oMonster.reaction.name.trim()+"</span>"+
 				oMonster.reaction.text+
 			"</div>";
-		}		
+		}
 
 		var action = '';
 		if(Array.isArray(oMonster.action)) {
@@ -406,17 +406,17 @@ window.onload = function(){
 					"<span class='i2-tipe'>"+oMonster.action[i].name.trim()+"</span>"+
 					oMonster.action[i].text+
 				"</div>";
-			}	
-		}		
+			}
+		}
 		else if(typeof oMonster.action == "object") {
 			action+="<div class='action i4-tipe'>"+
 				"<span class='i2-tipe'>"+oMonster.action.name.trim()+"</span>"+
 				oMonster.action.text+
 			"</div>";
-		}		
-		if(action!='')			
+		}
+		if(action!='')
 			action="<div class='actions i3-tipe'>Действия</div>"+action;
-		
+
 		var legendary = '';
 		if(Array.isArray(oMonster.legendary)) {
 			for(var i in oMonster.legendary){
@@ -424,17 +424,17 @@ window.onload = function(){
 					"<span class='i2-tipe'>"+oMonster.legendary[i].name.trim()+"</span>"+
 					oMonster.legendary[i].text+
 				"</div>";
-			}	
-		}		
+			}
+		}
 		else if(typeof oMonster.legendary == "object") {
 			legendary+="<div class='legendary i4-tipe'>"+
 				"<span class='i2-tipe'>"+oMonster.legendary.name.trim()+"</span>"+
 				oMonster.legendary.text+
 			"</div>";
 		}
-		if(legendary!='')			
+		if(legendary!='')
 			legendary="<div class='legendary i3-tipe'>Легендарные Действия</div>"+legendary;
-		
+
 		var spells = '';
 		if(Array.isArray(oMonster.spells)) {
 			for(var i in oMonster.spells){
@@ -442,8 +442,8 @@ window.onload = function(){
 					"<span class='i2-tipe'>"+oMonster.spells[i].name.trim()+"</span>"+
 					oMonster.spells[i].text+
 				"</div>";
-			}	
-		}		
+			}
+		}
 		else if(typeof oMonster.spells == "object") {
 			spells+="<div class='spells'>"+
 				"<span class='i2-tipe'>"+oMonster.spells.name.trim()+"</span>"+
@@ -452,8 +452,8 @@ window.onload = function(){
 		}
 
 		//console.log("spells: "+spells);
-		if(spells!='')			
-			spells="<div class='spellist i3-tipe'>Заклинания</div>"+spells;	
+		if(spells!='')
+			spells="<div class='spellist i3-tipe'>Заклинания</div>"+spells;
 		var stats = '';
 		var str = oMonster.str;
 		var dex = oMonster.dex;
@@ -477,7 +477,7 @@ window.onload = function(){
 		var passive = c_string("passive", "i2-tipe", "Пассивное восприятие", oMonster.passive);
 		var languages = c_string("languages", "i2-tipe", "Язык", oMonster.languages);
 		var name= oMonster.name;
-		
+
 		// experience
 		var expa = {
 			"0": "0 - 10",
@@ -515,23 +515,23 @@ window.onload = function(){
 			"29": "135000",
 			"30": "155000"
 		};
-		
+
 		var experience = "?";
 		try{
 			experience = expa[oMonster.cr].replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1 ');
 		} catch (err) {
-			
+
 		}
 		experience = "<span style='color: #999;'> ("+experience+" XP)</span>";
 		var cr = c_string("cr", "i2-tipe", "Сложность", "<span class='cr_num'>"+oMonster.cr+"</span>" + experience);
-		
+
 		var oLock = sLockedSpell? '<a href="#" class="unlock_monster" title="Открепить"><i class="fa fa fa-unlock-alt" aria-hidden="true"></i></a>':
 		'<a href="#" class="lock_monster" title="Закрепить"><i class="fa fa-lock" aria-hidden="true"></i></a>';
-		
+
 		var oHide = sLockedSpell? "" : '<a href="#" class="hide_monster" title="Скрыть"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>';
-		
+
 		var add = oMonster.add? "<hr>"+oMonster.add : "";
-		
+
 		var ret = '<div class="' + sClass + '" data-name="'+name.toLowerCase()+'">'+
 		oHide+
 		oLock+
@@ -542,11 +542,11 @@ window.onload = function(){
 				'<span class="type">' + oMonster.type + '</span>'+
 				'<span class="alignment">' + oMonster.alignment + '</span>'+
 			'</div>'+
-			'<hr>'+	
+			'<hr>'+
 			'<div class="ac"><span class="i-tipe">AC </span>' + oMonster.ac + '</div>'+
 			'<div class="hp"><span class="i-tipe">HP </span>' + oMonster.hp + '</div>'+
-			'<div class="speed"><span class="i-tipe">Скорось </span>' + oMonster.speed + '</div>'+
-			'<hr>'+	
+			'<div class="speed"><span class="i-tipe">Скорость </span>' + oMonster.speed + '</div>'+
+			'<hr>'+
 			stats+
 			'<hr>'+
 			skill+
@@ -556,7 +556,7 @@ window.onload = function(){
 			senses+
 			passive+
 			languages+
-			cr+  
+			cr+
 			'<hr>'+
 			trait+
 			"</div></div><div class='right'><div class='inner'>"+
@@ -569,35 +569,35 @@ window.onload = function(){
 			'</div>';
 		return ret;
 	}
-	
-	
+
+
 	function createMonstersIndex() {
 		var monsters = "";
 		allMonsters.forEach(function(item) {
 			monsters += createCard(item);
 		});
-		$(".monsterContainer").html(monsters);		
+		$(".monsterContainer").html(monsters);
 		$("#info_text").hide();
 	}
 	function showFiltered(oParams) {
-		
-		var sName = oParams.sName || ""; 
+
+		var sName = oParams.sName || "";
 		var aLevels = oParams.aLevels || [];
-		var aTypes = oParams.aTypes || []; 
-		var aSubTypes = oParams.aSubTypes || []; 
-		var aSources = oParams.aSources || []; 
+		var aTypes = oParams.aTypes || [];
+		var aSubTypes = oParams.aSubTypes || [];
+		var aSources = oParams.aSources || [];
 		var aSize = oParams.aSize || [];
 		var sClass = oParams.sClass || "monster";
 		var fHidden = oParams.fHidden;
 
 		$(".monsterContainer").empty();
-		var monsters = "";		
+		var monsters = "";
 
 		filteredMonsters = []; //arrDiff(filteredMonsters, aHiddenMonsters);
 		allMonsters.forEach(function(el) {
 			filteredMonsters.push(el);
 		});
-		
+
 		// name
 		if (sName) {
 			sName = sName.toLowerCase().trim();
@@ -605,8 +605,8 @@ window.onload = function(){
 				return (monster.name.toLowerCase().trim().indexOf(sName)>=0);
 			});
 		}
-		
-		// level		
+
+		// level
 		if(aLevels && aLevels.length>0 && aLevels.length<99) {
 			filteredMonsters = filteredMonsters.filter(function(monster){
 				for(var i = 0; i < aLevels.length; i++) {
@@ -617,8 +617,8 @@ window.onload = function(){
 				return false;
 			});
 		}
-		
-		// types		
+
+		// types
 		if(aTypes && aTypes.length>0 && aTypes.length<99) {
 			filteredMonsters = filteredMonsters.filter(function(monster){
 				for(var i = 0; i < aTypes.length; i++) {
@@ -629,7 +629,7 @@ window.onload = function(){
 				return false;
 			});
 		}
-		// subtypes		
+		// subtypes
 		if(aSubTypes && aSubTypes.length>0 && aSubTypes.length<99) {
 			filteredMonsters = filteredMonsters.filter(function(monster){
 				for(var i = 0; i < aSubTypes.length; i++) {
@@ -640,8 +640,8 @@ window.onload = function(){
 				return false;
 			});
 		}
-		
-		// sizes		
+
+		// sizes
 		if(aSize && aSize.length>0 && aSize.length<99) {
 			filteredMonsters = filteredMonsters.filter(function(monster){
 				for(var i = 0; i < aSize.length; i++) {
@@ -651,9 +651,9 @@ window.onload = function(){
 				}
 				return false;
 			});
-		}		
-		
-		//source		
+		}
+
+		//source
 		if(aSources && aSources.length>0 && aSources.length<9) {
 			filteredMonsters = filteredMonsters.filter(function(spell){
 				for(var i = 0; i < aSources.length; i++) {
@@ -664,28 +664,28 @@ window.onload = function(){
 				return false;
 			});
 		}
-			
-		
+
+
 		filteredMonsters = fHidden? arrDiff(filteredMonsters, aHiddenMonsters) : filteredMonsters;
-		
+
 		// sort
-		filteredMonsters.sort(function(a, b) {	
-			
+		filteredMonsters.sort(function(a, b) {
+
 			if (translateCR(a.cr)+a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") < translateCR(b.cr)+b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
 				return -1;
 			if (translateCR(a.cr)+a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") > translateCR(b.cr)+b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
-				return 1;	
-			
+				return 1;
+
 			return 0
 		});
-					
+
 		for (var i in filteredMonsters) {
 			if(filteredMonsters[i]) {
 				var fLocked = filteredMonsters[i].locked? true: false;
 				var tmp = createCard(filteredMonsters[i], fLocked, sClass);
 				if (tmp)
 					monsters += tmp;
-			} 
+			}
 		}
 
 		$(".monsterContainer").html(monsters);
@@ -693,7 +693,7 @@ window.onload = function(){
 		//$("#before_spells").hide();
 		$("#info_text").hide();
 	}
-	
+
 	function filterMonsters(oParams){
 		var sName = $("#NameInput input").val();
 		var aLevels = [];
@@ -705,7 +705,7 @@ window.onload = function(){
 		$("#TypeToggle .toggle_box_content input:checkbox:checked").each(function(i, el){
 			aTypes.push(el.value);
 		});
-		
+
 		var aSubTypes = [];
 		$("#SubTypeToggle .toggle_box_content input:checkbox:checked").each(function(i, el){
 			aSubTypes.push(el.value);
@@ -715,50 +715,50 @@ window.onload = function(){
 		$("#SourceCombobox .combo_box_content input:checkbox:checked").each(function(i, el){
 			aSources.push(el.value);
 		});
-			
+
 		var aSize = [];
 		$("#SizeCombobox .combo_box_content input:checkbox:checked").each(function(i, el){
 			aSize.push(el.value);
 		});
-		
+
 		var sClass = getCardView();
-		
+
 		var fHidden = (aHiddenMonsters.length>0)? true: false;
-		
+
 		//setConfig("schoolOpen", $("#SchoolCombobox").attr("data-content-open"));
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
 			showFiltered({
-				sName: sName, 
-				aLevels: aLevels, 
-				aTypes: aTypes, 
-				aSubTypes: aSubTypes, 
-				aSources: aSources, 
+				sName: sName,
+				aLevels: aLevels,
+				aTypes: aTypes,
+				aSubTypes: aSubTypes,
+				aSources: aSources,
 				aSize: aSize,
 				sClass: sClass,
 				fHidden: fHidden
 				});
-		}, nTimerSeconds/4);		
-		
+		}, nTimerSeconds/4);
+
 	}
-	
+
 	function colectMonstersParams() {
 		//monsterLevels[]
 		//monsterTypes[]
 		var tmpMonsterTypes = {};
-		
+
 		allMonsters.forEach(function(el) {
 			// level
 			if(monsterLevels.indexOf(el.cr)<0) {
 				monsterLevels.push(el.cr);
 			}
-			
+
 			// types
 			var sTypeString = el.type;
 			var sTypeTest = sTypeString.match(/^([^(]+)(\([^)]+\))?/);
 			var sType = (sTypeTest[1] || "").trim().toLowerCase();
 			var aSubtype = (sTypeTest[2]|| "").replace(/[)(]+/g, "").split(",").map(function(el){return el.trim().toLowerCase()});
-			
+
 			if(sType) {
 				if(!tmpMonsterTypes[sType]){
 					tmpMonsterTypes[sType] = {};
@@ -767,15 +767,15 @@ window.onload = function(){
 					aSubtype.forEach(function(el){
 						if(el.length>0)
 							tmpMonsterTypes[sType][el] = "";
-					});					
-				}	
+					});
+				}
 			}
-			
+
 			el.sType = sType;
 			if(aSubtype.length>0)
 				el.aSubtypes = aSubtype;
 		});
-		
+
 		// transform monster object to array
 		for (var type in tmpMonsterTypes) {
 			var aSubtype = [];
@@ -797,7 +797,7 @@ window.onload = function(){
 						return -1;
 					return 0;
 				});
-			
+
 				oType.subtype = aSubtype;
 			}
 			monsterTypes.push(oType);
@@ -809,7 +809,7 @@ window.onload = function(){
 				return -1;
 			return 0;
 		});
-		
+
 		// sorting monsters levels
 		monsterLevels.sort(function(a, b) {
 			if(eval(a) < eval(b))
@@ -819,19 +819,19 @@ window.onload = function(){
 			return 0
 		});
 	}
-	
+
 	function createButtons() {
 		var bHome = "<a href='/' class='bt flexChild' title='На главную страницу'><i class='fa fa-home'></i></a>";
 		var bInfo = "<a href='#' class='bt flexChild' id='bInfo' title='Справка'><i class='fa fa-question-circle'></i></a>";
 		var bPrint = "<a href='#' class='bt flexChild' id='bPrint' title='Распечатать'><i class='fa fa-print' aria-hidden='true'></i></a>";
-		$(".p_side").append("<div class='mediaWidth flexParent'>" + bHome + bInfo + bPrint + "</div>");		
+		$(".p_side").append("<div class='mediaWidth flexParent'>" + bHome + bInfo + bPrint + "</div>");
 	}
-	
+
 	function createLabel(text) {
 		return "<div class='filterLabel'>"+text+"</div>";
 	}
 	function createSizeCombobox(isOpen){
-		
+
 		var aSizes = [
 			{
 				"title": "Крошечный",
@@ -858,25 +858,25 @@ window.onload = function(){
 				"key": "G"
 			}
 		]
-		
+
 		if(isOpen == undefined)
 			isOpen = false;
 		var s1=createComboBox(aSizes, {
-			id: "SizeCombobox", 
-			title: "Размер", 
-			checkAll: true, 
+			id: "SizeCombobox",
+			title: "Размер",
+			checkAll: true,
 			isOpen: isOpen
 			});
 		$(".p_side").append("<div class='mediaWidth'>" + s1 + "</div>");
 	}
-		
-	function createSourceCombobox(isOpen) {	
+
+	function createSourceCombobox(isOpen) {
 		if(isOpen == undefined)
 			isOpen = false;
 		var s1=createComboBox(monsterSources, {id: "SourceCombobox", title: "Источники", checkAll: true, isOpen: isOpen});
 		$(".p_side").append("<div class='mediaWidth'>" + s1 + "</div>");
 	}
-		
+
 	function createViewSegmented() {
 		var aViews = [
 			{
@@ -893,15 +893,15 @@ window.onload = function(){
 		var label = createLabel("Вид");
 		$(".p_side").append("<div class='mediaWidth'>" + label + s1 + "</div>");
 	}
-	
-	function createTypeToggle() {	
+
+	function createTypeToggle() {
 		var label = createLabel("Типы");
 		var s1=createToggle(monsterTypes, {id: "TypeToggle", title: "Типы", checkAll: true});
 		$(".p_side").append("<div class='mediaWidth max_width_2'>" + label + s1 + "</div>");
 
 	}
-	
-	function createSubTypeToggle() {	
+
+	function createSubTypeToggle() {
 		var label = createLabel("Подтипы");
 		var s1=createToggle(monsterTypes, {id: "SubTypeToggle", title: "Подтипы", checkAll: true, subtypes: "only"});
 		$(".p_side").append("<div class='mediaWidth max_width_2'>" + label + s1 + "</div>");
@@ -910,15 +910,15 @@ window.onload = function(){
 	function createNameFilter() {
 		var ret=createInput({id: "NameInput"});
 		var label = createLabel("Название");
-		$(".p_side").append("<div class='mediaWidth'>" + label + ret + "</div>");		
+		$(".p_side").append("<div class='mediaWidth'>" + label + ret + "</div>");
 	}
-	
+
 	function createLevelToggle(){
 		var label = createLabel("Класс Сложности");
 		var s1 = createToggle(monsterLevels, {"id": "levelToggle"});
 		$(".p_side").append("<div class='mediaWidth max_width_2'>"  + label +  s1 + "</div>");
 	}
-	
+
 	function createHiddenMonstersList(){
 		if(aHiddenMonsters.length < 1){
 			$("#HiddenMonsters").parent().remove();
@@ -931,11 +931,11 @@ window.onload = function(){
 		var listHiddenMonsters = aHiddenMonsters.map(function(item){
 			return "<a href='#' title='Вернуть на место' class='bUnhideMonster' data-name='"+item+"'>"+item +"</a>";
 		}).join(" ");
-			
+
 		var bReturnAll = "<a href='#' class='bReturnUnvisible'>Вернуть все обратно</a>";
-		$("#HiddenMonsters").html(bReturnAll + listHiddenMonsters);			
+		$("#HiddenMonsters").html(bReturnAll + listHiddenMonsters);
 	}
-	
+
 	function createLockedMonstersArea(){
 		var aLocked = [];
 		for (var i in aLockedMonsters){
@@ -952,7 +952,7 @@ window.onload = function(){
 					}
 				}
 			}
-			
+
 			if($("#lockedMonstersArea").length<1){
 				$(".p_cont").prepend("<div id='lockedMonstersArea'><span class='bUnlockAll'>Открепить все</span><span class='topHeader'></span><div class='content row'></div><span class='bottomHeader'></span></div>");
 
@@ -962,11 +962,11 @@ window.onload = function(){
 				if (translateCR(a.cr)+a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") < translateCR(b.cr)+b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
 				return -1;
 				if (translateCR(a.cr)+a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") > translateCR(b.cr)+b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
-				return 1;	
+				return 1;
 
 				return 0
-			}).map(function(el){return createCard(el, true, sClass)}));	
-			
+			}).map(function(el){return createCard(el, true, sClass)}));
+
 			//COUNTER
 			$("#lockedMonstersArea .topHeader").html("("+l+")");
 			$(".monsterContainer").addClass("noprint");
@@ -975,38 +975,38 @@ window.onload = function(){
 			$(".monsterContainer").removeClass("noprint");
 		}
 	}
-	
+
 	function createSidebar() {
 		// menu buttons
 		createButtons();
-		
+
 		// name
-		createNameFilter();		
-		
+		createNameFilter();
+
 		// collect data for level & type
 		colectMonstersParams();
-		
+
 		// level
-		createLevelToggle();	
-		
-		
+		createLevelToggle();
+
+
 		// type
 		createTypeToggle();
-		
+
 		createSubTypeToggle();
-		
+
 		//size
 		createSizeCombobox();
-		
+
 		//source
-		createSourceCombobox();	
-		
+		createSourceCombobox();
+
 		// view
 		createViewSegmented()
-		
-		$(".p_side").fadeIn();	
+
+		$(".p_side").fadeIn();
 	}
-	
+
 	function setSubtypeToggleEnable() {
 		var aTypes = [];
 		var aSubTypes = [];
@@ -1016,8 +1016,8 @@ window.onload = function(){
 		//console.dir(aTypes);
 		//console.dir(monsterTypes);
 		if(aTypes.length>0){
-			$("#SubTypeToggle input[type='checkbox']").each(function () {			
-				$(this).attr("disabled", true);			
+			$("#SubTypeToggle input[type='checkbox']").each(function () {
+				$(this).attr("disabled", true);
 			});
 			for (var t in monsterTypes) {
 				aTypes.forEach(function(el) {
@@ -1026,36 +1026,36 @@ window.onload = function(){
 							monsterTypes[t].subtype.forEach(function (item) {
 								$("#SubTypeToggle input[type='checkbox']").each(function () {
 									if($(this).attr('value') == item.key){
-										$(this).removeAttr("disabled");	
-									}				
+										$(this).removeAttr("disabled");
+									}
 								})
 							})
 						}
 					}
 				})
-				
+
 			}
 		} else{
-			$("#SubTypeToggle input[type='checkbox']").each(function () {			
-				$(this).removeAttr("disabled");		
+			$("#SubTypeToggle input[type='checkbox']").each(function () {
+				$(this).removeAttr("disabled");
 			});
 		}
 	}
-	
+
 	/// handlers
-	
+
 	// close Mod Win
-	$("body").on("click", ".bCloseInfoWin", function() {		
+	$("body").on("click", ".bCloseInfoWin", function() {
 		$("#dbg").fadeOut();
 		hideInfoWin();
 	});
-	
+
 	// hide DBG
 	$("body").on("click", "#dbg", function() {
 		$(this).fadeOut();
 		hideInfoWin();
 	});
-	
+
 
 	// custom Combobox
 	$("body").on('click', ".combo_box_title, .combo_box_arrow", function(){
@@ -1075,10 +1075,10 @@ window.onload = function(){
 			el.parent().attr("data-content-open", true);
 		}
 	});// get item
-	
+
 	function onSelectItemPress(src) {
 		var d_root='', d_parent='', trig=true;
-		
+
 		var attrFor = src.attr("for"); // $("input#"+attrFor)
 		var oComboBox = src.closest(".combo_box");
 		var sComboBoxId = oComboBox.attr("id");
@@ -1194,7 +1194,7 @@ window.onload = function(){
 			$("body").attr("class", "");
 		}
 		/**/
-			
+
 		// bg /
 		return false;
 	}
@@ -1207,87 +1207,87 @@ window.onload = function(){
 		onSelectItemPress($(this));
 		return false;
 	});
-	
+
 	// custom Input
 	$("body").on('click', ".customInput .cross", function(){
 		$(this).parent().find("input").val("");
 		$(this).parent().focusout();
 	});
-	
+
 	// filters
-	
+
 	// name select
 	$("body").on('focusout', "#NameInput", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
 			filterMonsters();
-		}, nTimerSeconds);		
+		}, nTimerSeconds);
 	});
 	$("body").on('keyup', "#NameInput input", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
 			filterMonsters();
-		}, nTimerSeconds*3);		
+		}, nTimerSeconds*3);
 	});
-	
-	
+
+
 	// level select
 	$("body").on('click', "#levelToggle label", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
 			filterMonsters();
-		}, nTimerSeconds);		
+		}, nTimerSeconds);
 	});
-	
+
 	// type select
 	$("body").on('click', "#TypeToggle label", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
 			setSubtypeToggleEnable();
 			filterMonsters();
-		}, nTimerSeconds);		
+		}, nTimerSeconds);
 	});
-	
+
 	// subtype select
 	$("body").on('click', "#SubTypeToggle label", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
 			filterMonsters();
-		}, nTimerSeconds);		
+		}, nTimerSeconds);
 	});
-	
+
 	// source combobox
 	$("body").on('click', "#SourceCombobox label", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
 			filterMonsters();
-		}, nTimerSeconds);		
+		}, nTimerSeconds);
 	});
 	$("body").on('click', "#SourceCombobox .combo_box_title, #SourceCombobox .combo_box_arrow", function(){
-		setConfig("sourceOpen", $("#SourceCombobox").attr("data-content-open"));	
-	});	
+		setConfig("sourceOpen", $("#SourceCombobox").attr("data-content-open"));
+	});
 	// size combobox
 	$("body").on('click', "#SizeCombobox label", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
 			filterMonsters();
-		}, nTimerSeconds);		
+		}, nTimerSeconds);
 	});
 	$("body").on('click', "#SizeCombobox .combo_box_title, #SizeCombobox .combo_box_arrow", function(){
-		setConfig("sizeOpen", $("#SizeCombobox").attr("data-content-open"));	
+		setConfig("sizeOpen", $("#SizeCombobox").attr("data-content-open"));
 	});
-	
+
 	//
-	
+
 	// show all moncters
 	$("body").on('click', "#showAllMonsters", function(){
 		setConfig("infiIsShown", true);
-		filterMonsters();	
+		filterMonsters();
 		hideInfoWin();
 		hideDBG();
 		return false;
 	});
-	
+
 	//info_textbInfo
 	$("body").on('click', "#bInfo", function(){
 		var sInfo = $("#info_text").html();
@@ -1295,69 +1295,69 @@ window.onload = function(){
 		showInfoWin(sInfo);
 		return false;
 	});
-	
+
 
 	//hide monsters
 	$("body").on('click', ".hide_monster", function(){
 		var sName = $(this).closest("[class^='monster']").attr("data-name");
-		
+
 		$(this).hide();
 		// update hidden Monsters array
-		aHiddenMonsters.push(sName); 
-		
+		aHiddenMonsters.push(sName);
+
 		// show list of hidden Monsters
 		createHiddenMonstersList();
-		
+
 		// show Monsters without hidden
 		filterMonsters({fHidden: true});
-		
+
 		return false;
 	})
 	// unhide spells
 	$("body").on('click', ".bUnhideMonster", function(){
 		var sName = $(this).attr("data-name")
 		// update hidden spells array
-		aHiddenMonsters.splice(aHiddenMonsters.indexOf(sName), 1); 
-		
+		aHiddenMonsters.splice(aHiddenMonsters.indexOf(sName), 1);
+
 		// show list of hidden spells
 		createHiddenMonstersList();
-		
+
 		// show spells without hidden
 		filterMonsters({fHidden: true});
-		
+
 		return false;
 	})
 	$("body").on("click", ".bReturnUnvisible", function() {
 		aHiddenMonsters = [];// show list of hidden spells
 		createHiddenMonstersList();
-		
+
 		// show spells without hidden
 		filterMonsters({fHidden: true});
-		
+
 		return false;
 	});
-	
+
 	// lock spells
 	$("body").on('click', ".lock_monster", function(){
-		var sName = $(this).closest("[class^='monster']").attr("data-name");		
-		
+		var sName = $(this).closest("[class^='monster']").attr("data-name");
+
 		aLockedMonsters[sName] = "";
-		
+
 		// show locked
 		createLockedMonstersArea();
-		
+
 		return false;
 	})
-	
+
 	// unlock spells
 	$("body").on('click', ".unlock_monster", function(){
 		var sName = $(this).closest("[class^='monster']").attr("data-name");
-		
+
 		delete aLockedMonsters[sName];
-		
+
 		// show locked
 		createLockedMonstersArea();
-		
+
 		return false;
 	})
 	$("body").on('click', "#lockedMonstersArea .topHeader", function(){
@@ -1369,23 +1369,23 @@ window.onload = function(){
 		// show locked
 		createLockedMonstersArea();
 	});
-	
+
 	// print
 	$("body").on('click', "#bPrint", function(){
 		window.print();
-		
+
 		return false;
 	});
-	
+
 	// view
-	$("body").on('change', "#ViewSegmented input", function() {		
+	$("body").on('change', "#ViewSegmented input", function() {
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
 			filterMonsters();
-		}, nTimerSeconds);	
+		}, nTimerSeconds);
 	});
-		
-	
+
+
 	$.when(createSidebar()).done(
 		function(){
 			$("#showAllMonsters").slideDown();
@@ -1396,4 +1396,4 @@ window.onload = function(){
 			}
 		}
 	);
-}; 
+};
