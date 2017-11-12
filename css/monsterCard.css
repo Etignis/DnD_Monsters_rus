@@ -1083,11 +1083,6 @@ p {
 .monster .beautifullDescription {
   position: relative;
 }
-.monster .beautifullDescription img {
-  width: 30%;
-  min-width: 200px;
-  float: right;
-}
 .monster .sh_beautifullDescription {
   position: absolute;
   top: -2rem;
