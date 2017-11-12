@@ -1580,6 +1580,13 @@ window.onload = function(){
 			filterMonsters();
 		}, nTimerSeconds);
 	});
+  
+  
+	// monster type inf oclose
+	$("body").on('click', "#monsterTypeInfoWindow .cross", function() {
+    hideDBG();
+		hideMonsterTypeInfo();
+	});
 
 // url filters
 	function updateHash() {
@@ -1598,11 +1605,16 @@ window.onload = function(){
 
     var sHash = window.location.hash.slice(1); // /archive#q=spell_name
     if(sHash && !/[^А-Яа-яЁё\w\d\/&?|_=-]/.test(sHash)) {
-      var sName = sHash.match(/q=([А-Яа-яЁё\/\w\d_]+)/);
+      var sName = sHash.match(/\bq=([А-Яа-яЁё\/\w\d_]+)/);
+      var sMonsterType = sHash.match(/\bMonsterType=([А-Яа-яЁё\/\w\d_]+)/);
       if(sName && sName[1]) {
       	$("#NameInput input").val(sName[1].replace(/[_]+/g," "));
       	//filterSpells();
-      } else {
+      } 
+      if(sMonsterType && sMonsterType[1]) {
+        showMonsterTypeInfo(sMonsterType[1]);
+      }
+      else {
       	/*/
         $('html, body').animate({
           scrollTop: $("#"+sHash).offset().top
@@ -1622,6 +1634,26 @@ window.onload = function(){
   }
   //window.onhashchange = getHash;
 
+  function showMonsterTypeInfo(sName) {
+    if($("#monsterTypeInfoWindow").lengt >0) {
+      $("#monsterTypeInfoWindow").remove();
+    }
+    var oData = monsterTypesInfo.filter(function(item){
+      return item.name == sName
+    });
+    var sTitle = "<h1 class='title'>"+oData[0].title+"</h1>";
+    var sCross = "<a class='cross'>✖</a>";
+    var sImg = (oData[0].img)? "<img class='img' src='"+oData[0].img+"'>" : "";
+    var sInfo = "<div class='info'>"+oData[0].info+"</div>";
+    var oWin = "<div class='display: none' id='monsterTypeInfoWindow'>"+sTitle+sCross+sImg+sInfo+"</div>";
+    showDBG();
+    $("body").append(oWin);
+    $("#monsterTypeInfoWindow").fadeIn();
+  }
+  
+  function hideMonsterTypeInfo() {
+    $("#monsterTypeInfoWindow").fadeOut();
+  }
 
 
 function startCatalog() {
