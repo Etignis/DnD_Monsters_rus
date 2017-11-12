@@ -1641,14 +1641,16 @@ window.onload = function(){
     var oData = monsterTypesInfo.filter(function(item){
       return item.name == sName
     });
-    var sTitle = "<h1 class='title'>"+oData[0].title+"</h1>";
-    var sCross = "<a class='cross'>✖</a>";
-    var sImg = (oData[0].img)? "<img class='img' src='"+oData[0].img+"'>" : "";
-    var sInfo = "<div class='info'>"+oData[0].info+"</div>";
-    var oWin = "<div class='display: none' id='monsterTypeInfoWindow'>"+sTitle+sCross+sImg+sInfo+"</div>";
-    showDBG();
-    $("body").append(oWin);
-    $("#monsterTypeInfoWindow").fadeIn();
+    if (oData.length > 0) {
+      var sTitle = "<h1 class='title'>"+oData[0].title+"</h1>";
+      var sCross = "<a class='cross'>✖</a>";
+      var sImg = (oData[0].img)? "<img class='img' src='"+oData[0].img+"'>" : "";
+      var sInfo = "<div class='info'>"+oData[0].info+"</div>";
+      var oWin = "<div class='display: none' id='monsterTypeInfoWindow'>"+sTitle+sCross+sImg+sInfo+"</div>";
+      showDBG();
+      $("body").append(oWin);
+      $("#monsterTypeInfoWindow").fadeIn();      
+    }
   }
   
   function hideMonsterTypeInfo() {
