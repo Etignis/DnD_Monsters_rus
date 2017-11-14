@@ -765,7 +765,8 @@ window.onload = function(){
 		var aSources = oParams.aSources || [];
 		var aSize = oParams.aSize || [];
 		var sClass = oParams.sClass || "monster";
-		var fHidden = oParams.fHidden;
+    var fHidden = oParams.fHidden;
+		var sSort = oParams.sSort;
 
 		$(".monsterContainer").empty();
 		var monsters = "";
@@ -852,15 +853,28 @@ window.onload = function(){
 		filteredMonsters = fHidden? arrDiff(filteredMonsters, aHiddenMonsters) : filteredMonsters;
 
 		// sort
-		filteredMonsters.sort(function(a, b) {
+    if(sSort) {
+      switch (sSort) {
+        case "alpha" :
+            filteredMonsters.sort(function(a, b) {
+              if (a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") < b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
+                return -1;
+              if (a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") > b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
+                return 1;
+              return 0
+            });
+          break;
+        default :
+            filteredMonsters.sort(function(a, b) {
+              if (translateCR(a.cr)+a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") < translateCR(b.cr)+b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
+                return -1;
+              if (translateCR(a.cr)+a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") > translateCR(b.cr)+b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
+                return 1;
+              return 0
+            });
+      }
+    }
 
-			if (translateCR(a.cr)+a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") < translateCR(b.cr)+b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
-				return -1;
-			if (translateCR(a.cr)+a.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") > translateCR(b.cr)+b.name.toLowerCase().replace(/\s+|\([^)(]+\)/g, "") )
-				return 1;
-
-			return 0
-		});
 
 		for (var i in filteredMonsters) {
 			if(filteredMonsters[i]) {
@@ -904,6 +918,8 @@ window.onload = function(){
 			aSize.push(el.value);
 		});
 
+    var sSort = $("#SortSelect .label").attr("data-selected-key");
+
 		var sClass = getCardView();
 
 		var fHidden = (aHiddenMonsters.length>0)? true: false;
@@ -919,7 +935,8 @@ window.onload = function(){
 				aSources: aSources,
 				aSize: aSize,
 				sClass: sClass,
-				fHidden: fHidden
+				fHidden: fHidden,
+        sSort: sSort
 				});
 		}, nTimerSeconds/4);
 
@@ -1163,6 +1180,23 @@ window.onload = function(){
 		}
 	}
 
+  function createSortSelect() {
+    var src = [
+      {
+        name: "alpha_level",
+        title: "По уровню и алфавиту"
+      },
+      {
+        name: "alpha",
+        title: "По алфавиту"
+      }
+    ];
+
+    var classSelect = createSelect(src, {id: "SortSelect", selected_key: "alpha_level", width: "100%"});
+    var label = createLabel("Сортировка");
+    $(".p_side").append("<div class='mediaWidth'>" + label + classSelect + "</div>");
+  }
+
 	function createSidebar() {
 		$(".p_side").empty();
 
@@ -1191,6 +1225,9 @@ window.onload = function(){
 
 		// view
 		createViewSegmented()
+
+    //sort
+    createSortSelect();
 
 		$(".p_side").fadeIn();
 	}
@@ -1401,6 +1438,25 @@ window.onload = function(){
 		$(this).parent().find("input").val("");
 		$(this).parent().focusout();
 	});
+  //custom Select
+  $("body").on("click", ".customSelect .label", function() {
+    if($(this).next(".list").css('display') == 'none') {
+    $(this).parent().focus();
+    }
+    $(this).next(".list").fadeToggle();
+  });
+  $("body").on("focusout", ".customSelect", function() {
+    $(this).find(".list").fadeOut();
+  });
+  $("body").on("click", ".customSelect .option", function() {
+    var key = $(this).attr("data-key");
+    var text = $(this).html().replace("<br>", " | ");
+    $(this).closest(".customSelect").find(".label").attr("data-selected-key", key).text(text);
+    $(this).parent("ul").fadeOut();
+    $(this).closest(".customSelect").focusout();
+    $(this).closest(".customSelect").blur();
+    //$("#toFocus").focus();
+  });
 
 	// filters
 
@@ -1466,6 +1522,15 @@ window.onload = function(){
 	$("body").on('click', "#SizeCombobox .combo_box_title, #SizeCombobox .combo_box_arrow", function(){
 		setConfig("sizeOpen", $("#SizeCombobox").attr("data-content-open"));
 	});
+
+  // sort select
+  $("body").on('focusout', "#SortSelect", function(){
+    clearTimeout(oTimer);
+    oTimer = setTimeout(function(){
+      updateHash();
+      filterMonsters();
+    }, nTimerSeconds);
+  });
 
 	//
 
@@ -1580,8 +1645,8 @@ window.onload = function(){
 			filterMonsters();
 		}, nTimerSeconds);
 	});
-  
-  
+
+
 	// monster type inf oclose
 	$("body").on('click', "#monsterTypeInfoWindow .cross", function() {
     hideDBG();
@@ -1590,15 +1655,25 @@ window.onload = function(){
 
 // url filters
 	function updateHash() {
-		var sName = $("#NameInput input").val();
+    var sName = $("#NameInput input").val();
+		var sSort = $("#SortSelect .label").attr("data-selected-key");
 
+    var aFilters = [];
 		//#q=spell_name
-		if(sName && sName.length>0) {
-			var sHash = "q="+sName.replace(/\s+/g, "_");
+    if(sName && sName.length>0) {
+      aFilters.push("q="+sName.replace(/\s+/g, "_"));
+      window.location.hash = sHash;
+    }
+		if(sSort && sSort.length>0) {
+      aFilters.push("sort="+sSort.replace(/\s+/g, "_"));
 			window.location.hash = sHash;
-		} else {
-			removeHash();
 		}
+    if(aFilters.length>0) {
+      var sHash = aFilters.join("&");
+      window.location.hash = sHash;
+    } else {
+      removeHash();
+    }
 	}
   function getHash(){
     $('html, body').animate({scrollTop:0}, 'fast');
@@ -1606,13 +1681,17 @@ window.onload = function(){
     var sHash = window.location.hash.slice(1); // /archive#q=spell_name
     if(sHash && !/[^А-Яа-яЁё\w\d\/&?|_=-]/.test(sHash)) {
       var sName = sHash.match(/\bq=([А-Яа-яЁё\/\w\d_]+)/);
+      var sSort = sHash.match(/\bsort=([\w]+)/);
       var sMonsterType = sHash.match(/\bMonsterType=([А-Яа-яЁё\/\w\d_]+)/);
       if(sName && sName[1]) {
       	$("#NameInput input").val(sName[1].replace(/[_]+/g," "));
       	//filterSpells();
-      } 
+      }
       if(sMonsterType && sMonsterType[1]) {
         showMonsterTypeInfo(sMonsterType[1]);
+      }
+      if(sSort && sSort[1]) {
+        $("#SortSelect .label").attr("data-selected-key", sSort[1]).html($("#SortSelect li[data-key='"+sSort[1]+"']").html());
       }
       else {
       	/*/
@@ -1649,10 +1728,10 @@ window.onload = function(){
       var oWin = "<div class='display: none' id='monsterTypeInfoWindow'>"+sTitle+sCross+sImg+sInfo+"</div>";
       showDBG();
       $("body").append(oWin);
-      $("#monsterTypeInfoWindow").fadeIn();      
+      $("#monsterTypeInfoWindow").fadeIn();
     }
   }
-  
+
   function hideMonsterTypeInfo() {
     $("#monsterTypeInfoWindow").fadeOut();
   }
