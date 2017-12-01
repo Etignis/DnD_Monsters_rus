@@ -1707,9 +1707,9 @@ window.onload = function(){
     if(aSizes && aSizes.length>0 && $("#SizeCombobox .combo_box_content input").length > aSizes.length) {
 			aFilters.push("size="+aSizes.join(","));
 		}
-		// if(sSort && sSort.length>0) {
-      // aFilters.push("sort="+sSort.replace(/\s+/g, "_"));
-		// }
+		if(sSort && sSort.length>0 && sSort!="alpha_level") {
+      aFilters.push("sort="+sSort.replace(/\s+/g, "_"));
+		}
     if(aFilters.length>0) {
       var sHash = aFilters.join("&");
       window.location.hash = sHash;
