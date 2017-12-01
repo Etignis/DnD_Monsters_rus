@@ -690,10 +690,10 @@ window.onload = function(){
 		if(oMonster.image) {
 			if(typeof oMonster.image == "string") {
 				//sImage = '<div class="image" style="float: right;"><img src="img/monsters/' + oMonster.image + '" style="max-width: 350px"></div>';
-        sImage = '<img src="img/monsters/' + oMonster.image + '">';
+        sImage = '<img src="img/cute_monsters/' + oMonster.image + '">';
 			} else if(oMonster.image.src && oMonster.image.type) {
 				//sImage = '<div class="image '+oMonster.image.type+'"  style="float: right;"><img src="img/monsters/' + oMonster.image.src + '" style="max-width: 350px"></div>';
-        sImage = '<img src="img/monsters/' + oMonster.image.src + '">';
+        sImage = '<img src="img/cute_monsters/' + oMonster.image.src + '">';
 			}
 		}
 
