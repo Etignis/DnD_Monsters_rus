@@ -1481,6 +1481,7 @@ window.onload = function(){
 	$("body").on('click', "#levelToggle label", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
+      updateHash();
 			filterMonsters();
 		}, nTimerSeconds);
 	});
@@ -1489,6 +1490,7 @@ window.onload = function(){
 	$("body").on('click', "#TypeToggle label", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
+      updateHash();
 			setSubtypeToggleEnable();
 			filterMonsters();
 		}, nTimerSeconds);
@@ -1498,6 +1500,7 @@ window.onload = function(){
 	$("body").on('click', "#SubTypeToggle label", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
+      updateHash();
 			filterMonsters();
 		}, nTimerSeconds);
 	});
@@ -1506,6 +1509,7 @@ window.onload = function(){
 	$("body").on('click', "#SourceCombobox label", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
+      updateHash();
 			filterMonsters();
 		}, nTimerSeconds);
 	});
@@ -1516,6 +1520,7 @@ window.onload = function(){
 	$("body").on('click', "#SizeCombobox label", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
+      updateHash();
 			filterMonsters();
 		}, nTimerSeconds);
 	});
@@ -1655,19 +1660,56 @@ window.onload = function(){
 
 // url filters
 	function updateHash() {
+    var aFilters = [];
+    // text
     var sName = $("#NameInput input").val();
+    
+    //select
 		var sSort = $("#SortSelect .label").attr("data-selected-key");
 
-    var aFilters = [];
-		//#q=spell_name
+    //combobox
+    var aSources = $("#SourceCombobox .combo_box_title").attr("data-val");
+			if(aSources) aSources = aSources.split(",").map(function(item){return item.trim()});
+    var aSizes = $("#SizeCombobox .combo_box_title").attr("data-val");
+			if(aSizes) aSizes = aSizes.split(",").map(function(item){return item.trim()});
+    
+    //buttos
+    var aCr=[];
+    $("#levelToggle input:checked").each(function(){aCr.push( $(this).attr('value'))})
+    if(aCr.length>0){
+      aFilters.push("cr="+aCr.join(",").replace(/\s+/g, "_"));
+    }
+    var aTypes=[];
+    $("#TypeToggle input:checked").each(function(){aTypes.push( $(this).attr('value'))})
+    if(aTypes.length>0){
+      aFilters.push("type="+aTypes.join(",").replace(/\s+/g, "_"));
+    }
+    var aSubTypes=[];
+    $("#SubTypeToggle input:checked").each(function(){aSubTypes.push( $(this).attr('value'))})
+    if(aSubTypes.length>0){
+      aFilters.push("subtype="+aSubTypes.join(",").replace(/\s+/g, "_"));
+    }
+    
+    //segmented
+    var aView=[];
+    $("#ViewSegmented input:checked").each(function(){aView.push( $(this).attr('value'))})
+    if(aView.length>0 && aView[0]!='text'){
+      aFilters.push("view="+aView.join(",").replace(/\s+/g, "_"));
+    }
+    
+    //filters
     if(sName && sName.length>0) {
       aFilters.push("q="+sName.replace(/\s+/g, "_"));
-      window.location.hash = sHash;
     }
-		if(sSort && sSort.length>0) {
-      aFilters.push("sort="+sSort.replace(/\s+/g, "_"));
-			window.location.hash = sHash;
+    if(aSources && aSources.length>0 && $("#SourceCombobox .combo_box_content input").length > aSources.length) {
+			aFilters.push("source="+aSources.join(","));
 		}
+    if(aSizes && aSizes.length>0 && $("#SizeCombobox .combo_box_content input").length > aSizes.length) {
+			aFilters.push("size="+aSizes.join(","));
+		}
+		// if(sSort && sSort.length>0) {
+      // aFilters.push("sort="+sSort.replace(/\s+/g, "_"));
+		// }
     if(aFilters.length>0) {
       var sHash = aFilters.join("&");
       window.location.hash = sHash;
@@ -1682,13 +1724,80 @@ window.onload = function(){
     if(sHash && !/[^А-Яа-яЁё\w\d\/&?|_=-]/.test(sHash)) {
       var sName = sHash.match(/\bq=([А-Яа-яЁё\/\w\d_]+)/);
       var sSort = sHash.match(/\bsort=([\w]+)/);
-      var sMonsterType = sHash.match(/\bMonsterType=([А-Яа-яЁё\/\w\d_]+)/);
+      var sMonsterType = sHash.match(/\bmonsterType=([А-Яа-яЁё\/\w\d_]+)/);
+      var sType = sHash.match(/\btype=([А-Яа-яЁё\/\w\d_]+)/);
+      var sSubType = sHash.match(/\bsubtype=([А-Яа-яЁё\/\w\d_]+)/);
+      var sSize = sHash.match(/\bsize=([А-Яа-яЁё\/\w\d_]+)/);
+      var sSources = sHash.match(/\bsource=([\w,_]+)/);
+      var sCr = sHash.match(/\bcr=([\w\d\\\/,_]+)/);
+      var sView = sHash.match(/\bview=([\w\d\\\/,_]+)/);
       if(sName && sName[1]) {
       	$("#NameInput input").val(sName[1].replace(/[_]+/g," "));
-      	//filterSpells();
       }
       if(sMonsterType && sMonsterType[1]) {
         showMonsterTypeInfo(sMonsterType[1]);
+      }
+      if(sCr && sCr[1]) {
+        var aCr = sCr[1].split(",");
+        aCr.forEach(function(i){
+          $("#levelToggle input[type=checkbox]").each(function(){
+            if($(this).attr("value") == i.trim()) {
+              $(this).prop('checked', true);
+            }
+          })
+        });
+      }
+      if(sType && sType[1]) {
+        var aType = sType[1].split(",");
+        aType.forEach(function(i){
+          $("#TypeToggle input[type=checkbox]").each(function(){
+            if($(this).attr("value") == i.trim()) {
+              $(this).prop('checked', true);
+            }
+          })
+        });
+      }
+      if(sSubType && sSubType[1]) {
+        var aSubType = sSubType[1].split(",");
+        aSubType.forEach(function(i){
+          $("#SubTypeToggle input[type=checkbox]").each(function(){
+            if($(this).attr("value") == i.trim()) {
+              $(this).prop('checked', true);
+            }
+          })
+        });
+      }
+      if(sSize && sSize[1]) {
+      	var aSize = sSize[1].split(",");
+
+      	$("#SizeCombobox .combo_box_content input[type='checkbox']").each(function(){
+      		if(aSize.indexOf($(this).val())>-1) {
+      			$(this).prop('checked', true);
+      		} else {
+      			$(this).prop('checked', false);
+      		}
+      	});
+      	$("#SourceCombobox .combo_box_title").attr("data-val", aSize[1])
+      }
+      if(sSources && sSources[1]) {
+      	var aSources = sSources[1].split(",");
+
+      	$("#SourceCombobox .combo_box_content input[type='checkbox']").each(function(){
+      		if(aSources.indexOf($(this).val())>-1) {
+      			$(this).prop('checked', true);
+      		} else {
+      			$(this).prop('checked', false);
+      		}
+      	});
+      	$("#SourceCombobox .combo_box_title").attr("data-val", sSources[1])
+      }
+      if(sView && sView[1]) {
+        $("#ViewSegmented input").each(function(){
+          $(this).prop('checked', false);
+          if($(this).attr("value") == sView[1]) {
+            $(this).prop('checked', true);
+          }
+        });
       }
       if(sSort && sSort[1]) {
         $("#SortSelect .label").attr("data-selected-key", sSort[1]).html($("#SortSelect li[data-key='"+sSort[1]+"']").html());
