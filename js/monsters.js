@@ -811,9 +811,14 @@ window.onload = function(){
 
 		// name
 		if (sName) {
-			sName = sName.toLowerCase().trim();
+      var aName = sName.split(",").map(item => item.trim().toLowerCase());
 			filteredMonsters = filteredMonsters.filter(function(monster){
-				return (monster.name.toLowerCase().trim().indexOf(sName)>=0);
+        for (i=0; i<aName.length; i++) {
+          if (monster.name.toLowerCase().trim().indexOf(aName[i])>=0) {
+            return true;
+          }
+        }	
+        return false;
 			});
 		}
 
@@ -1748,8 +1753,8 @@ window.onload = function(){
     $('html, body').animate({scrollTop:0}, 'fast');
 
     var sHash = window.location.hash.slice(1); // /archive#q=spell_name
-    if(sHash && !/[^А-Яа-яЁё\w\d\/&?|_=-]/.test(sHash)) {
-      var sName = sHash.match(/\bq=([А-Яа-яЁё\/\w\d_]+)/);
+    if(sHash && !/[^А-Яа-яЁё\w\d\/&?|_=,-]/.test(sHash)) {
+      var sName = sHash.match(/\bq=([А-Яа-яЁё\/\w\d_,]+)/);
       var sSort = sHash.match(/\bsort=([\w]+)/);
       var sMonsterType = sHash.match(/\bmonsterType=([А-Яа-яЁё\/\w\d_]+)/);
       var sType = sHash.match(/\btype=([А-Яа-яЁё\/\w\d_]+)/);
