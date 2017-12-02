@@ -576,9 +576,18 @@ window.onload = function(){
     var ret = '';
 		if(Array.isArray(oData)) {
 			for(var i in oData){
+        var sText='';
+        var oText = oData[i].text;
+        if(Array.isArray(oText)){
+          oText.forEach(function(item){
+            sText += "<p>"+item+"</p>";
+          });
+        } else{
+          sText = oText;
+        }
 				ret+="<div class='"+sClassName+" i4-tipe'>"+
 					(oData[i].name? "<span class='i2-tipe'>"+oData[i].name.trim()+"</span>" : "")+
-					oData[i].text+
+					sText+
 				"</div>";
 			}
 		}
@@ -586,9 +595,18 @@ window.onload = function(){
 			if(oData.list) {
 				// new
 				//var sLenendaryText = oData.text? "<span class='i2-tipe'>"+oData.text+"</span>" : "";
-				var sText = oData.text? oData.text : "";
-				ret+=
-					sText+
+				//var sText = oData.text? oData.text : "";
+        var sText='';
+        var oText = oData.text;
+        if(oText && Array.isArray(oText)){
+          oText.forEach(function(item){
+            sText += "<p>"+item+"</p>";
+          });
+        } else{
+          sText = oText;
+        }
+        
+				ret+= sText+
 
 					oData.list.map(function(el){
 						var sLeg = "";
@@ -604,9 +622,18 @@ window.onload = function(){
 
 			} else{
 				// old
+        var sText='';
+        var oText = oData.text;
+        if(Array.isArray(oText)){
+          oText.forEach(function(item){
+            sText += "<p>"+item+"</p>";
+          });
+        } else{
+          sText = oText;
+        }
 				ret+="<div class='"+sClassName+" i4-tipe'>"+
 					"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
-					oData.text+
+					sText+
 				"</div>";
 			}
 
