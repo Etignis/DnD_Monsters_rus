@@ -49,7 +49,7 @@ function getCardView() {
 	return sClass;
 }
 
-window.onload = function(){
+$(document).ready(function(){
 	var monsterLevels = [];
 	var monsterTypes = [];
 	var aHiddenMonsters = [];
@@ -1906,4 +1906,4 @@ var nMaxTry = 3;
 			setTimeout(startCatalog, 4000);
 	}
 
-};
+});
