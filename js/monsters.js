@@ -63,6 +63,14 @@ $(document).ready(function(){
 
 	var oSource = {};
 
+	$("body").on("load", ".beautifullDescription img", function(){
+		debugger;
+		while ($(this).height() > $(this).closest(".monster").height()-50) {
+			var nWidth = $(this).width();
+			$(this).width(nWidth-10);
+		}
+	});
+	
 	function translateCR(str){
 		str = String(eval(str)*1000);
 		while (str.length<7) {
