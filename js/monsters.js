@@ -646,6 +646,20 @@ $(document).ready(function(){
 		return ret;
   }
 
+	function makeImageName(sImg){
+		var oImg = /([a-z\s'-]+)/ig.exec(sImg);
+		if(oImg && oImg[1]) {
+			return oImg[1].toUpperCase().replace(/\s/g, "_") + ".jpg";			
+		}
+		return "";
+	}
+	function makeImageFromName(sImg){
+		var oImg = /\(([a-z\s'-]+)\)/ig.exec(sImg) || /\[([a-z\s'-]+)\]/ig.exec(sImg);
+		if(oImg && oImg[1]) {
+			return oImg[1].toUpperCase().replace(/\s/g, "_") + ".jpg";			
+		}
+		return "";
+	}
 	function createCard(oMonster, sLockedSpell, sClass) {
 		var size = '';
 		size = monsterSize[oMonster.size];
@@ -717,11 +731,14 @@ $(document).ready(function(){
 		if(oMonster.image) {
 			if(typeof oMonster.image == "string") {
 				//sImage = '<div class="image" style="float: right;"><img src="img/monsters/' + oMonster.image + '" style="max-width: 350px"></div>';
-        sImage = '<img src="img/cute_monsters/' + oMonster.image + '">';
+				//makeImageName(sImg);
+        sImage = '<img src="img/cute_monsters/' + makeImageName(oMonster.image) + '"  onerror="this.style.display=\'none\'">';
 			} else if(oMonster.image.src && oMonster.image.type) {
 				//sImage = '<div class="image '+oMonster.image.type+'"  style="float: right;"><img src="img/monsters/' + oMonster.image.src + '" style="max-width: 350px"></div>';
-        sImage = '<img src="img/cute_monsters/' + oMonster.image.src + '">';
+        sImage = '<img src="img/cute_monsters/' + makeImageName(oMonster.image.src) + '"  onerror="this.style.display=\'none\'">';
 			}
+		} else {
+			sImage = '<img src="img/cute_monsters/' + makeImageFromName(oMonster.name) + '"  onerror="this.style.display=\'none\'">';;			
 		}
 
     var sBeautifullDescription = (sFiction || sImage)? "<div class='beautifullDescription'><a href='#' class='sh_beautifullDescription'>Скрыть/показать описание</a><div class='beautifullDescriptionInner'>" +sImage+sFiction+"</div></div>" : "";

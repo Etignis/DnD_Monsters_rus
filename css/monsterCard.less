@@ -2,7 +2,8 @@
 @pr: .4em;
 .monster, .monster_card{
     position: relative;    
-    
+    max-width: 120rem;
+		margin: 0 auto;
     .lock_monster, .unlock_monster, .hide_monster{
     	//display: none;
         display: block; 
@@ -39,7 +40,9 @@
 	.frame();
 	/*float: left;
 	width: 30%;*/
-	margin: 10px 15px;
+	/*margin: 10px 15px;*/
+	margin-top: 10px;
+	margin-botttom: 10px;
 	padding: 10px;
 	position: relative;
 	
@@ -86,6 +89,26 @@
 			width: 30%;
 			min-width: 200px;
 			float: right;
+			max-height: 100%;
+			
+			&:after{
+				content:url('../img/who.jpg'); 
+				
+				display: block;
+
+				position: absolute;
+				top: -10px;
+				left: 0;
+				height: calc(100% + 10px);
+				width: 100%;
+				background-color: rgb(230, 230, 230);
+				border: 2px dotted rgb(200, 200, 200);
+				border-radius: 5px;
+			}
+			&:before{
+				content: " ";
+			}
+			
 		}
 	}
 	.sh_beautifullDescription{
