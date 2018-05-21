@@ -655,16 +655,16 @@ $(document).ready(function(){
   }
 
 	function makeImageName(sImg){
-		var oImg = /([a-z\s'-]+)/ig.exec(sImg);
+		var oImg = /([a-z\s'_-]+)/ig.exec(sImg);
 		if(oImg && oImg[1]) {
 			return oImg[1].toUpperCase().replace(/\s/g, "_") + ".jpg";			
 		}
 		return "";
 	}
 	function makeImageFromName(sImg){
-		var oImg = /\(([a-z\s'-]+)\)/ig.exec(sImg) || /\[([a-z\s'-]+)\]/ig.exec(sImg);
+		var oImg = /\(([a-z\s\\\/'_-]+)\)/ig.exec(sImg) || /\[([a-z\s\\\/'-]+)\]/ig.exec(sImg);
 		if(oImg && oImg[1]) {
-			return oImg[1].toUpperCase().replace(/\s/g, "_") + ".jpg";			
+			return oImg[1].toUpperCase().replace(/[^\w-]/g, "_") + ".jpg";			
 		}
 		return "";
 	}
@@ -678,19 +678,12 @@ $(document).ready(function(){
 		size='<span class="size">' + size + '</span>';
 
 		var trait = getMonsterAbils(oMonster.trait, null, "trait");//getMonsterTraits(oMonster.trait);
-
 		var reaction = getMonsterAbils(oMonster.reaction, "Реакция", "reaction");//getMonsterReactions(oMonster.reaction);
-
 		var action = getMonsterAbils(oMonster.action, "Действия", "action");//getMonsterActions(oMonster.action);
-
 		var legendary = getMonsterAbils(oMonster.legendary, "Легендарные действия", "legendary");//getMonsterLegendary(oMonster.legendary);
-
 		var lair = getMonsterAbils(oMonster.lair, "Действия логова", "lair");//getMonsterLair(oMonster.lair);
-
 		var local = getMonsterAbils(oMonster.local, "Эффекты местности", "local");//getMonsterLocal(oMonster.local);
-
 		var spells = getMonsterAbils(oMonster.spells, "Заклинания", "spells");//getMonsterSpells(oMonster.spells);
-
 
 		var stats = '';
 		var str = oMonster.str;
