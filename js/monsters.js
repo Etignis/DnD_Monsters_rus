@@ -185,7 +185,7 @@ $(document).ready(function(){
 
 		var modeClass = " class='mode_"+mode+"' ";
 
-		function getOption(el) {
+		function getOption(el, elParent) {
 			var sOptionValue, sOptionLabel;
 			if(typeof el == "number" || typeof el == "string") {
 				sOptionValue = sOptionLabel = el;
@@ -194,36 +194,26 @@ $(document).ready(function(){
 				sOptionLabel = el.title;
 			}
 
-			return "<input type='checkbox' value='"+sOptionValue+"' id='tg_"+sOptionValue+"'><label for='tg_"+sOptionValue+"' "+modeClass+" data-hierarchy='root'>"+sOptionLabel+"</label>";
+			return "<input type='checkbox' value='"+sOptionValue+"' id='tg_"+elParent+"_"+sOptionValue+"'><label for='tg_"+elParent+"_"+sOptionValue+"' "+modeClass+" data-hierarchy='root'>"+sOptionLabel+"</label>";
 		}
 		var aItems = [];
 		var oItems = [];
 		for (var i =0; i < src.length; i++) {
 			var type = src[i];
-
+			type.parentId= params.id;
 
 			if (subtypes == "only") {
 				for (var sbt in type.subtype) {
-					//aItems.push(type.subtype[sbt]);
 					oItems[type.subtype[sbt].key]=type.subtype[sbt];
-					//ret+= getOption(type.subtype[sbt]);
 				}
 			} else {
-				//aItems.push(type);
 				var key = (typeof type == "number" || typeof type == "string")? type: type.key;
 				oItems[key] = type;
-				//ret+= getOption(type);
 			}
 
 		}
-		/*/
-		aItems.forEach(function(el) {
-			ret+= getOption(el);
-		});
-		/*/
-		/**/
+		
 		for(var i in oItems) {
-			//ret+= getOption(oItems[i]);
 			aItems.push(i);
 		}
 		aItems.sort(function (a, b) {
@@ -233,9 +223,12 @@ $(document).ready(function(){
 				return 1;
 			return 0;
 		})
-		aItems.forEach(function(el) {
-			ret+= getOption(el);
-		})
+		for (var i=0; i< aItems.length; i++) {
+			ret+= getOption(aItems[i], params.id);
+		}
+		// aItems.forEach(function(el) {
+			// ret+= getOption(el, params.id);
+		// }.bind(el, params))
 		/**/
 		ret = "<div "+id+" class='toggle_box'><div class='toggle_box_content'>"+ret+"</div></div>";
 		return ret;
