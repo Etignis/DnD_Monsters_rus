@@ -648,7 +648,7 @@ $(document).ready(function(){
   }
 
 	function makeImageName(sImg){
-		var oImg = /([a-z\s'-]+)/ig.exec(sImg);
+		var oImg = /([a-z\s'_-]+)/ig.exec(sImg);
 		if(oImg && oImg[1]) {
 			return oImg[1].toUpperCase().replace(/\s/g, "_") + ".jpg";			
 		}

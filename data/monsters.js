@@ -6,6 +6,10 @@
 	{
 		title:"Volo's Guide to Monsters",
 		key: "VGtM"
+	},
+	{
+		title:"Xanathar's Guide to Everuthing",
+		key: "XGTE"
 	}
 ];
 var monsterExpa = {
@@ -4497,9 +4501,9 @@ var allMonsters = [
       {
         "name": "Глинянный Голем (Clay Golem)",
         "size": "L",
-        "type": "конструкция",
-		"source": "MM",
-		"alignment": "unaligned",
+        "type": "конструкт",
+				"source": "MM",
+				"alignment": "unaligned",
         "ac": "14 (естественная броня)",
         "hp": "133 (14d10 + 56)",
         "speed": "4 клетки",
@@ -26578,5 +26582,35 @@ var allMonsters = [
 			}
 		],
 		"source": "VGtM"
+      },
+      {
+        "name": "Крошечный слуга [Tiny Servant]",
+        "image": "tiny_servant.jpg",
+        "size": "T",
+        "type": "конструкт",
+        "alignment": "без мировоззрения",
+        "ac": "15",
+        "hp": "10 (4к4)",
+        "speed": "6 клеток, взбирание 6 клеток",
+        "str": "4",
+        "dex": "16",
+        "con": "10",
+        "int": "2",
+        "wis": "10",
+        "cha": "1",
+        "immune": "яд, психический",
+        "conditionImmune": "ослеплённый, очарованный, оглохший, истощённый, испуганный, парализованный, окаменевший, отравленный",
+        "senses": "слепое зрение 60 фт. (слеп за этим радиусом)",
+        "passive": "10",
+        "languages": "",
+        "cr": "0",
+        
+        "action": [
+					{
+						"name": "Удар",
+						"text": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к4 + 3) дробящего урона."
+					}
+				],
+				"source": "XGTE"
       }
     ];
