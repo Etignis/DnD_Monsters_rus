@@ -7,7 +7,14 @@
   <meta name="description" content="Каталог монстров D&D5 на русском языке">
   <meta name="Keywords" content="днд, монстры, dnd, monsters, monster manual, d&d">
   <link rel="stylesheet" type="text/css" href="css/style.css"><!-- include css styles  -->
-  <link href="https://tentaculus.ru/_fonts/FortAwesome/css/font-awesome.min.css" rel="stylesheet">
+	<script>
+	if(window.location.protocol == "file:") {
+		document.write("<link href='../_fonts/FortAwesome/css/font-awesome.min.css' rel='stylesheet'>"); 
+	} else{
+		document.write("<link href='"+ window.location.protocol +'//' + window.location.host + "/_fonts/FortAwesome/css/font-awesome.min.css'  rel='stylesheet'>");
+	}
+	</script>
+  <!--link href="https://tentaculus.ru/_fonts/FortAwesome/css/font-awesome.min.css" rel="stylesheet"-->
   <link rel="shortcut icon" href="favicon.ico" /><!-- include icon for browser -->
   <link rel="canonical" href="https://tentaculus.ru/monsters" />
   <meta property="og:image" content="img/t1.jpg" />
@@ -106,8 +113,13 @@
 </div>
 
   <script type='text/javascript' src='js/jquery-1.11.3.min.js'></script><!-- jQuery -->
+<<<<<<< HEAD
   <script type='text/javascript' src='data/monsters.js?v=0.3'></script><!-- your script -->
   <script type='text/javascript' src='js/monsters.js?v=0.31'></script><!-- your script -->
+=======
+  <script type='text/javascript' src='data/monsters.js?v=0.21'></script><!-- your script -->
+  <script type='text/javascript' src='js/monsters.js?v=0.2'></script><!-- your script -->
+>>>>>>> new_data
  <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
     (function (d, w, c) {
