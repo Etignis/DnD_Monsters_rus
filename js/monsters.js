@@ -194,7 +194,7 @@ $(document).ready(function(){
 				sOptionLabel = el.title;
 			}
 
-			return "<input type='checkbox' value='"+sOptionValue+"' id='tg_"+elParent+"_"+sOptionValue+"'><label for='tg_"+elParent+"_"+sOptionValue+"' "+modeClass+" data-hierarchy='root'>"+sOptionLabel+"</label>";
+			return "<input type='checkbox' value='"+sOptionValue.replace(/\s+/g, "_")+"' id='tg_"+elParent.replace(/\s+/g, "_")+"_"+sOptionValue.replace(/\s+/g, "_")+"'><label for='tg_"+elParent.replace(/\s+/g, "_")+"_"+sOptionValue.replace(/\s+/g, "_")+"' "+modeClass.replace(/\s+/g, "_")+" data-hierarchy='root'>"+sOptionLabel+"</label>";
 		}
 		var aItems = [];
 		var oItems = [];
@@ -648,14 +648,14 @@ $(document).ready(function(){
   }
 
 	function makeImageName(sImg){
-		var oImg = /([a-z\s'_-]+)/ig.exec(sImg);
+		var oImg = /([\da-z\s'_-]+)/ig.exec(sImg);
 		if(oImg && oImg[1]) {
 			return oImg[1].toUpperCase().replace(/\s/g, "_") + ".jpg";			
 		}
 		return "";
 	}
 	function makeImageFromName(sImg){
-		var oImg = /\(([a-z\s\\\/'_-]+)\)/ig.exec(sImg) || /\[([a-z\s\\\/'-]+)\]/ig.exec(sImg);
+		var oImg = /\(([\da-z\s\\\/'_-]+)\)/ig.exec(sImg) || /\[([\da-z\s\\\/'-]+)\]/ig.exec(sImg);
 		if(oImg && oImg[1]) {
 			return oImg[1].toUpperCase().replace(/[^\w-]/g, "_") + ".jpg";			
 		}
@@ -825,7 +825,7 @@ $(document).ready(function(){
       var aName = sName.split(",").map(item => item.trim().toLowerCase());
 			filteredMonsters = filteredMonsters.filter(function(monster){
         for (i=0; i<aName.length; i++) {
-          if (monster.name.toLowerCase().trim().indexOf(aName[i])>=0) {
+          if (monster.name.toLowerCase().trim().indexOf(aName[i].replace(/_+/g, " "))>=0) {
             return true;
           }
         }	
@@ -849,7 +849,7 @@ $(document).ready(function(){
 		if(aTypes && aTypes.length>0 && aTypes.length<99) {
 			filteredMonsters = filteredMonsters.filter(function(monster){
 				for(var i = 0; i < aTypes.length; i++) {
-					if(aTypes[i].toLowerCase().trim() == monster.sType.toLowerCase().trim()) {
+					if(aTypes[i].replace(/_+/g, " ").toLowerCase().trim() == monster.sType.toLowerCase().trim()) {
 						return true;
 					}
 				}
@@ -860,7 +860,7 @@ $(document).ready(function(){
 		if(aSubTypes && aSubTypes.length>0 && aSubTypes.length<99) {
 			filteredMonsters = filteredMonsters.filter(function(monster){
 				for(var i = 0; i < aSubTypes.length; i++) {
-					if(monster.aSubtypes.indexOf(aSubTypes[i].toLowerCase().trim()) >= 0) {
+					if(monster.aSubtypes.indexOf(aSubTypes[i].replace(/_+/g, " ").toLowerCase().trim()) >= 0) {
 						return true;
 					}
 				}
@@ -1766,11 +1766,11 @@ $(document).ready(function(){
     var sHash = window.location.hash.slice(1); // /archive#q=spell_name
     sHash = decodeURIComponent(sHash);
     if(sHash && !/[^А-Яа-яЁё\w\d\/&?|_=,-]/.test(sHash)) {
-      var sName = sHash.match(/\bq=([А-Яа-яЁё\/\w\d_,]+)/);
+      var sName = sHash.match(/\bq=([А-Яа-яЁё\/\w\d_,-]+)/);
       var sSort = sHash.match(/\bsort=([\w]+)/);
-      var sMonsterType = sHash.match(/\bmonsterType=([А-Яа-яЁё\/\w\d_]+)/);
-      var sType = sHash.match(/\btype=([А-Яа-яЁё\/\w\d_]+)/);
-      var sSubType = sHash.match(/\bsubtype=([А-Яа-яЁё\/\w\d_]+)/);
+      var sMonsterType = sHash.match(/\bmonsterType=([А-Яа-яЁё\/\w\d_-]+)/);
+      var sType = sHash.match(/\btype=([А-Яа-яЁё\/\w\d_-]+)/);
+      var sSubType = sHash.match(/\bsubtype=([А-Яа-яЁё\/\w\d_-]+)/);
       var sSize = sHash.match(/\bsize=([А-Яа-яЁё\/\w\d_]+)/);
       var sSources = sHash.match(/\bsource=([\w,_]+)/);
       var sCr = sHash.match(/\bcr=([\w\d\\\/,_]+)/);
