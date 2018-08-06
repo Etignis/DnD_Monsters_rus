@@ -1,4 +1,4 @@
-var TENTACULUS_APP_VERSION = "2.0.0";
+var TENTACULUS_APP_VERSION = "2.1.0";
 
 var oConfig = {}; // global app config data
 function setConfig(prop, val) {
@@ -49,6 +49,23 @@ function getCardView() {
 	return sClass;
 }
 
+// function isInViewport (elem) {
+	// var bounding = elem.getBoundingClientRect();
+	// return (
+		// bounding.top >= 0 &&
+		// bounding.left >= 0 &&
+		// bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+		// bounding.right <= (window.innerWidth || document.documentElement.clientWidth)
+	// );
+// };
+$.fn.isInViewport = function() {
+	var elementTop = $(this).offset().top;
+	var elementBottom = elementTop + $(this).outerHeight();
+	var viewportTop = $(window).scrollTop();
+	var viewportBottom = viewportTop + $(window).height();
+	return elementBottom > viewportTop && elementTop < viewportBottom;
+};
+
 $(document).ready(function(){
 	var monsterLevels = [];
 	var monsterTypes = [];
@@ -56,6 +73,7 @@ $(document).ready(function(){
 
 	var oTimer; // for TimeOut (filtering)
 	var nTimerSeconds = 100;
+	var oImageLoadingTimer;
 
 	var aHiddenMonsters = [];
 	var aLockedMonsters = {};
@@ -724,16 +742,14 @@ $(document).ready(function(){
 		var sImage = "";
 		if(oMonster.image) {
 			if(typeof oMonster.image == "string") {
-				//sImage = '<div class="image" style="float: right;"><img src="img/monsters/' + oMonster.image + '" style="max-width: 350px"></div>';
-				//makeImageName(sImg);
-        sImage = '<img src="img/cute_monsters/' + makeImageName(oMonster.image) + '"  onerror="this.style.display=\'none\'">';
+        sImage = makeImageName(oMonster.image);
 			} else if(oMonster.image.src && oMonster.image.type) {
-				//sImage = '<div class="image '+oMonster.image.type+'"  style="float: right;"><img src="img/monsters/' + oMonster.image.src + '" style="max-width: 350px"></div>';
-        sImage = '<img src="img/cute_monsters/' + makeImageName(oMonster.image.src) + '"  onerror="this.style.display=\'none\'">';
+        sImage = makeImageName(oMonster.image.src);
 			}
 		} else {
-			sImage = '<img src="img/cute_monsters/' + makeImageFromName(oMonster.name) + '"  onerror="this.style.display=\'none\'">';;			
+			sImage = makeImageFromName(oMonster.name);		
 		}
+		sImage = '<a title="Открыть изображение в новой вкладке" href="img/cute_monsters/' + sImage + '" target="_blanc"><img class="lasy_img" data-src="img/cute_monsters/' + sImage + '"  onerror="this.style.display=\'none\'"></a>';			
 
     var sBeautifullDescription = (sFiction || sImage)? "<div class='beautifullDescription'><a href='#' class='sh_beautifullDescription'>Скрыть/показать описание</a><div class='beautifullDescriptionInner'>" +sImage+sFiction+"</div></div>" : "";
 
@@ -932,6 +948,7 @@ $(document).ready(function(){
 		createLockedMonstersArea();
 		//$("#before_spells").hide();
 		$("#info_text").hide();
+		LasyLoadImages();
 	}
 
 	function filterMonsters(oParams){
@@ -1700,6 +1717,27 @@ $(document).ready(function(){
     hideDBG();
 		hideMonsterTypeInfo();
 	});
+	
+	// images lasy loading
+	function LasyLoadImages() {
+		if(oImageLoadingTimer) {
+			clearTimeout(oImageLoadingTimer);
+		}
+		oImageLoadingTimer = setTimeout(function(){
+			var aImages = $(".lasy_img");//document.getElementByClassName("lasy_img");
+			aImages.each(function(){
+				var oImg = $(this);
+				if(!oImg.attr("src")){
+					if(oImg.isInViewport()){
+						var sSrc=oImg.attr('data-src');
+						oImg.attr("src", sSrc);
+						oImg.removeClass("lasy_img");
+					}
+				}
+			});
+		}, 200);
+	}
+	window.onscroll = LasyLoadImages;
 
 // url filters
 	function updateHash() {
