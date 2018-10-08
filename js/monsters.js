@@ -696,6 +696,15 @@ $(document).ready(function(){
 		var local = getMonsterAbils(oMonster.local, "Эффекты местности", "local");//getMonsterLocal(oMonster.local);
 		var spells = getMonsterAbils(oMonster.spells, "Заклинания", "spells");//getMonsterSpells(oMonster.spells);
 
+		var sBioms = oMonster.biom || "";
+		sBioms = sBioms.split(",").map(function(el){
+			let oBiom = aBioms.filter(biom=> biom.text.key.toLowerCase() == el.trim().toLowerCase())[0];
+			 return oBiom? oBiom.text.title: "";
+		}).join(", ");
+		if(sBioms) {
+			sBioms = "Место обирания: "+sBioms;
+		}
+		
 		var stats = '';
 		var str = oMonster.str;
 		var dex = oMonster.dex;
@@ -765,6 +774,7 @@ $(document).ready(function(){
 				sMonsterType+
 				'<span class="alignment">' + oMonster.alignment + '</span>'+
 			'</div>'+
+			'<div>'+sBioms+'</div>'+
 			'<hr>'+
       sBeautifullDescription+
 			'<div class="ac"><span class="i-tipe">AC </span>' + oMonster.ac + '</div>'+
@@ -818,6 +828,7 @@ $(document).ready(function(){
 		var aSubTypes = oParams.aSubTypes || [];
 		var aSources = oParams.aSources || [];
 		var aSize = oParams.aSize || [];
+		var aBiom = oParams.aBiom || [];
 		var sClass = oParams.sClass || "monster";
     var fHidden = oParams.fHidden;
 		var sSort = oParams.sSort;
@@ -889,6 +900,19 @@ $(document).ready(function(){
 			filteredMonsters = filteredMonsters.filter(function(monster){
 				for(var i = 0; i < aSize.length; i++) {
 					if(aSize[i].toLowerCase().trim() == monster.size.toLowerCase().trim()) {
+						return true;
+					}
+				}
+				return false;
+			});
+		}
+		
+		// biomes
+		if(aBiom && aBiom.length>0 && aBiom.length<99) {
+			filteredMonsters = filteredMonsters.filter(function(monster){
+				for(var i = 0; monster.biom && i < aBiom.length; i++) {
+					// if(aBiom[i].toLowerCase().trim() == monster.biom.toLowerCase().trim()) {
+					if(monster.biom.toLowerCase().trim().indexOf(aBiom[i].toLowerCase().trim())>-1) {
 						return true;
 					}
 				}
@@ -977,6 +1001,11 @@ $(document).ready(function(){
 		$("#SizeCombobox .combo_box_content input:checkbox:checked").each(function(i, el){
 			aSize.push(el.value);
 		});
+		
+		var aBiom = [];
+		$("#BiomCombobox .combo_box_content input:checkbox:checked").each(function(i, el){
+			aBiom.push(el.value);
+		});
 
     var sSort = $("#SortSelect .label").attr("data-selected-key");
 
@@ -994,6 +1023,7 @@ $(document).ready(function(){
 				aSubTypes: aSubTypes,
 				aSources: aSources,
 				aSize: aSize,
+				aBiom: aBiom,
 				sClass: sClass,
 				fHidden: fHidden,
         sSort: sSort
@@ -1018,6 +1048,7 @@ $(document).ready(function(){
 				var sTypeTest = sTypeString.match(/^([^(]+)(\([^)]+\))?/);
 				var sType = (sTypeTest[1] || "").trim().toLowerCase();
 				var aSubtype = (sTypeTest[2]|| "").replace(/[)(]+/g, "").split(",").map(function(el){return el.trim().toLowerCase()});
+				
 
 				if(sType) {
 					if(!tmpMonsterTypes[sType]){
@@ -1034,6 +1065,8 @@ $(document).ready(function(){
 				el.sType = sType;
 				if(aSubtype.length>0)
 					el.aSubtypes = aSubtype;
+
+				var aBiom = (sTypeTest[2]|| "").replace(/[)(]+/g, "").split(",").map(function(el){return el.trim().toLowerCase()});
 			});
 		} catch (err) {
 			$("#info_text p").first().append("<br>[ОШИБКА]: Не могу загрузить базу монстров! {colectMonstersParams}");
@@ -1129,6 +1162,19 @@ $(document).ready(function(){
 			id: "SizeCombobox",
 			title: "Размер",
 			checkAll: true,
+			isOpen: isOpen
+			});
+		$(".p_side").append("<div class='mediaWidth'>" + s1 + "</div>");
+	}
+
+	
+	function createBiomCombobox(isOpen){
+		if(isOpen == undefined)
+			isOpen = false;
+		var s1=createComboBox(aBioms.map(function(el){return {title: el.text.title, key: el.text.key}}), {
+			id: "BiomCombobox",
+			title: "Места обитания",
+			checkAll: false,
 			isOpen: isOpen
 			});
 		$(".p_side").append("<div class='mediaWidth'>" + s1 + "</div>");
@@ -1279,6 +1325,9 @@ $(document).ready(function(){
 
 		//size
 		createSizeCombobox();
+		
+		//biom
+		createBiomCombobox();
 
 		//source
 		createSourceCombobox();
@@ -1587,6 +1636,18 @@ $(document).ready(function(){
 	$("body").on('click', "#SizeCombobox .combo_box_title, #SizeCombobox .combo_box_arrow", function(){
 		setConfig("sizeOpen", $("#SizeCombobox").attr("data-content-open"));
 	});
+	
+	// Biom combobox
+	$("body").on('click', "#BiomCombobox label", function(){
+		clearTimeout(oTimer);
+		oTimer = setTimeout(function(){
+      updateHash();
+			filterMonsters();
+		}, nTimerSeconds);
+	});
+	$("body").on('click', "#BiomCombobox .combo_box_title, #BiomCombobox .combo_box_arrow", function(){
+		setConfig("sizeOpen", $("#BiomCombobox").attr("data-content-open"));
+	});
 
   // sort select
   $("body").on('focusout', "#SortSelect", function(){
@@ -1753,6 +1814,8 @@ $(document).ready(function(){
 			if(aSources) aSources = aSources.split(",").map(function(item){return item.trim()});
     var aSizes = $("#SizeCombobox .combo_box_title").attr("data-val");
 			if(aSizes) aSizes = aSizes.split(",").map(function(item){return item.trim()});
+    var aBiomes = $("#BiomCombobox .combo_box_title").attr("data-val");
+			if(aBiomes) aBiomes = aBiomes.split(",").map(function(item){return item.trim()});
     
     //buttos
     var aCr=[];
@@ -1788,6 +1851,9 @@ $(document).ready(function(){
     if(aSizes && aSizes.length>0 && $("#SizeCombobox .combo_box_content input").length > aSizes.length) {
 			aFilters.push("size="+aSizes.join(","));
 		}
+    if(aBiomes && aBiomes.length>0 && $("#BiomCombobox .combo_box_content input").length > aBiomes.length) {
+			aFilters.push("biom="+aBiomes.join(","));
+		}
 		if(sSort && sSort.length>0 && sSort!="alpha_level") {
       aFilters.push("sort="+sSort.replace(/\s+/g, "_"));
 		}
@@ -1810,6 +1876,7 @@ $(document).ready(function(){
       var sType = sHash.match(/\btype=([А-Яа-яЁё\/\w\d_-]+)/);
       var sSubType = sHash.match(/\bsubtype=([А-Яа-яЁё\/\w\d_-]+)/);
       var sSize = sHash.match(/\bsize=([А-Яа-яЁё\/\w\d_]+)/);
+      var sBiom = sHash.match(/\bbiom=([А-Яа-яЁё\/\w\d_]+)/);
       var sSources = sHash.match(/\bsource=([\w,_]+)/);
       var sCr = sHash.match(/\bcr=([\w\d\\\/,_]+)/);
       var sView = sHash.match(/\bview=([\w\d\\\/,_]+)/);
@@ -1859,7 +1926,19 @@ $(document).ready(function(){
       			$(this).prop('checked', false);
       		}
       	});
-      	$("#SourceCombobox .combo_box_title").attr("data-val", aSize[1])
+      	$("#SizeCombobox .combo_box_title").attr("data-val", aSize[1])
+      }
+      if(sBiom && sBiom[1]) {
+      	var aBiom = sBiom[1].split(",");
+
+      	$("#BiomCombobox .combo_box_content input[type='checkbox']").each(function(){
+      		if(aBiom.indexOf($(this).val())>-1) {
+      			$(this).prop('checked', true);
+      		} else {
+      			$(this).prop('checked', false);
+      		}
+      	});
+      	$("#BiomCombobox .combo_box_title").attr("data-val", aBiom[1])
       }
       if(sSources && sSources[1]) {
       	var aSources = sSources[1].split(",");
