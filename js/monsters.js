@@ -723,6 +723,7 @@ $(document).ready(function(){
 		var skill = c_string("skill", "i2-tipe", "Способность", oMonster.skill);
 		var vulnerable = c_string("vulnerable", "i2-tipe", "Уязвимость", oMonster.vulnerable);
 		var immune = c_string("immune", "i2-tipe", "Иммунитет", oMonster.immune);
+		var resist = c_string("resist", "i2-tipe", "Сопротивляемость", oMonster.resist);
 		var conditionImmune = c_string("conditionImmune", "i2-tipe", "Иммунитет к состояниям", oMonster.conditionImmune);
 		var senses = c_string("senses", "i2-tipe", "Чувства", oMonster.senses);
 		var passive = c_string("passive", "i2-tipe", "Пассивное восприятие", oMonster.passive);
@@ -785,6 +786,7 @@ $(document).ready(function(){
 			'<hr>'+
 			skill+
 			vulnerable+
+			resist+
 			immune+
 			conditionImmune+
 			senses+
