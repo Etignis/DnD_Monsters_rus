@@ -8521,7 +8521,7 @@ var allMonsters = [{
 			}
 		]
 	}, {
-		"name": "Медуза Горгона (Gorgon)",
+		"name": "Горгона (Gorgon)",
 		"size": "L",
 		"type": "монстр",
 		"source": "MM",
