@@ -1031,6 +1031,10 @@ p {
 .monster_card:hover .unlock_monster {
   opacity: 1;
 }
+.monster .abilsList,
+.monster_card .abilsList {
+  padding-left: 2rem;
+}
 .monster {
   -webkit-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
   -moz-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
