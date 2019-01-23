@@ -1035,6 +1035,11 @@ p {
 .monster_card .abilsList {
   padding-left: 2rem;
 }
+.monster li.noLi,
+.monster_card li.noLi {
+  list-style-type: none;
+  margin-left: -2rem;
+}
 .monster {
   -webkit-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
   -moz-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;

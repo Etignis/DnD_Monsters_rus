@@ -611,7 +611,7 @@ $(document).ready(function(){
 					// sText+
 				// "</li>";
 				aItems.push(
-				"<li class='"+sClassName+" i4-tipe'>"+
+				"<li class='"+sClassName+" noLi i4-tipe'>"+
 					(oData[i].name? "<span class='i2-tipe'>"+oData[i].name.trim()+"</span>" : "")+
 					sText+
 				"</li>");
@@ -636,14 +636,16 @@ $(document).ready(function(){
 
 				aItems = oData.list.map(function(el){
 						var sLeg = "";
+						var sNoLi = "";
 						if(el.name) {
 							sLeg =  "<span class='i2-tipe'>"+el.name+"</span>";
+							sNoLi = " noLi ";
 						}
 						if(el.text) {
 							sLeg += el.text;
 						}
 
-						return "<li class='"+sClassName+" i4-tipe'>"+sLeg+"</li>";
+						return "<li class='"+sClassName+sNoLi+" i4-tipe'>"+sLeg+"</li>";
 					});
 
 			} else{
@@ -657,20 +659,25 @@ $(document).ready(function(){
         } else{
           sText = oText;
         }
-				aItems.push("<li class='"+sClassName+" i4-tipe'>"+
+				aItems.push("<li class='"+sClassName+" noLi i4-tipe'>"+
 					"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
 					sText+
 				"</li>");
 			}
 
 		}
+		
+		
+		var sList = "";
+		if(aItems.length>0) {
+			sList = "<ul class='abilsList'>"+aItems.join("")+"</ul>";
+		}
+		ret+=sList;
 		if(ret!='' && sTitle) {
-			var sList = "";
-			if(aItems.length>0) {
-				sList = "<ul class='abilsList'>"+aItems.join("")+"</ul>";
-			}
-			ret= "<div class='"+sClassName+" i3-tipe'>"+sTitle+"</div>"+ret + sList;
-    }
+			ret= "<div class='"+sClassName+" i3-tipe'>"+sTitle+"</div>"+ret;
+    } else {
+			ret= sText + ret;
+		}
 
 		return ret;
   }
@@ -697,7 +704,7 @@ $(document).ready(function(){
 		}
 
 		size='<span class="size">' + size + '</span>';
-
+		if(oMonster.name == "Аболет (Aboleth)") debugger;
 		var trait = getMonsterAbils(oMonster.trait, null, "trait");//getMonsterTraits(oMonster.trait);
 		var reaction = getMonsterAbils(oMonster.reaction, "Реакция", "reaction");//getMonsterReactions(oMonster.reaction);
 		var action = getMonsterAbils(oMonster.action, "Действия", "action");//getMonsterActions(oMonster.action);
