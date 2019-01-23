@@ -704,7 +704,7 @@ $(document).ready(function(){
 		}
 
 		size='<span class="size">' + size + '</span>';
-		if(oMonster.name == "Аболет (Aboleth)") debugger;
+		//if(oMonster.name == "Аболет (Aboleth)") debugger;
 		var trait = getMonsterAbils(oMonster.trait, null, "trait");//getMonsterTraits(oMonster.trait);
 		var reaction = getMonsterAbils(oMonster.reaction, "Реакция", "reaction");//getMonsterReactions(oMonster.reaction);
 		var action = getMonsterAbils(oMonster.action, "Действия", "action");//getMonsterActions(oMonster.action);
