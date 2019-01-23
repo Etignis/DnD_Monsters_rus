@@ -1779,7 +1779,8 @@ $(document).ready(function(){
 	// view
 	$("body").on('change', "#ViewSegmented input", function() {
 		clearTimeout(oTimer);
-		oTimer = setTimeout(function(){
+		oTimer = setTimeout(function(){			
+      updateHash();
 			filterMonsters();
 		}, nTimerSeconds);
 	});
