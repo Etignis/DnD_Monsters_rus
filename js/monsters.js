@@ -592,20 +592,21 @@ $(document).ready(function(){
 	}
 
   function getMonsterAbils(oData, sTitle, sClassName) {
-		console.log(sClassName);
+		//console.log(sClassName);
     var ret = '';
     var sText='';
 		var aItems = [];
 		if(Array.isArray(oData)) {
 			for(var i in oData){
-        var oText = oData[i].text;
-        if(Array.isArray(oText)){
-          oText.forEach(function(item){
-            sText += "<p>"+item+"</p>";
-          });
-        } else{
-          sText = oText;
-        }
+				sText='';
+				var oText = oData[i].text;
+				if(Array.isArray(oText)){
+					oText.forEach(function(item){
+						sText += "<p>"+item+"</p>";
+					});
+				} else{
+					sText = oText;
+				}
 				// ret+="<li class='"+sClassName+" i4-tipe'>"+
 					// (oData[i].name? "<span class='i2-tipe'>"+oData[i].name.trim()+"</span>" : "")+
 					// sText+
@@ -616,6 +617,7 @@ $(document).ready(function(){
 					sText+
 				"</li>");
 			}
+			sText='';
 		}
 		else if(typeof oData == "object") {
 			if(oData.list) {

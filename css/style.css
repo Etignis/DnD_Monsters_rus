@@ -1040,6 +1040,91 @@ p {
   list-style-type: none;
   margin-left: -2rem;
 }
+.monster .inner .randomProp,
+.monster_card .inner .randomProp {
+  cursor: pointer;
+  border-bottom: 1px rgba(72, 126, 197, 0) dashed;
+  transition: border 0.2s;
+}
+.monster .inner .randomProp:hover,
+.monster_card .inner .randomProp:hover {
+  border-bottom: 1px #487EC5 dashed;
+}
+.monster .inner .randomPropButton,
+.monster_card .inner .randomPropButton {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity .3s;
+}
+.monster .inner .randomPropButton:hover,
+.monster_card .inner .randomPropButton:hover {
+  opacity: 1;
+}
+.monster .inner a,
+.monster_card .inner a {
+  font-style: italic;
+  text-decoration: none;
+}
+.monster .inner a[href*="spells"],
+.monster_card .inner a[href*="spells"] {
+  color: #2e5992;
+  border-bottom: 1px rgba(72, 126, 197, 0) dashed;
+  background: #f6f9fc;
+  transition: border 0.2s;
+}
+.monster .inner a[href*="spells"]:hover,
+.monster_card .inner a[href*="spells"]:hover {
+  border-bottom: 1px #487EC5 dashed;
+}
+.monster .inner a[href*="spells"]:visited,
+.monster_card .inner a[href*="spells"]:visited {
+  color: #2e5992;
+}
+.monster .inner a[href*="spells"],
+.monster_card .inner a[href*="spells"] {
+  color: #2e5992;
+  border-bottom: 1px rgba(72, 126, 197, 0) dashed;
+  background: #f6f9fc;
+  transition: border 0.2s;
+}
+.monster .inner a[href*="spells"]:hover,
+.monster_card .inner a[href*="spells"]:hover {
+  border-bottom: 1px #487EC5 dashed;
+}
+.monster .inner a[href*="spells"]:visited,
+.monster_card .inner a[href*="spells"]:visited {
+  color: #2e5992;
+}
+.monster .inner a[href*="magic-item"],
+.monster_card .inner a[href*="magic-item"] {
+  color: #925d2e;
+  background: #fcf9f6;
+  border-bottom-color: rgba(197, 131, 72, 0);
+}
+.monster .inner a[href*="magic-item"]:hover,
+.monster_card .inner a[href*="magic-item"]:hover {
+  border-bottom: 1px #c58348 dashed;
+}
+.monster .inner a[href*="magic-item"]:visited,
+.monster_card .inner a[href*="magic-item"]:visited {
+  color: #925d2e;
+}
+.monster .inner a[href*="monsters"],
+.monster_card .inner a[href*="monsters"] {
+  color: #922e45;
+  background: #fcf6f8;
+  border-bottom-color: rgba(197, 72, 100, 0);
+}
+.monster .inner a[href*="monsters"]:hover,
+.monster_card .inner a[href*="monsters"]:hover {
+  border-bottom: 1px #c54864 dashed;
+}
+.monster .inner a[href*="monsters"]:visited,
+.monster_card .inner a[href*="monsters"]:visited {
+  color: #922e45;
+}
 .monster {
   -webkit-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
   -moz-border-radius: 0.2rem 0.2rem 0.2rem 0.2rem;
