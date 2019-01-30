@@ -7792,7 +7792,7 @@ var allMonsters = [{
 		"cr": "1/8",
 		"action": {
 			"name": "Укус",
-			"text": "Рукопашное Оружие: +3 к атаке, досягаемость: 1 клетка, одна цель. Попадание: 3 (1d4 + 1) колющего урона. Если цель - существо, оно должно бросить спасбросок сложностью 10 по Телосложению или заразится болезнью. Пока болезнь не излечена, цель не может восстанавливать очки здоровья кроме как магическим образо, а максимальное значение очков здоровья цели уменьшается на 3 (1d6) каждые 24 часа. Если максимум очков здоровья уменьшается до 0 - цель умирает.",
+			"text": "Рукопашное Оружие: +3 к атаке, досягаемость: 1 клетка, одна цель. Попадание: 3 (1d4 + 1) колющего урона. Если цель - существо, оно должно бросить спасбросок сложностью 10 по Телосложению или заразится болезнью. Пока болезнь не излечена, цель не может восстанавливать очки здоровья кроме как магическим образом, а максимальное значение очков здоровья цели уменьшается на 3 (1d6) каждые 24 часа. Если максимум очков здоровья уменьшается до 0 - цель умирает.",
 			"attack": "Укус|3|1d4+1"
 		}
 	}, {
@@ -15200,7 +15200,7 @@ var allMonsters = [{
 				"text": "Солар всегда знает, когда слышит ложь."
 			}, {
 				"name": "Прирожденный Заклинатель",
-				"text": ["Характеристика для заклинаний - Харизма (сложность спасброска 25). Он может врожденно колдовать следующие заклинания, без использования материальных компонентов: ", "По желанию:<i> <a href='https://tentaculus.ru/spells/#q=detect_evil_and_good'> <i>обнаружение зла и добра [detect evil and good]</a></i>,<i> <a href='https://tentaculus.ru/spells/#q=invisibility'> невидимость [invisibility]</a></i>(только на себя)</i>", "3 раза в день каждое:<i> <a href='https://tentaculus.ru/spells/#q=blade_barrier'> <i>стена клинков [blade barrier]</a></i>,<i> <a href='https://tentaculus.ru/spells/#q=dispel_evil_and_good'> развеять зло и добро [dispel evil and good]</a></i>,<i> <a href='https://tentaculus.ru/spells/#q=resurrection)</i'> воскрешение [resurrection]</i></a></i>", "1 раз в день каждое:<i> <a href='https://tentaculus.ru/spells/#q=commune'> <i>озарение [commune]</a></i>,<i> <a href='https://tentaculus.ru/spells/#q=control_weather'> власть над погодой [control weather]</a></i></i>"]
+				"text": ["Характеристика для заклинаний - Харизма (сложность спасброска 25). Он может врожденно колдовать следующие заклинания, без использования материальных компонентов: ", "По желанию:<i> <a href='https://tentaculus.ru/spells/#q=detect_evil_and_good'> <i>обнаружение зла и добра [detect evil and good]</a></i>,<i> <a href='https://tentaculus.ru/spells/#q=invisibility'> невидимость [invisibility]</a></i>(только на себя)</i>", "3 раза в день каждое:<i> <a href='https://tentaculus.ru/spells/#q=blade_barrier'> <i>стена клинков [blade barrier]</a></i>,<i> <a href='https://tentaculus.ru/spells/#q=dispel_evil_and_good'> развеять зло и добро [dispel evil and good]</a></i>,<i> <a href='https://tentaculus.ru/spells/#q=resurrection'></i'> воскрешение [resurrection]</i></a></i>", "1 раз в день каждое:<i> <a href='https://tentaculus.ru/spells/#q=commune'> <i>озарение [commune]</a></i>,<i> <a href='https://tentaculus.ru/spells/#q=control_weather'> власть над погодой [control weather]</a></i></i>"]
 			}, {
 				"name": "Сопротивление Магии",
 				"text": "Солар имеет преимущество в спасбросках против заклинаний и других магических эффектов."
