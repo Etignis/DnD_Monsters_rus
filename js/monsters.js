@@ -873,7 +873,9 @@ $(document).ready(function(){
       var aName = sName.split(",").map(item => item.trim().toLowerCase());
 			filteredMonsters = filteredMonsters.filter(function(monster){
         for (i=0; i<aName.length; i++) {
-          if (monster.name.toLowerCase().trim().indexOf(aName[i].replace(/_+/g, " "))>=0) {
+          if (monster.name.toLowerCase().trim().indexOf(aName[i].replace(/_+/g, " "))>=0 || 
+						  monster.nic.toLowerCase().trim().indexOf(aName[i].replace(/_+/g, " "))>=0
+					) {
             return true;
           }
         }	
