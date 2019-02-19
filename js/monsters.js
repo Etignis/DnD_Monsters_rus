@@ -1,5 +1,8 @@
 var TENTACULUS_APP_VERSION = "2.1.0";
-
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
 var oConfig = {}; // global app config data
 function setConfig(prop, val) {
 	if(prop && val != undefined && oConfig) {
@@ -766,8 +769,13 @@ $(document).ready(function(){
 
 		var add = oMonster.add? "<hr>"+oMonster.add : "";
 
-
-		var sFiction = oMonster.fiction? 	'<div class="fiction">' + oMonster.fiction + '</div><hr>' : "";
+		var aFic=[], sFic="";
+		if(oMonster.fiction) {
+			oMonster.fiction = oMonster.fiction.replaceAll(/\{\{([\w_-]+)\}\}/ig, function(sFull, sInner){
+				return monsterCommonInfo[sInner]? "<hr>"+monsterCommonInfo[sInner] : "";
+			});
+		}
+		var sFiction = oMonster.fiction? 	'<div class="fiction">'+ oMonster.fiction + sFic + '</div><hr>' : "";
 		var sImage = "";
 		if(oMonster.image) {
 			if(typeof oMonster.image == "string") {
@@ -874,7 +882,7 @@ $(document).ready(function(){
 			filteredMonsters = filteredMonsters.filter(function(monster){
         for (i=0; i<aName.length; i++) {
           if (monster.name.toLowerCase().trim().indexOf(aName[i].replace(/_+/g, " "))>=0 || 
-						  monster.nic.toLowerCase().trim().indexOf(aName[i].replace(/_+/g, " "))>=0
+						  monster.nic && monster.nic.toLowerCase().trim().indexOf(aName[i].replace(/_+/g, " "))>=0
 					) {
             return true;
           }

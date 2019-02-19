@@ -67,6 +67,10 @@ var monsterTypesInfo = [
   }
 ];  
 
+var monsterCommonInfo = {
+	dragon: "DRAGON"
+}
+
 var aBioms = [
 	{
 		text: {
@@ -342,6 +346,7 @@ var allMonsters = [{
 		"biom": "URBAN"
 	}, {
 		"name": "Взрослый Черный Дракон (Adult Black Dragon)",
+		"fiction": "{{dragon}}{{beast}}",
 		"size": "H",
 		"type": "дракон",
 		"source": "MM",
