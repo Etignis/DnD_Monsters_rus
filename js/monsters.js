@@ -769,13 +769,16 @@ $(document).ready(function(){
 
 		var add = oMonster.add? "<hr>"+oMonster.add : "";
 
-		var aFic=[], sFic="";
+		var aFic=[], sFic="", sSeparator="";
 		if(oMonster.fiction) {
 			oMonster.fiction = oMonster.fiction.replaceAll(/\{\{([\w_-]+)\}\}/ig, function(sFull, sInner){
-				return monsterCommonInfo[sInner]? "<hr>"+monsterCommonInfo[sInner] : "";
+				return monsterCommonInfo[sInner]? monsterCommonInfo[sInner] : "";
 			});
 		}
-		var sFiction = oMonster.fiction? 	'<div class="fiction">'+ oMonster.fiction + sFic + '</div><hr>' : "";
+		if(oMonster.fiction && sFic) {
+			sSeparator="<hr>";
+		}
+		var sFiction = oMonster.fiction? 	'<div class="fiction">'+ oMonster.fiction + sSeparator + sFic + '</div><hr>' : "";
 		var sImage = "";
 		if(oMonster.image) {
 			if(typeof oMonster.image == "string") {
