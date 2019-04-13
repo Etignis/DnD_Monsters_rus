@@ -1325,8 +1325,8 @@ $(document).ready(function(){
   }
 	function createDbButtons() {
 		var sButtons = "<input type='file' style='display: none' id='fileUploader'>"+
-		"<div class='mediaWidth'><button	id='bDownload'	>Скачать</button></div>" +
-		"<div class='mediaWidth'><button	id='bUpload'	>Загрузить</button></div>";
+		"<div class='mediaWidth'><button	id='bDownload' class='bt' style='width: 100%;'	>Скачать</button></div>" +
+		"<div class='mediaWidth'><button	id='bUpload'  class='bt' style='width: 100%;'	>Загрузить</button></div>";
     $(".p_side").append("<div class='mediaWidth'>" + sButtons + "</div>");
   }
 	
