@@ -721,7 +721,7 @@ $(document).ready(function(){
 			 return oBiom? oBiom.text.title: "";
 		}).join(", ");
 		if(sBioms) {
-			sBioms = "Место обирания: "+sBioms;
+			sBioms = "Место обитания: "+sBioms;
 		}
 		
 		var stats = '';
