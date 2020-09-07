@@ -1,5 +1,32 @@
 var TENTACULUS_APP_VERSION = "2.1.0";
 
+function isIos(){
+	if(window.location.href.toLowerCase().indexOf('ios=true')>-1) {
+		return true;
+	}
+	
+	if(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+		return true;
+	}
+	
+  var iDevices = [
+    'iPad Simulator',
+    'iPhone Simulator',
+    'iPod Simulator',
+    'iPad',
+    'iPhone',
+    'iPod'
+  ];
+
+  if (!!navigator.platform) {
+    while (iDevices.length) {
+      if (navigator.platform === iDevices.pop()){ return true; }
+    }
+  }
+
+  return false;
+}
+
 var oConfig = {}; // global app config data
 function setConfig(prop, val) {
 	if(prop && val != undefined && oConfig) {
@@ -336,7 +363,11 @@ $(document).ready(function(){
 
 	function createInput(params){
 		var id = params.id? "id='"+params.id+"'" : "";
-		return "<div "+id+" class='customInput'><input type='text'><span class='cross'></span></div>";
+		if(isIos()) {
+			return "<div "+id+" class='customInput'><textarea rows='1' style='width :100%; height: 3rem; font-size: 110%'></textarea><span class='cross'></span></div>";
+		} else {
+			return "<div "+id+" class='customInput'><input type='text'><span class='cross'></span></div>";
+		}
 	}
 
 	function showInfoWin(sText) {
@@ -997,7 +1028,7 @@ $(document).ready(function(){
 	}
 
 	function filterMonsters(oParams){
-		var sName = $("#NameInput input").val();
+		var sName = isIos()? $("#NameInput textarea").val() : $("#NameInput input").val();
 		var aLevels = [];
 		$("#levelToggle .toggle_box_content input:checkbox:checked").each(function(i, el){
 			aLevels.push(el.value);
@@ -1575,7 +1606,11 @@ $(document).ready(function(){
 
 	// custom Input
 	$("body").on('click', ".customInput .cross", function(){
-		$(this).parent().find("input").val("");
+		if(isIos()) {
+			$(this).parent().find("textarea").val("");
+		} else {
+			$(this).parent().find("input").val("");
+		}
 		$(this).parent().focusout();
 	});
   //custom Select
@@ -1609,6 +1644,13 @@ $(document).ready(function(){
 		}, nTimerSeconds);
 	});
 	$("body").on('keyup', "#NameInput input", function(){
+		clearTimeout(oTimer);
+		oTimer = setTimeout(function(){
+			updateHash();
+			filterMonsters();
+		}, nTimerSeconds*3);
+	});
+	$("body").on('keyup', "#NameInput textarea", function(){
 		clearTimeout(oTimer);
 		oTimer = setTimeout(function(){
 			updateHash();
@@ -1836,7 +1878,7 @@ $(document).ready(function(){
 	function updateHash() {
     var aFilters = [];
     // text
-    var sName = $("#NameInput input").val();
+    var sName = isIos()?$("#NameInput textarea").val() :$("#NameInput input").val();
     
     //select
 		var sSort = $("#SortSelect .label").attr("data-selected-key");
@@ -1913,7 +1955,7 @@ $(document).ready(function(){
       var sCr = sHash.match(/\bcr=([\w\d\\\/,_]+)/);
       var sView = sHash.match(/\bview=([\w\d\\\/,_]+)/);
       if(sName && sName[1]) {
-      	$("#NameInput input").val(sName[1].replace(/[_]+/g," "));
+      	isIos()? $("#NameInput textarea").val(sName[1].replace(/[_]+/g," ")) : $("#NameInput input").val(sName[1].replace(/[_]+/g," "));
       }
       if(sMonsterType && sMonsterType[1]) {
         showMonsterTypeInfo(sMonsterType[1]);
