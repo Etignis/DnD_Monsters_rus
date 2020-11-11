@@ -10,6 +10,10 @@
 	{
 		title:"Xanathar's Guide to Everuthing",
 		key: "XGTE"
+	},
+	{
+		title:"Mordenkainen's Tome of Foes",
+		key: "MToF"
 	}
 ];
 var monsterExpa = {
