@@ -131,6 +131,12 @@ var aBioms = [
 			key: "URBAN",
 			title: "Город"
 		}
+	},
+	{
+		text: {
+			key: "ASTRAL",
+			title: "Астрал"
+		}
 	}
 ];  
     
