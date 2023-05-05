@@ -406,18 +406,18 @@ $(document).ready(function(){
 		if(Array.isArray(oData)) {
 			for(var i in oData){
 				trait+="<div class='trait i4-tipe'>"+
-					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span>"+
+					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span><span>"+
 					oData[i].text+
-				"</div>";
+				"</span></div>";
 			}
 		}
 
 		else if(typeof oData == "object") {
 
 			trait+="<div class='trait i4-tipe'>"+
-				"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+				"<span class='i2-tipe'>"+oData.name.trim()+"</span><span>"+
 				oData.text+
-			"</div>";
+			"</span></div>";
 		}
 
 		return trait;
@@ -428,17 +428,17 @@ $(document).ready(function(){
 			for(var i in oData){
 
 				reaction+="<div class='reaction i4-tipe'>"+
-					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span>"+
+					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span><span>"+
 					oData[i].text+
-				"</div>";
+				"</span></div>";
 			}
 		}
 		else if(typeof oData == "object") {
 
 			reaction+="<div class='reaction i4-tipe'>"+
-				"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+				"<span class='i2-tipe'>"+oData.name.trim()+"</span><span>"+
 				oData.text+
-			"</div>";
+			"</span></div>";
 		}
 
 		return reaction;
@@ -448,17 +448,17 @@ $(document).ready(function(){
 		if(Array.isArray(oData)) {
 			for(var i in oData){
 				action+="<div class='action i4-tipe'>"+
-					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span>"+
+					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span><span>"+
 					oData[i].text+
-				"</div>";
+				"</span></div>";
 			}
 		}
 		else if(typeof oData == "object") {
 
 			action+="<div class='action i4-tipe'>"+
-				"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+				"<span class='i2-tipe'>"+oData.name.trim()+"</span><span>"+
 				oData.text+
-			"</div>";
+			"</span></div>";
 		}
 		if(action!='')
 			action="<div class='actions i3-tipe'>Действия</div>"+action;
@@ -472,9 +472,9 @@ $(document).ready(function(){
 		if(Array.isArray(oData)) {
 			for(var i in oData){
 				legendary+="<div class='legendary i4-tipe'>"+
-					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span>"+
+					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span><span>"+
 					oData[i].text+
-				"</div>";
+				"</span></div>";
 			}
 		}
 		else if(typeof oData == "object") {
@@ -499,9 +499,9 @@ $(document).ready(function(){
 			} else{
 				// old
 				legendary+="<div class='legendary i4-tipe'>"+
-					"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+					"<span class='i2-tipe'>"+oData.name.trim()+"</span><span>"+
 					oData.text+
-				"</div>";
+				"</span></div>";
 			}
 
 		}
@@ -515,9 +515,9 @@ $(document).ready(function(){
 		if(Array.isArray(oData)) {
 			for(var i in oData){
 				lair+="<div class='lair i4-tipe'>"+
-					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span>"+
+					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span><span>"+
 					oData[i].text+
-				"</div>";
+				"</span></div>";
 			}
 		}
 		else if(typeof oData == "object") {
@@ -542,9 +542,9 @@ $(document).ready(function(){
 			} else{
 				// old
 				lair+="<div class='lair i4-tipe'>"+
-					"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+					"<span class='i2-tipe'>"+oData.name.trim()+"</span><span>"+
 					oData.text+
-				"</div>";
+				"</span></div>";
 			}
 
 		}
@@ -558,9 +558,9 @@ $(document).ready(function(){
 		if(Array.isArray(oData)) {
 			for(var i in oData){
 				local+="<div class='local i4-tipe'>"+
-					"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+					"<span class='i2-tipe'>"+oData.name.trim()+"</span><span>"+
 					oData[i].text+
-				"</div>";
+				"</span></div>";
 			}
 		}
 		else if(typeof oData == "object") {
@@ -585,9 +585,9 @@ $(document).ready(function(){
 			} else{
 				// old
 				local+="<div class='local i4-tipe'>"+
-					"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+					"<span class='i2-tipe'>"+oData.name.trim()+"</span><span>"+
 					oData.text+
-				"</div>";
+				"</span></div>";
 			}
 
 		}
@@ -601,18 +601,18 @@ $(document).ready(function(){
 		if(Array.isArray(oData)) {
 			for(var i in oData){
 				spells+="<div class='spells'>"+
-					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span>"+
+					"<span class='i2-tipe'>"+oData[i].name.trim()+"</span><span>"+
 					oData[i].text+
-				"</div>";
+				"</span></div>";
 			}
 		}
 
 		else if(typeof oData == "object") {
 
 			spells+="<div class='spells'>"+
-				"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+				"<span class='i2-tipe'>"+oData.name.trim()+"</span><span>"+
 				oData.text+
-			"</div>";
+			"</span></div>";
 		}
 
 		//console.log("spells: "+spells);
@@ -645,7 +645,7 @@ $(document).ready(function(){
 				aItems.push(
 				"<li class='"+sClassName+" noLi i4-tipe'>"+
 					(oData[i].name? "<span class='i2-tipe'>"+oData[i].name.trim()+"</span>" : "")+
-					sText+
+					"<span>"+sText+"</span>"+
 				"</li>");
 			}
 			sText='';
@@ -675,7 +675,7 @@ $(document).ready(function(){
 							sNoLi = " noLi ";
 						}
 						if(el.text) {
-							sLeg += el.text;
+							sLeg += `<span>${el.text}</span>`;
 						}
 
 						return "<li class='"+sClassName+sNoLi+" i4-tipe'>"+sLeg+"</li>";
@@ -693,9 +693,9 @@ $(document).ready(function(){
           sText = oText;
         }
 				aItems.push("<li class='"+sClassName+" noLi i4-tipe'>"+
-					"<span class='i2-tipe'>"+oData.name.trim()+"</span>"+
+					"<span class='i2-tipe'>"+oData.name.trim()+"</span><span>"+
 					sText+
-				"</li>");
+				"</span></li>");
 			}
 
 		}
@@ -2167,5 +2167,27 @@ var nMaxTry = 3;
 			console.log("Start was unsuccessfull, try after 4 seconds.");
 			setTimeout(startCatalog, 4000);
 	}
+	
+	
+		$("body").on("dblclick", ".monster_card span", function(oEvent) {
+			//debugger;
+			$(this).toggleClass('editable');
+			if($(this).hasClass('editable')) {
+				
+				$('.monster_card span[contenteditable="true"]').each(function(){
+					$(this).removeClass('editable');
+					$(this).attr('contenteditable', false);	
+				});
+				$(this).attr('contenteditable', true);
+			} else {
+				$(this).attr('contenteditable', false);				
+			}
+		});
+		
+		$("body").on("focusout", ".monster_card span", function(oEvent) {
+			//debugger;
+			$(this).removeClass('editable');		
+			$(this).attr('contenteditable', false);		
+		});
 
 });

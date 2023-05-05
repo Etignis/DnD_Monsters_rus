@@ -963,6 +963,13 @@ p {
   color: #376db4;
   box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
 }
+span[contenteditable='true'] {
+  outline: none;
+  background: #e0f7fa;
+}
+span[contenteditable='true'] p {
+  background: #e0f7fa;
+}
 @media screen and (min-width: 65em) {
   body {
     background: url('../img/t1.jpg') center center no-repeat;
